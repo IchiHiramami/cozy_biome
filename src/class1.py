@@ -4,7 +4,7 @@ import os
 # pygame setup
 pygame.init()
 os.system('cls')
-screen = pygame.display.set_mode((1920, 1080))
+screen = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 running = True
 dt = 0
