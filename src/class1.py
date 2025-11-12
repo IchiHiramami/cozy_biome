@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import pygame
 import os
 
@@ -44,3 +45,5 @@ while running:
     dt = clock.tick(60) / 1000
 
 pygame.quit()
+=======
+>>>>>>> Stashed changes
