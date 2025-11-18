@@ -1,43 +1,21 @@
 import pygame
-import os
+from class1 import Dock
 
-# pygame setup
 pygame.init()
-os.system('cls')
 screen = pygame.display.set_mode((800, 600))
+dock = Dock(screen)
+dock.add_button("Start", (20, 20))
+dock.add_button("Exit", (140, 20))
+
 clock = pygame.time.Clock()
 running = True
-dt = 0
-
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        dock.handle_event(event)
 
-    screen.fill("purple")
-
-    pygame.draw.circle(screen, "red", player_pos, 40)
-
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        player_pos.y -= 1800 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 1800 * dt
-    if keys[pygame.K_a]:
-        player_pos.x -= 900 * dt
-    if keys[pygame.K_d]:
-        player_pos.x += 1800 * dt
-    if keys[pygame.K_ESCAPE]:
-        running = False
-
-    # flip() the display to put your work on screen
+    screen.fill((30, 30, 30))
+    dock.draw()
     pygame.display.flip()
-
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
-    dt = clock.tick(60) / 1000
-
-pygame.quit()
+    clock.tick(60)
