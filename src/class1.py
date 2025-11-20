@@ -1,4 +1,5 @@
-import pygame   
+import pygame
+from typing import Any
 
 class Dock: 
     def __init__(self,
@@ -11,7 +12,7 @@ class Dock:
         self.height = height
         self.color = color
         self.rect = pygame.Rect(0, window.get_height() - height, window.get_width(), height)
-        self.buttons = []
+        self.buttons: list[dict[str, Any ]] = []
 
     def add_button(self, 
                     text : str, 
