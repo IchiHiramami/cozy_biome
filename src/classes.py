@@ -68,3 +68,4 @@ class Menu:
     def handle_event(self, event : pygame.event.Event):
         for button in self.buttons:
             button.handle_event(event)
+
