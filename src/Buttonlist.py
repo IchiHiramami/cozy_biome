@@ -1,4 +1,4 @@
-from classes import Button
+from game_manager import Button
 import pygame
 
 def new_game():

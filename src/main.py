@@ -1,9 +1,9 @@
 import pygame
 import os
-from classes import Menu
+from game_manager import Menu
 from Buttonlist import home_screen_buttons
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # go up from src/
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ASSETS = os.path.join(BASE_DIR, "assets")
 
 pygame.init()
