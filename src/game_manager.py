@@ -69,6 +69,28 @@ class Menu:
         for button in self.buttons:
             button.handle_event(event)
 
+class InputField:
+    def __init__(self, xpos : int, ypos : int, wid : int | float, hei : int | float, font : pygame.font.Font):
+        self.rect = pygame.Rect(xpos, ypos, wid, hei)
+        self.font = font
+        self.text = ""
+        self.active = False
+
+    def draw(self, screen : pygame.Surface):
+        pygame.draw.rect(screen, (255,255,255), self.rect, 2)
+        txt = self.font.render(self.text, True, (255,255,255))
+        screen.blit(txt, (self.rect.x + 5, self.rect.y + 5))
+
+    def handle_event(self, event : pygame.event.Event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self.active = self.rect.collidepoint(event.pos)
+
+        if event.type == pygame.KEYDOWN and self.active:
+            if event.key == pygame.K_BACKSPACE:
+                self.text = self.text[:-1]
+            else:
+                self.text += event.unicode
+                
 class GameSetupMenu(Menu): #New Game Creation Menu
     def __init__(self, background : pygame.Surface, buttons : list[Button], input_fields = None): # wait im still tryna figure out objet type of input_fields 
         pass
