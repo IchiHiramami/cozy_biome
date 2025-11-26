@@ -1,8 +1,6 @@
 import pygame #type: ignore
 from collections.abc import Callable
 
-from pygame.event import Event
-
 def hex_to_rgb(hex_color : str) -> tuple[int, int, int]:
     """
     Allows for all the functions to be able to take HEX values instead of just RGB
@@ -56,28 +54,6 @@ class Button:
             if self.rect.collidepoint(event.pos):
                 self.on_click()
 
-class InputField:
-    def __init__(self, xpos : int, ypos : int, wid : int | float, hei : int | float, font : pygame.font.Font):
-        self.rect = pygame.Rect(xpos, ypos, wid, hei)
-        self.font = font
-        self.text = ""
-        self.active = False
-
-    def draw(self, screen : pygame.Surface):
-        pygame.draw.rect(screen, (255,255,255), self.rect, 2)
-        txt = self.font.render(self.text, True, (255,255,255))
-        screen.blit(txt, (self.rect.x + 5, self.rect.y + 5))
-
-    def handle_event(self, event : pygame.event.Event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            self.active = self.rect.collidepoint(event.pos)
-
-        if event.type == pygame.KEYDOWN and self.active:
-            if event.key == pygame.K_BACKSPACE:
-                self.text = self.text[:-1]
-            else:
-                self.text += event.unicode
-
 class Menu:
     def __init__(self, background : pygame.Surface, buttons : list[Button]):
         self.background = background
@@ -94,19 +70,8 @@ class Menu:
             button.handle_event(event)
 
 class GameSetupMenu(Menu): #New Game Creation Menu
-    def __init__(self, background : pygame.Surface, buttons : list[Button], input_fields : list[InputField]): # wait im still tryna figure out objet type of input_fields 
-        super().__init__(background, buttons)
-        self.input_fields = input_fields
-
-    def draw(self, screen : pygame.Surface):
-        super().draw(screen)
-        for field in self.input_fields:
-            field.draw(screen)
-
-    def handle_event(self, event: Event):
-        super().handle_event(event)
-        for field in self.input_fields:
-            field.handle_event(event)
+    def __init__(self, background : pygame.Surface, buttons : list[Button], input_fields = None): # wait im still tryna figure out objet type of input_fields 
+        pass
 
 class MenuManager:
     def __init__(self):
@@ -125,8 +90,4 @@ class MenuManager:
     
     def handle_event(self, event : pygame.event.Event):
         if self.current:
-            self.current.handle_event(event)
-
-    def draw(self, screen : pygame.Surface):
-        if self.current:
-            self.current.draw(screen)
+            pass

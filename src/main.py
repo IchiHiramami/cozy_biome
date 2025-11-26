@@ -5,7 +5,8 @@ from game_manager import Menu, Button, InputField, MenuManager, GameSetupMenu
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ASSETS = os.path.join(BASE_DIR, "assets")
 
-pygame.init()
+if __name__ == "__main__":
+    pygame.init()
 
 def new_game():
     menu_manager.push(new_game_menu)
@@ -13,6 +14,7 @@ def new_game():
 
 def load_game():
     pass #TODO: put the log here (or maybe in the log.py file)
+         # 
 
 def quit_game():
     #TODO: log here quit before quitting
