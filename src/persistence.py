@@ -42,8 +42,17 @@ class Persistence:
     @staticmethod
     def load_slot(file_slot):
         filename = f"checkpoint_{file_slot}.json"
-        with open(filename, "r") as f:
-            return (json.load(f))
+
+        try:
+            with open(filename, "r") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return None
+        except json.JSONDecodeError:
+            return None
+        except Exception as e:
+            print("Error loading:", e)
+            return None
 
 class Creature:
     def __init__(self):
@@ -74,5 +83,5 @@ potion = Potion()
 potion2 = Potion()
 
 # Example save
-Persistence.save_to_slot(1, 65, (creature, creature2), (food, food2), (potion, potion2))
-Persistence.load_slot(1)
+Persistence.save_to_slot(2, 65, (creature, creature2), (food, food2), (potion, potion2))
+print(Persistence.load_slot(2))
