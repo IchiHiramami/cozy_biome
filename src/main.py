@@ -14,7 +14,7 @@ def new_game():
 
 def load_game():
     pass #TODO: put the log here (or maybe in the log.py file)
-         # 
+         #
 
 def quit_game():
     #TODO: log here quit before quitting
