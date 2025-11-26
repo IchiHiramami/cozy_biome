@@ -3,8 +3,8 @@ from datetime import datetime
 
 class Persistence:
     @staticmethod
-    def save_to_slot(file_slot : int, world_score : int, creatures : list, foods : list, potions : list):
-        filename = f"checkpoint_{file_slot}.json"
+    def save_to_slot(file_slot : int, world_score : int, creatures : list[object], foods : list[object], potions : list[object]):
+        filename = f"checkpoint_{file_slot}"
         state = {
             "world_score" : world_score,
             "creatures" : [],
@@ -20,7 +20,7 @@ class Persistence:
             state["creatures"].append({
                 "name": creature.name,
                 "type": creature.type,
-                "position": [creature.x, creature.y],
+                "position": creature.location,
                 "satisfaction": creature.satisfaction
             })
 
@@ -41,7 +41,7 @@ class Persistence:
 
     @staticmethod
     def load_slot(file_slot):
-        filename = f"checkpoint_{file_slot}.json"
+        filename = f"checkpoint_{file_slot}"
 
         try:
             with open(filename, "r") as f:
@@ -58,8 +58,7 @@ class Creature:
     def __init__(self):
         self.name = "noob"
         self.type = "super"
-        self.x = 45
-        self.y = 50
+        self.location = 45, 50
         self.satisfaction = 100
     
 class Food:
@@ -83,5 +82,5 @@ potion = Potion()
 potion2 = Potion()
 
 # Example save
-Persistence.save_to_slot(2, 65, (creature, creature2), (food, food2), (potion, potion2))
-print(Persistence.load_slot(2))
+Persistence.save_to_slot(3, 65, (creature, creature2), (food, food2), (potion, potion2))
+print(Persistence.load_slot(3))
