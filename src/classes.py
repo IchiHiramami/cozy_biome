@@ -1,16 +1,15 @@
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod #type: ignore
 
 class Creatures:
-    def __init__(self, name, location : list[str, str], satisfaction_level=50):
+    def __init__(self, name : str, location : list[str], satisfaction_level : int =50):
         self.name = name
         self.location = location
         self.satisfaction_level = satisfaction_level
 
-    def move(self, new_location):
-        self.location = new_location
+    def move(self, new_location : tuple[int, int]):
         self.location = new_location
 
-    def pet(self, action):
+    def pet(self, action): #type: ignore ; anong datatype ang action?
         pass
 
 class Food:

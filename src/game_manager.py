@@ -92,9 +92,23 @@ class InputField:
                 self.text += event.unicode
                 
 class GameSetupMenu(Menu): #New Game Creation Menu
-    def __init__(self, background : pygame.Surface, buttons : list[Button], input_fields = None): # wait im still tryna figure out objet type of input_fields 
-        pass
+    def __init__(self, background : pygame.Surface, buttons : list[Button], input_fields : list[InputField] | None = None):
+        super().__init__(background, buttons)
+        self.input_fields = input_fields
 
+    def draw(self, screen : pygame.Surface):
+        super().draw(screen)
+        if self.input_fields:
+            for field in self.input_fields:
+                field.draw(screen)
+        
+    def handle_event(self, event : pygame.event.Event):
+        super().handle_event(event)
+        if self.input_fields:
+            for field in self.input_fields:
+                field.handle_event(event)
+
+        
 class MenuManager:
     def __init__(self):
         self.menus : list[Menu] = []
@@ -112,4 +126,8 @@ class MenuManager:
     
     def handle_event(self, event : pygame.event.Event):
         if self.current:
-            pass
+            self.current.handle_event(event)
+
+    def draw(self, screen : pygame.Surface):
+        if self.current:
+            self.current.draw(screen)
