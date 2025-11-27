@@ -1,8 +1,17 @@
+from enum import Enum
+import pygame
+
+class PetAction(Enum):
+    STROKE = 1
+    FEED = 2
+    PLAY = 3
+
 class Creature:
-    def __init__(self, name : str, x : int, y : int, 
+    def __init__(self, name : str, x : int, y : int, image_paths: list[str],
                 satisfaction_multiplier : int = 1, 
-                satisfaction_decay : int = 1,
-                satisfaction_level : int = 50):
+                satisfaction_decay : float = 0.01,
+                satisfaction_level : float = 50,
+                dragging : bool = True):
         self.name = name
         self.x = x
         self.y = y
@@ -11,15 +20,37 @@ class Creature:
         self.satisfaction_level = satisfaction_level
         self.effects : list[Effect] = []
 
+        # Animation
+        self.frames = [pygame.image.load(path).convert_alpha() for path in image_paths]
+        self.current_frame = 0
+        self.frame_counter = 0
+        self.rect = self.frames[0].get_rect(center = (x,y))
+
     def move(self, new_x : int, new_y : int):
         self.x = new_x
         self.y = new_y
 
-    def pet(self, action): #type: ignore ; anong datatype ang action?
-        # int? para pwedeng action1 or action2
-        pass
+    def update_animation(self):
+        self.frame_counter += 1
+        if self.frame_counter % 10 == 0:
+            self.current_frame = (self.current_frame) % len(self.frames)
+
+    def draw(self, screen : pygame.Surface):
+        screen.blit(self.frames[self.current_frame], self.rect)
+
+        pygame.draw.rect(screen, (0, 255, 0),
+                         (self.x - 20, self.y - 30, self.satisfaction_level // 2, 5))
+
+    def pet(self, action : PetAction):
+        if action == PetAction.STROKE:
+            self.satisfaction_level = min(100, self.satisfaction_level + 5) # enforce a hard cap max = 100
+        
+        if action == PetAction.PLAY:
+            self.satisfaction_level = min(100, self.satisfaction_level) # to be implemented based on minigames
     
     def update_effects(self):
+        for effects in self.effects[:]:
+            effects.update(self)
         pass
 
 class Effect():
@@ -99,7 +130,7 @@ class Potion(Consumable): # dev2 : Add Effects
         self.multiplier = multiplier
     
     def consume(self, name : str, creature: Creature, multiplier : int, duration : int):
-        effect_copy = type(self.effect)(name)
+        effect_copy = type(self.effect)(name) # TODO: Fix Potion.consume to handle Effect class subclasses correctly
         effect_copy.consume(creature, multiplier, duration) 
 
 class Cleanse(Consumable): # dev2: Clear Effects
@@ -108,5 +139,5 @@ class Cleanse(Consumable): # dev2: Clear Effects
         super().__init__(name = self.name)
 
     def consume(self, creature : Creature):
-        for effect in creature.effects:
+        for effect in creature.effects[:]:
             effect.remove(creature)

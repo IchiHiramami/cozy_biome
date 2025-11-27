@@ -1,7 +1,10 @@
 import pygame
 import os
-from game_manager import Menu, Button, InputField, MenuManager, GameSetupMenu, BackgroundManager
 from datetime import datetime
+
+# local dependencies
+from game_manager import Menu, Button, InputField, MenuManager, GameSetupMenu, BackgroundManager
+from gameplay import GameScene
 
 # Path and Assets
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -22,6 +25,9 @@ font = pygame.font.Font(None, 40)
 screen = pygame.display.set_mode((800,600))
 pygame.display.set_caption("Cozy Cove the App")
 
+# Gameplay Stuff
+current_scene = None
+
 # Callbacks
 def new_game():
     menu_manager.switch(new_game_menu)
@@ -38,12 +44,14 @@ def quit_game():
     exit()
 
 def start_game():
-    today = datetime.today
+    today = datetime.today()
     world_name = name_Field.return_input()
     print(f"World Name:{world_name}")
     print(f"Time of Creation: {str(today)}")
-    #TODO: transitioning to actual gameplay scene
-    #TODO: log here
+
+    global current_scene # Transfer over to main gameplay
+    current_scene = GameScene(world_name)
+        #TODO: log here
     pass
 
 def go_back():
@@ -92,10 +100,18 @@ while is_running:
         if event.type == pygame.QUIT:
             is_running = False
         else:
-            menu_manager.handle_event(event)
+            if current_scene:
+                current_scene.handle_event(event)
+            else:
+                menu_manager.handle_event(event)
         
     screen.fill((0,0,0))
-    menu_manager.draw(screen)
+
+    if current_scene:               # while game is still not loaded, refer to menu_manager for the draw function
+        current_scene.update()
+        current_scene.draw(screen)
+    else:
+        menu_manager.draw(screen)
     pygame.display.flip()
     
     clock.tick(60)

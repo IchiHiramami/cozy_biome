@@ -1,3 +1,7 @@
+# --------------------------------------------------------------
+# Contained here are classes and methods related to UI and Menus
+# --------------------------------------------------------------
+
 import pygame
 from collections.abc import Callable
 
