@@ -1,4 +1,4 @@
-import pygame #type: ignore
+import pygame
 from collections.abc import Callable
 
 def hex_to_rgb(hex_color : str) -> tuple[int, int, int]:
@@ -22,7 +22,7 @@ class Button:
                  on_hover_color : tuple[int, int, int] | str,
                  text_color : tuple[int, int, int] | str,
                  # function callback
-                 on_click : Callable[[], None] | None = None
+                 on_click : Callable[[], None]
                  ):
         
         self.rect = pygame.Rect(xpos, ypos, wid, hei)
@@ -31,8 +31,7 @@ class Button:
         self.text_color = text_color if isinstance(text_color, tuple) else hex_to_rgb(text_color)
         self.text = text
         self.font = font
-        if on_click:
-            self.on_click = on_click
+        self.on_click = on_click
 
     def draw(self, surface : pygame.Surface):
         """
@@ -52,23 +51,7 @@ class Button:
         """Return a bool value if mouse is clicked"""
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos):
-                if self.on_click():
-                    self.on_click()
-
-class Menu:
-    def __init__(self, background : pygame.Surface, buttons : list[Button]):
-        self.background = background
-        self.buttons = buttons
-
-    def draw(self, screen : pygame.Surface):
-        screen.blit(self.background, (0, 0))
-
-        for button in self.buttons:
-            button.draw(screen)
-
-    def handle_event(self, event : pygame.event.Event):
-        for button in self.buttons:
-            button.handle_event(event)
+                self.on_click()
 
 class InputField:
     def __init__(self, xpos : int, ypos : int, wid : int | float, hei : int | float, font : pygame.font.Font):
@@ -84,42 +67,81 @@ class InputField:
 
     def handle_event(self, event : pygame.event.Event):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            self.active = self.rect.collidepoint(event.pos)
+            self.active = self.rect.collidepoint(event.pos) # true if the field in being interacted
 
         if event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_BACKSPACE:
                 self.text = self.text[:-1]
             else:
                 self.text += event.unicode
-                
-class GameSetupMenu(Menu): #New Game Creation Menu
-    def __init__(self, background : pygame.Surface, buttons : list[Button], input_fields : list[InputField] | None = None):
-        super().__init__(background, buttons)
-        self.input_fields = input_fields
-
-    def draw(self, screen : pygame.Surface):
-        super().draw(screen)
-        if self.input_fields:
-            for field in self.input_fields:
-                field.draw(screen)
+    
+    def return_input(self) -> str:
+        return self.text
         
+class BackgroundManager:
+    def __init__(self, wid : int = 800, hei : int = 600):
+        self.width = wid
+        self.height = hei
+        self.current : pygame.Surface | None = None
+
+    def load(self, filename : str):
+        bg = pygame.image.load(filename).convert()
+        self.current = pygame.transform.scale(bg, (self.width, self.height))
+
+    def draw(self, screen: pygame.Surface):
+        if self.current:
+            screen.blit(self.current, (0,0))
+
+class Menu:
+    def __init__(self, background_file: str, buttons: list[Button], bg_manager: BackgroundManager):
+        self.buttons = buttons
+        self.bg_file = background_file
+        self.bg_manager = bg_manager
+
+    def activate(self):
+        self.bg_manager.load(self.bg_file)
+
+    def draw(self, screen: pygame.Surface):
+        self.bg_manager.draw(screen)
+        for button in self.buttons:
+            button.draw(screen)
+
     def handle_event(self, event : pygame.event.Event):
-        super().handle_event(event)
-        if self.input_fields:
-            for field in self.input_fields:
-                field.handle_event(event)
+        for button in self.buttons:
+            button.handle_event(event)
 
-        
+    def __repr__(self):
+        return f"<buttons={len(self.buttons)}>"
+
 class MenuManager:
     def __init__(self):
         self.menus : list[Menu] = []
+        self.history : list[Menu] = []
 
     def push(self, menu : Menu):
+        """Overlay menu on top of another menu"""
         self.menus.append(menu)
+        print(f"Now displaying: {Menu}\nCurrent Stack: {self.menus}\nCurrent History: {self.history}")
 
     def pop_menu(self):
         if self.menus:
-            self.menus.pop()
+            removed = self.menus.pop()
+            self.history.append(removed)
+            print(f"Storing to history: {removed}\nCurrent Stack: {self.menus}\nCurrent History: {self.history}")
+
+    def switch(self, menu: Menu):
+        """Replace Menu with a new Menu"""
+        if self.menus:
+            self.history.append(menu) #store to history
+            print(f"Storing to history: {menu}\nCurrent Stack: {self.menus}\nCurrent History: {self.history}")
+        self.menus = [menu]
+        print(f"Menu Stack Reset\nCurrent Stack: {self.menus}\nCurrent History: {self.history}")
+
+    def back(self):
+        if self.history:
+            restored = self.history.pop()
+            self.menus.append(restored)
+            print(f"Recovered from history: {restored}\nCurrent Stack: {self.menus}\nCurrent History: {self.history}")
 
     @property
     def current(self):
@@ -131,4 +153,32 @@ class MenuManager:
 
     def draw(self, screen : pygame.Surface):
         for menu in self.menus:
-            self.menu.draw(screen)
+            menu.draw(screen)
+
+class GameSetupMenu(Menu):
+    def __init__(self, background: str, buttons: list[Button], input_fields: list[InputField], bg_manager: BackgroundManager):
+        super().__init__(background, buttons, bg_manager)
+        self.input_fields = input_fields
+        self.labels = ["World Name"] 
+
+    def draw(self, screen: pygame.Surface):
+        super().draw(screen)
+        if self.input_fields:
+            for i, field in enumerate(self.input_fields):
+                label_surf = field.font.render(self.labels[i], True, hex_to_rgb('ffffff'))
+                screen.blit(label_surf, (field.rect.x, field.rect.y - 30))
+                field.draw(screen)
+
+    def handle_event(self, event: pygame.event.Event):
+        super().handle_event(event)
+        if self.input_fields:
+            for field in self.input_fields:
+                field.handle_event(event)
+
+    def get_values(self):
+        """Return dict of all input field values"""
+        return {f"field_{i}": field.text for i, field in enumerate(self.input_fields)}
+
+    def __repr__(self):
+        return f"<GameSetupMenu bg='YKYK' buttons={len(self.buttons)} inputs={len(self.input_fields)}>"
+    

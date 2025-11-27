@@ -35,6 +35,7 @@ class Persistence:
         for potion in potions:
             state["inventory"]["potions"].append({
                 "name": potion.name,
+                "duration": potion.effect.duration,
                 "effect": potion.effect
             })
 
