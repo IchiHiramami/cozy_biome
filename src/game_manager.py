@@ -52,7 +52,8 @@ class Button:
         """Return a bool value if mouse is clicked"""
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos):
-                self.on_click()
+                if self.on_click():
+                    self.on_click()
 
 class Menu:
     def __init__(self, background : pygame.Surface, buttons : list[Button]):
@@ -129,5 +130,5 @@ class MenuManager:
             self.current.handle_event(event)
 
     def draw(self, screen : pygame.Surface):
-        if self.current:
-            self.current.draw(screen)
+        for menu in self.menus:
+            self.menu.draw(screen)
