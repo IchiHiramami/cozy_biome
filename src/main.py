@@ -14,7 +14,7 @@ def new_game():
 
 def load_game():
     pass #TODO: put the log here (or maybe in the log.py file)
-         #
+        #
 
 def quit_game():
     #TODO: log here quit before quitting
@@ -30,7 +30,7 @@ start_game_btn = Button(300, 400, 200, 60, font, "Start", "c8ab83", "eec584", "f
 
 # Home Buttons
 new_game_btn = Button(300, 200, 200, 60, font, "New Game", "c8ab83", "eec584", "ffffff", on_click = new_game)
-load_game_btn = Button(300, 300, 200, 60, font, "Load Game", "c8ab83", "eec584", "ffffff")  
+load_game_btn = Button(300, 300, 200, 60, font, "Load Game", "c8ab83", "eec584", "ffffff", on_click = load_game)  
 quit_btn = Button(300, 400, 200, 60, font, "Quit Game", "c8ab83", "eec584", "ffffff", on_click = quit_game)
 
 # Input Fields

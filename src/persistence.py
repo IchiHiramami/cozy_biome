@@ -20,9 +20,11 @@ class Persistence:
             state["creatures"].append({
                 "name": creature.name,
                 "type": creature.type,
-                "position": creature.location,
+                "x": creature.x,
+                "y": creature.y,
                 "satisfaction": creature.satisfaction
-            })
+            }
+            )
 
         for food in foods:
             state["inventory"]["foods"].append({
@@ -58,7 +60,8 @@ class Creature:
     def __init__(self):
         self.name = "noob"
         self.type = "super"
-        self.location = 45, 50
+        self.x = 45
+        self.y = 50
         self.satisfaction = 100
     
 class Food:
