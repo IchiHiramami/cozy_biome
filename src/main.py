@@ -104,6 +104,9 @@ while is_running:
                 current_scene.handle_event(event)
             else:
                 menu_manager.handle_event(event)
+        """
+        for creature in (creatureslist):
+            creature.update_effects()"""
         
     screen.fill((0,0,0))
 

@@ -51,7 +51,6 @@ class Creature:
     def update_effects(self):
         for effects in self.effects[:]:
             effects.update(self)
-        pass
 
 class Effect():
     def __init__(self, name : str):
@@ -62,7 +61,6 @@ class Effect():
     def remove(self, creature : Creature):
         if self in creature.effects:
             creature.effects.remove(self)
-        pass
 
     def update(self, creature : Creature):
         if self.duration > 0:
