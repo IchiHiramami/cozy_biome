@@ -5,7 +5,8 @@ from datetime import datetime
 # local dependencies
 from game_manager import Menu, Button, InputField, MenuManager, GameSetupMenu, BackgroundManager
 from gameplay import GameScene
-from logger import log
+from logger import log, clear
+from persistence import Persistence
 
 # Path and Assets
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -17,6 +18,7 @@ if __name__ == "__main__":
     pygame.init()
 
 clock = pygame.time.Clock()
+clear()
 
 # Managers
 menu_manager = MenuManager()
@@ -37,11 +39,12 @@ def new_game():
 
 def load_game():
     pass #TODO: put the log here (or maybe in the log.py file)
-        #
+    menu_manager.switch(load_game_menu)
+    load_game_menu.activate()
 
 def quit_game():
     #TODO: log here quit before quitting
-    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "Game Exitted")
+    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "Game Exited")
     pygame.quit()
     exit()
 
@@ -54,6 +57,11 @@ def start_game():
     current_scene = GameScene(world_name)
         #TODO: log here
     pass
+
+def start_loaded_game(slot):
+    print(slot)
+    global current_scene
+    current_scene = GameScene(Persistence.load_slot(slot+1))
 
 def go_back():
     menu_manager.back()
@@ -74,6 +82,7 @@ quit_btn = Button(300, 400, 200, 60, font, "Quit Game", "c8ab83", "eec584", "fff
 # New Game Buttons
 start_game_btn = Button(300, 300, 200, 60, font, "Start", "c8ab83", "eec584", "ffffff", on_click = start_game)
 
+
 # All purpose Buttons:
 back_btn = Button(300, 500, 200, 60, font, "Back", "e8ab83", "eec584", "ffffff", on_click = go_back)
 
@@ -89,6 +98,16 @@ home_menu = Menu(os.path.join(ASSETS, "Background/main_menu_noncut.png"), [new_g
 
 # New Game Setup Menu
 new_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"), [start_game_btn, back_btn], [name_Field], bg_manager)
+load_game_menu = GameSetupMenu(
+    os.path.join(ASSETS, "Background/main_menu_new_game.png"),
+    [
+        Button(300, 100 + i * 100, 200, 60, font, Persistence.load_slot(i+1)["world_name"],
+               "c8ab83", "eec584", "ffffff", on_click=(lambda slot=i: start_loaded_game(slot))
+        )
+        for i in range(3)
+    ],
+    None,
+    bg_manager)
 
 menu_manager.push(home_menu) # Start app with home menu first
 home_menu.activate()

@@ -1,3 +1,4 @@
+import logging
 
 def log(timestamp : str, type : int, message: str):
     """
@@ -19,4 +20,10 @@ def log(timestamp : str, type : int, message: str):
         case _:
             declaration = "OTHERS"
         
-    print(f"{timestamp} -- {declaration} -- {message}")
+    to_log = f"{timestamp} -- {declaration} -- {message}"
+    with open("cozy_biome.log", "a") as f:
+        f.write(to_log + "\n")
+
+def clear():
+    with open("cozy_biome.log", "w") as f:
+        pass

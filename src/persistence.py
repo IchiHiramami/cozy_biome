@@ -3,9 +3,10 @@ from datetime import datetime
 
 class Persistence:
     @staticmethod
-    def save_to_slot(file_slot : int, world_score : int, creatures : list[object], foods : list[object], potions : list[object]):
+    def save_to_slot(file_slot : int, world_name : str, world_score : int, creatures : list[object], foods : list[object], potions : list[object]):
         filename = f"checkpoint_{file_slot}"
         state = {
+            "world_name" : world_name,
             "world_score" : world_score,
             "creatures" : [],
             "inventory" : {
@@ -22,7 +23,11 @@ class Persistence:
                 "type": creature.type,
                 "x": creature.x,
                 "y": creature.y,
-                "satisfaction": creature.satisfaction
+                "satisfaction": creature.satisfaction,
+                "satisfaction_multiplier": creature.satisfaction_multiplier,
+                "satisfaction_decay": creature.satisfaction_decay,
+                "satisfaction_bar": creature.satisfaction_bar,
+                "effects": creature.effects
             }
             )
 
@@ -57,34 +62,4 @@ class Persistence:
             print("Error loading:", e)
             return None
 
-class Creature:
-    def __init__(self):
-        self.name = "noob"
-        self.type = "super"
-        self.x = 45
-        self.y = 50
-        self.satisfaction = 100
-    
-class Food:
-    def __init__(self):
-        self.name = "chichaw"
-        self.for_type = "dark"
-        self.satisfaction = 65
 
-class Potion:
-    def __init__(self):
-        self.name = "chichaw"
-        self.effect = "double_points"
-
-creature = Creature()
-creature2 = Creature()
-
-food = Food()
-food2 = Food()
-
-potion = Potion()
-potion2 = Potion()
-
-# Example save
-Persistence.save_to_slot(3, 65, (creature, creature2), (food, food2), (potion, potion2))
-print(Persistence.load_slot(3))

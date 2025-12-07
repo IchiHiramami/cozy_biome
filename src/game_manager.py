@@ -128,7 +128,7 @@ class MenuManager:
         if self.menus:
             removed = self.menus.pop()
             self.history.append(removed)
-
+    
     def switch(self, menu: Menu):
         """Replace Menu with a new Menu"""
         if self.menus:
@@ -144,7 +144,7 @@ class MenuManager:
     @property
     def current(self):
         return self.menus[-1] if self.menus else None
-    
+
     def handle_event(self, event : pygame.event.Event):
         if self.current:
             self.current.handle_event(event)
@@ -157,7 +157,7 @@ class GameSetupMenu(Menu):
     def __init__(self, background: str, buttons: list[Button], input_fields: list[InputField], bg_manager: BackgroundManager):
         super().__init__(background, buttons, bg_manager)
         self.input_fields = input_fields
-        self.labels = ["World Name"] 
+        self.labels = ["World Name"]
 
     def draw(self, screen: pygame.Surface):
         super().draw(screen)
