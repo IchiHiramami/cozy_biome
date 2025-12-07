@@ -80,7 +80,7 @@ name_Field = InputField(300, 200, 200, 60, font)
 
 # ---------------------------------------------
 # Note: Menu Creation Syntax:
-# Menu (<filepath to bg>, <button list>, <field list> [for gamesetup only], bg_manager [ALWAYS])
+# Menu (<filepath to bg>, <button list>, <field list> [for gamesetup only], bg_manager [<<< ALWAYS INCLUDE])
 
 # Splash Screen Menu
 home_menu = Menu(os.path.join(ASSETS, "Background/main_menu_noncut.png"), [new_game_btn, load_game_btn, quit_btn], bg_manager)

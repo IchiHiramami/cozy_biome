@@ -124,6 +124,7 @@ class MenuManager:
         self.menus.append(menu)
 
     def pop_menu(self):
+        """Remove menu from list of menus, stores to history"""
         if self.menus:
             removed = self.menus.pop()
             self.history.append(removed)
@@ -135,6 +136,7 @@ class MenuManager:
         self.menus = [menu]
 
     def back(self):
+        """Return to previously removed Menu"""
         if self.history:
             restored = self.history.pop()
             self.menus.append(restored)

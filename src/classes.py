@@ -7,7 +7,7 @@ class PetAction(Enum):
     PLAY = 3
 
 class Creature:
-    def __init__(self, name : str, x : int, y : int, image_paths: list[str],
+    def __init__(self, name : str, x : int, y : int, sprite: list[str],
                 satisfaction_multiplier : int = 1, 
                 satisfaction_decay : float = 0.01,
                 satisfaction_level : float = 50,
@@ -21,7 +21,7 @@ class Creature:
         self.effects : list[Effect] = []
 
         # Animation
-        self.frames = [pygame.image.load(path).convert_alpha() for path in image_paths]
+        self.frames = [pygame.image.load(path).convert_alpha() for path in sprite]
         self.current_frame = 0
         self.frame_counter = 0
         self.rect = self.frames[0].get_rect(center = (x,y))
