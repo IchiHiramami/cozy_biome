@@ -7,13 +7,13 @@ import os
 import pygame
 from random import randint, choice
 from classes import Creature, Food, Potion, Cleanse #type: ignore
-from game_manager import Button
+from game_manager import Button, InputField
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ASSETS = os.path.join(BASE_DIR, "assets")
 
 animated_cat = [f"assets/Sprites/cat_animation_1.png", "assets/Sprites/cat_animation_2.png", "assets/Sprites/cat_animation_3.png", "assets/Sprites/cat_animation_4.png"]
-Nocky_OC = ["assets/Sprites/Nocky_OC_1.png"]
+Nocky_OC = ["assets/Sprites/Nocky_OC_1.png", "assets/Sprites/Nocky_OC_2.png"]
 
 spritz = [animated_cat, Nocky_OC]
 
@@ -32,7 +32,11 @@ class GameScene:
         self.selected : Creature | None = None # currently selected creature (cannot exceed 1 unless we magically make 2 mouse pointers and at that point, this ain't 111 level na)
         
         self.buttons : list[Button] = []
+        self.inputs : list[InputField] = []
         self.buttons.append(Button(20,20,120,40, pygame.font.Font(None, 20), "Spawn More", "c8ab83", "eec584", "ffffff", on_click = self.debug_spawn))
+        self.inputs.append(InputField(300, 200, 200, 60, pygame.font.Font(None, 20)))
+
+        self.admin_mode = False
 
     def debug_spawn(self):
         new = Creature(f"creature{len(self.creatures)}", randint(0, 800), randint(0, 600), choice(spritz))
@@ -41,6 +45,12 @@ class GameScene:
     def handle_event(self, event : pygame.event.Event):
         for button in self.buttons:
             button.handle_event(event)
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SLASH:
+                #TODO: Log here admin access
+                self.admin_mode = not self.admin_mode
+
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             for creature in self.creatures:
@@ -64,8 +74,18 @@ class GameScene:
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self.background, (0,0))
+
         for creature in self.creatures:
-            creature.update_animation()
-            creature.draw(screen)
+                if creature.satisfaction_level > 70:
+                    creature.update_sprite(1)  # happy
+                elif creature.satisfaction_level < 30:
+                    creature.update_sprite(2)  # sad
+                else:
+                    creature.update_sprite(0)  # normal
+                creature.draw(screen)
         for buttons in self.buttons:
             buttons.draw(screen)
+
+        if self.admin_mode:
+            for input_field in self.inputs:
+                input_field.draw(screen)

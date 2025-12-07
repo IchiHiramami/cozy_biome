@@ -20,30 +20,31 @@ class Creature:
         self.satisfaction_level = satisfaction_level
         self.effects : list[Effect] = []
 
-        # Animation
+        # Reactive Sprite Image
         self.frames = [pygame.image.load(path).convert_alpha() for path in sprite]
-        self.current_frame = 0
-        self.frame_counter = 0
+        self.sprite = self.frames[0]
         self.rect = self.frames[0].get_rect(center = (x,y))
 
     def move(self, new_x : int, new_y : int):
         self.x = new_x
         self.y = new_y
+        self.rect.center = (new_x, new_y)
 
-    def update_animation(self):
-        self.frame_counter += 1
-        if self.frame_counter % 10 == 0:
-            self.current_frame = (self.current_frame) % len(self.frames)
+    def update_sprite(self, spritestyle : int):
+        """
+        spritestyle : 0-> normal, 1-> happy, 2-> sad
+        """
+        self.sprite = self.frames[spritestyle]
 
     def draw(self, screen : pygame.Surface):
-        screen.blit(self.frames[self.current_frame], self.rect)
+        screen.blit(self.sprite, self.rect)
 
         pygame.draw.rect(screen, (0, 255, 0),
                          (self.x - 20, self.y - 30, self.satisfaction_level // 2, 5))
 
     def pet(self, action : PetAction):
         if action == PetAction.STROKE:
-            self.satisfaction_level = min(100, self.satisfaction_level + 5) # enforce a hard cap max = 100
+            self.satisfaction_decay = 2
         
         if action == PetAction.PLAY:
             self.satisfaction_level = min(100, self.satisfaction_level) # to be implemented based on minigames
@@ -56,7 +57,6 @@ class Effect():
     def __init__(self, name : str):
         self.name = name
         self.duration = 0
-        self.active = True
 
     def remove(self, creature : Creature):
         if self in creature.effects:
@@ -66,7 +66,6 @@ class Effect():
         if self.duration > 0:
             self.duration -= 1
         else:
-            self.active = False
             self.remove(creature)
 
     def consume(self, creature : Creature, multiplier : int, duration_frames : int):
