@@ -1,10 +1,64 @@
 from enum import Enum
+from game_manager import hex_to_rgb
 import pygame
+
 
 class PetAction(Enum):
     STROKE = 1
     FEED = 2
     PLAY = 3
+
+class SatisfactionBar:
+    def __init__(self, 
+                 width : int = 50, 
+                 height : int = 5, 
+                 offset_x : int = -20, 
+                 offset_y : int = -30):
+        
+        self.width = width
+        self.height = height
+        self.offset_x = offset_x
+        self.offset_y = offset_y
+        
+        self.bg_color = hex_to_rgb("#ffffff")
+
+        self.color_green = hex_to_rgb("#00e774")      
+        self.color_lime = hex_to_rgb("#d0ff00")
+        self.color_yellow = hex_to_rgb("#ffe600")
+        self.color_orange = hex_to_rgb("#ffa600")
+        self.color_red = hex_to_rgb("#e06614") 
+        self.color_critical = hex_to_rgb("#ff0000") 
+
+
+    def get_satbar_color(self, value : float):
+        """coloring of the value"""
+        if 100 >= value > 89:
+            return self.color_green
+        elif 89 >= value > 59:
+            return self.color_lime
+        elif 59 >= value > 39:
+            return self.color_yellow
+        elif 39 >= value > 29:
+            return self.color_orange
+        elif 29 >= value > 9:
+            return self.color_red
+        elif 9 >= value >= 0:
+            return self.color_critical
+
+    def draw(self, screen : pygame.Surface, x : int, y : int, value : float):
+        """
+        x, y - coordinate placement
+        value - satisfaction level
+        """
+        pygame.draw.rect(screen, self.bg_color, (x +  self.offset_x, y + self.offset_y, self.width, self.height))
+        
+        fill_width = int((value/100) * self.width)
+
+        pygame.draw.rect(
+            screen,
+            self.get_satbar_color(value), 
+            (x + self.offset_x, y + self.offset_y, fill_width, self.height)
+        )
 
 class Creature:
     def __init__(self, name : str, x : int, y : int, sprite: list[str],
@@ -18,6 +72,7 @@ class Creature:
         self.satisfaction_multiplier  = satisfaction_multiplier
         self.satisfaction_decay  = satisfaction_decay
         self.satisfaction_level = satisfaction_level
+        self.satisfaction_bar = SatisfactionBar()
         self.effects : list[Effect] = []
 
         # Reactive Sprite Image
@@ -38,9 +93,7 @@ class Creature:
 
     def draw(self, screen : pygame.Surface):
         screen.blit(self.sprite, self.rect)
-
-        pygame.draw.rect(screen, (0, 255, 0),
-                         (self.x - 20, self.y - 30, self.satisfaction_level // 2, 5))
+        self.satisfaction_bar.draw(screen, self.x, self.y, self.satisfaction_level)
 
     def pet(self, action : PetAction):
         if action == PetAction.STROKE:
@@ -52,6 +105,27 @@ class Creature:
     def update_effects(self):
         for effects in self.effects[:]:
             effects.update(self)
+
+
+class GlobalSatisfactionBar(SatisfactionBar):
+    def __init__(self, screen_width : int=800, y : int=20, height : int=12, margin : int =40):
+        width = screen_width - 2 * margin
+        x = margin  # start at left margin
+
+        super().__init__(width=width, height=height, offset_x=0, offset_y=0)
+
+        self.x = x
+        self.y = y
+
+    def compute_average(self, creatures : list[Creature]):
+        if not creatures:
+            return 0
+        total = sum(c.satisfaction_level for c in creatures)
+        return total / len(creatures)
+
+    def draw(self, screen : pygame.Surface, creatures : list[Creature]):
+        avg = self.compute_average(creatures)
+        super().draw(screen, self.x, self.y, avg)
 
 class Effect():
     def __init__(self, name : str):

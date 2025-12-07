@@ -5,6 +5,7 @@ from datetime import datetime
 # local dependencies
 from game_manager import Menu, Button, InputField, MenuManager, GameSetupMenu, BackgroundManager
 from gameplay import GameScene
+from logger import log
 
 # Path and Assets
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -32,7 +33,7 @@ current_scene = None
 def new_game():
     menu_manager.switch(new_game_menu)
     new_game_menu.activate()
-    pass #TODO: put the log here
+    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "New Game Set")
 
 def load_game():
     pass #TODO: put the log here (or maybe in the log.py file)
@@ -40,6 +41,7 @@ def load_game():
 
 def quit_game():
     #TODO: log here quit before quitting
+    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "Game Exitted")
     pygame.quit()
     exit()
 
