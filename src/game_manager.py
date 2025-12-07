@@ -114,9 +114,6 @@ class Menu:
         for button in self.buttons:
             button.handle_event(event)
 
-    def __repr__(self):
-        return f"<buttons={len(self.buttons)}>"
-
 class MenuManager:
     def __init__(self):
         self.menus : list[Menu] = []
@@ -125,27 +122,22 @@ class MenuManager:
     def push(self, menu : Menu):
         """Overlay menu on top of another menu"""
         self.menus.append(menu)
-        print(f"Now displaying: {Menu}\nCurrent Stack: {self.menus}\nCurrent History: {self.history}")
 
     def pop_menu(self):
         if self.menus:
             removed = self.menus.pop()
             self.history.append(removed)
-            print(f"Storing to history: {removed}\nCurrent Stack: {self.menus}\nCurrent History: {self.history}")
 
     def switch(self, menu: Menu):
         """Replace Menu with a new Menu"""
         if self.menus:
             self.history.append(menu) #store to history
-            print(f"Storing to history: {menu}\nCurrent Stack: {self.menus}\nCurrent History: {self.history}")
         self.menus = [menu]
-        print(f"Menu Stack Reset\nCurrent Stack: {self.menus}\nCurrent History: {self.history}")
 
     def back(self):
         if self.history:
             restored = self.history.pop()
             self.menus.append(restored)
-            print(f"Recovered from history: {restored}\nCurrent Stack: {self.menus}\nCurrent History: {self.history}")
 
     @property
     def current(self):
@@ -182,7 +174,4 @@ class GameSetupMenu(Menu):
     def get_values(self):
         """Return dict of all input field values"""
         return {f"field_{i}": field.text for i, field in enumerate(self.input_fields)}
-
-    def __repr__(self):
-        return f"<GameSetupMenu bg='YKYK' buttons={len(self.buttons)} inputs={len(self.input_fields)}>"
     

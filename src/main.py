@@ -44,10 +44,9 @@ def quit_game():
     exit()
 
 def start_game():
-    today = datetime.today()
     world_name = name_Field.return_input()
     print(f"World Name:{world_name}")
-    print(f"Time of Creation: {str(today)}")
+    print(f"Time of Creation: {datetime.now().strftime("%B %d, %Y %I:%M:%S %p")}")
 
     global current_scene # Transfer over to main gameplay
     current_scene = GameScene(world_name)
