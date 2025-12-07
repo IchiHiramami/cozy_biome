@@ -63,6 +63,7 @@ class GameScene:
             self.selected = None
 
         elif event.type == pygame.MOUSEMOTION and self.selected:
+            
             self.selected.rect.x = event.pos[0] + self.drag_offset[0]
             self.selected.rect.y = event.pos[1] + self.drag_offset[1]
             self.selected.x, self.selected.y = self.selected.rect.center
@@ -79,7 +80,7 @@ class GameScene:
                 if creature.satisfaction_level > 70:
                     creature.update_sprite(1)  # happy
                 elif creature.satisfaction_level < 30:
-                    creature.update_sprite(2)  # sad
+                    creature.update_sprite(1)  # sad
                 else:
                     creature.update_sprite(0)  # normal
                 creature.draw(screen)

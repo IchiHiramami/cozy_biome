@@ -10,7 +10,7 @@ class Creature:
     def __init__(self, name : str, x : int, y : int, sprite: list[str],
                 satisfaction_multiplier : int = 1, 
                 satisfaction_decay : float = 0.01,
-                satisfaction_level : float = 50,
+                satisfaction_level : float = 100,
                 dragging : bool = True):
         self.name = name
         self.x = x
