@@ -7,7 +7,7 @@ import os
 import pygame
 from random import randint, choice
 from persistence import Persistence # type: ignore
-from classes import Creature, Food, Potion, Cleanse, GlobalSatisfactionBar  # type: ignore
+from classes import Creature, Food, Potion, Cleanse, GlobalSatisfactionBar, Less_Decay, More_Satisfaction  # type: ignore
 from game_manager import Button, InputField, Toolbar
 from logger import log
 from datetime import datetime
@@ -41,19 +41,27 @@ class GameScene:
         self.background = pygame.image.load(os.path.join(ASSETS, "Background/main_world.png"))
         self.background = pygame.transform.scale(self.background, (800, 600))
 
-        self.creatures = [
-            Creature(
-                f"creature{i}",
-                "super",
-                randint(50, 750),
-                randint(50, 550),
-                choice(spritz),
-            )
-            for i in range(randint(2, 4))
-        ] if not creatures else creatures
+        if creatures:
+            self.creatures = creatures
+        else:
+            self.creatures = [
+                Creature(
+                    f"creature{i}",
+                    "super",
+                    randint(50, 750),
+                    randint(50, 550),
+                    choice(spritz),
+                )
+                for i in range(randint(2, 4))
+    ]
 
         self.foods = foods
         self.potions = potions
+
+        ##################################
+        potion = Potion(10, Less_Decay(), 2)
+        potion.consume(self.creatures[0])
+        ##################################
 
         self.selected: Creature | None = None
         self.inputs: list[InputField] = []
@@ -189,11 +197,14 @@ class GameScene:
         self.toolbar.visible = not self.toolbar.visible
 
     def save_game_state(self):
+        Persistence.clear(self.world_name)
         Persistence.save_to_slot(self.world_name,
                                   sum(c.satisfaction_level for c in self.creatures),
                                     self.creatures,
                                     self.foods,
                                     self.potions)
+        for c in self.creatures:
+            print(c.effects)
         print("TODO: Save game here")  #TODO: will wire to Persistence later
 
     def load_game_state(self):

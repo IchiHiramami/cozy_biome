@@ -25,4 +25,3 @@ def log(timestamp : str, type : int, message: str):
 def clear():
     with open("cozy_biome.log", "w") as f:
         f.read
-        pass

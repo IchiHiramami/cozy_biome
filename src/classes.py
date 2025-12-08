@@ -78,6 +78,7 @@ class Creature:
         self.effects : list[Effect] = []
 
         # Reactive Sprite Image
+        self.frames_paths = sprite
         self.frames = [pygame.image.load(path).convert_alpha() for path in sprite]
         self.sprite = self.frames[0]
         self.rect = self.frames[0].get_rect(center = (x,y))
@@ -215,9 +216,11 @@ class Potion(Consumable): # dev2 : Add Effects
         self.effect = effect
         self.multiplier = multiplier
     
-    def consume(self, name : str, creature: Creature, multiplier : int, duration : int):
-        effect_copy = type(self.effect)(name) # TODO: Fix Potion.consume to handle Effect class subclasses correctly
-        effect_copy.consume(creature, multiplier, duration) 
+    def consume(self, creature: Creature):
+        if not isinstance(self.effect, Effect):
+            raise TypeError("Potion.effect must be an Effect instance")
+        effect_copy = type(self.effect)() # TODO: Fix Potion.consume to handle Effect class subclasses correctly
+        effect_copy.consume(creature, self.multiplier, self.duration) 
 
 class Cleanse(Consumable): # dev2: Clear Effects
     """Clear Effects"""

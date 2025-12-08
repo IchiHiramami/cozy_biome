@@ -30,6 +30,7 @@ pygame.display.set_caption("Cozy Cove the App")
 
 # Gameplay Stuff
 current_scene = None
+creatureslist = []
 
 # Callbacks
 def new_game():
@@ -62,11 +63,14 @@ def start_game():
 
 def start_loaded_game(slot : str):
     print(f"Game selected from slot {slot}")
-    global current_scene
+    global current_scene, creatureslist
     log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"Stated Loaded Game: {slot}")
     loaded_data = Persistence.load_slot(slot)
+    for c in loaded_data["creatures"]:
+        creature = Persistence.unpack_creatures(c)
+        creatureslist.append(creature)
     if loaded_data:
-        current_scene = GameScene(loaded_data["world_name"], loaded_data["creatures"])
+        current_scene = GameScene(loaded_data["world_name"], creatureslist)
 
 def go_back():
     menu_manager.back()
@@ -130,10 +134,10 @@ while is_running:
                 current_scene.handle_event(event)
             else:
                 menu_manager.handle_event(event)
-        """
-        for creature in (creatureslist):
-            creature.update_effects()"""
         
+        for creature in (creatureslist):
+            creature.update_effects()
+    
     screen.fill((0,0,0))
 
     if current_scene:               # while game is still not loaded, refer to menu_manager for the draw function
