@@ -177,6 +177,61 @@ class GameSetupMenu(Menu):
         """Return dict of all input field values"""
         return {f"field_{i}": field.text for i, field in enumerate(self.input_fields)}
     
+class InventorySlot:
+    def __init__(self, x: int, y : int, size : int, bg_color : str ="#c8ab83", border_color : str = "#ffffff", item : str = None, quantity : int = 0):
+        self.rect = pygame.Rect(x, y, size, size)
+
+        # Colors
+        self.bg_color = hex_to_rgb(bg_color) if isinstance(bg_color, str) else bg_color
+        self.border_color = hex_to_rgb(border_color) if isinstance(border_color, str) else border_color
+
+        # Item data
+        self.item = item          # Should be a sprite or object with .icon
+        self.quantity = quantity
+
+        # Font for quantity text
+        self.font = pygame.font.Font(None, 20)
+
+    def set_item(self, item, quantity=1):
+        """Add item to a slot"""
+        if self.item:
+            if item == self.item:
+                self.quantity += quantity
+        self.item = item
+        self.quantity = quantity
+
+    def clear(self):
+        """Clear item from slot"""
+        self.item = None
+        self.quantity = 0
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                print("Clicked inventory slot")
+                # You can add custom behavior here
+                return True
+        return False
+
+    def draw(self, screen):
+        # Draw background
+        pygame.draw.rect(screen, self.bg_color, self.rect, border_radius=6)
+
+        # Draw border
+        pygame.draw.rect(screen, self.border_color, self.rect, width=2, border_radius=6)
+
+        # Draw item icon
+        if self.item and hasattr(self.item, "icon"):
+            icon = pygame.transform.scale(self.item.icon, (self.rect.width - 8, self.rect.height - 8))
+            screen.blit(icon, (self.rect.x + 4, self.rect.y + 4))
+
+        # Draw quantity
+        if self.quantity > 1:
+            text = self.font.render(str(self.quantity), True, (255, 255, 255))
+            screen.blit(text, (self.rect.right - text.get_width() - 4,
+                               self.rect.bottom - text.get_height() - 2))
+
+
 class Toolbar:
     """
     IFYKYK

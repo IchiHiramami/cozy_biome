@@ -8,7 +8,7 @@ import pygame
 from random import randint, choice
 from persistence import Persistence # type: ignore
 from classes import Creature, Food, Potion, Cleanse, GlobalSatisfactionBar, Less_Decay, More_Satisfaction  # type: ignore
-from game_manager import Button, InputField, Toolbar
+from game_manager import Button, InputField, InventorySlot, Toolbar
 from logger import log
 from datetime import datetime
 
@@ -19,11 +19,13 @@ animated_cat = {
     "Sprite" : ["assets/Sprites/cat_animation_1.png", "assets/Sprites/cat_animation_2.png", "assets/Sprites/cat_animation_3.png",],
     }
 
+cat = {"Sprite" : ["assets/Sprites/cat.jpg"]}
+
 Nocky_OC = {
         "Sprite" : ["assets/Sprites/Nocky_OC_1.png", "assets/Sprites/Nocky_OC_2.png", "assets/Sprites/Nocky_OC_2.png"]
     }
 
-spritz = [animated_cat["Sprite"], Nocky_OC["Sprite"]]
+spritz = [animated_cat["Sprite"], Nocky_OC["Sprite"], cat["Sprite"]]
 
 class GameScene:
     def __init__(self, world_name: str, creatures : list[Creature] = [], foods : list[Food] = [], potions : list[Potion] = []):
@@ -32,6 +34,7 @@ class GameScene:
 
         #state
         self.is_paused = False
+        self.allow_dragging = True
 
         self.background = pygame.image.load(os.path.join(ASSETS, "Background/main_world.png"))
         self.background = pygame.transform.scale(self.background, (800, 600))
@@ -68,17 +71,23 @@ class GameScene:
         toolbar_font = pygame.font.Font(None, 30)
 
         # Place tab content slightly below the header area so headers don't overlap
-        tab_content_y = 580
+        tab_content_y = 540
 
         main_tab_buttons = [
             Button(20, tab_content_y, 100, 40, toolbar_font, "Toggle", "c8ab83", "eec584", "ffffff", on_click = self.toggle_toolbar),
-            Button(140, tab_content_y, 100, 40, toolbar_font, "Pet", "c8ab83", "eec584", "ffffff", on_click = self.save_game_state),
+            Button(140, tab_content_y, 100, 40, toolbar_font, "Pet", "c8ab83", "eec584", "ffffff", on_click = self.petting),
         ]
 
-        admin_tab_buttons = [
+        Inventory_buttons = [
             Button(20, tab_content_y, 120, 40, pygame.font.Font(None, 20), "Master Spawn", "c8ab83", "eec584", "ffffff", on_click=lambda: self.run_admin_command("spawn")),
             Button(150, tab_content_y, 120, 40, pygame.font.Font(None, 20), "Refill All", "c8ab83", "eec584", "ffffff", on_click=lambda: self.run_admin_command("refill")),
         ]
+
+        slot1 = InventorySlot(300, 560, 50)
+        slot2 = InventorySlot(360, 560, 50)
+        slot3 = InventorySlot(420, 560, 50)
+
+        Inventory_buttons = [slot1, slot2, slot3]
 
         self.toolbar = Toolbar(
             x=0,
@@ -88,8 +97,9 @@ class GameScene:
             bg_color=(200, 171, 131),
             tabs=[
                 {'name': 'Main', 'buttons': main_tab_buttons, 'elements': []},
-                {'name': 'Admin', 'buttons': admin_tab_buttons, 'elements': []}
-            ]
+                {'name': 'Admin', 'buttons': Inventory_buttons, 'elements': []}
+            ],
+
         )
 
         pause_font = pygame.font.Font(None, 32)
@@ -183,6 +193,14 @@ class GameScene:
 
         self.master_buttons.extend([spawn_btn_m, reset_btn_m, refill_btn_m, hide_btn_m])
 
+    def petting(self):
+        self.allow_dragging = not self.allow_dragging
+        if not self.allow_dragging:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"World Dragging to {self.is_paused}")
+
     def toggle_pause(self):
         self.is_paused = not self.is_paused
         log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"Paused set to {self.is_paused}")
@@ -273,6 +291,8 @@ class GameScene:
             for fields in self.inputs:
                 fields.handle_event(event)
 
+        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 self.toggle_pause()
@@ -291,20 +311,26 @@ class GameScene:
         if event.type == pygame.MOUSEBUTTONDOWN:
             for creature in self.creatures:
                 if creature.rect.collidepoint(event.pos):
-                    self.selected = creature
-                    self.drag_offset = (
-                        creature.rect.x - event.pos[0],
-                        creature.rect.y - event.pos[1]
-                    )
-                    break
+                    if self.allow_dragging == True:
+                        self.selected = creature
+                        self.drag_offset = (
+                            creature.rect.x - event.pos[0],
+                            creature.rect.y - event.pos[1]
+                        )
+                        break
+
+                    else:
+                        creature.satisfaction_level += 0.5 * creature.satisfaction_multiplier
 
         elif event.type == pygame.MOUSEBUTTONUP:
             self.selected = None
 
         elif event.type == pygame.MOUSEMOTION and self.selected:
-            self.selected.rect.x = event.pos[0] + self.drag_offset[0]
-            self.selected.rect.y = event.pos[1] + self.drag_offset[1]
-            self.selected.x, self.selected.y = self.selected.rect.center  
+            if self.allow_dragging:
+                pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+                self.selected.rect.x = event.pos[0] + self.drag_offset[0]
+                self.selected.rect.y = event.pos[1] + self.drag_offset[1]
+                self.selected.x, self.selected.y = self.selected.rect.center  
 
     def update(self):
         if self.is_paused:
