@@ -13,7 +13,8 @@ class SatisfactionBar:
                  width : int = 50, 
                  height : int = 5, 
                  offset_x : int = -20, 
-                 offset_y : int = -30):
+                 offset_y : int = -30
+        ):
         
         self.width = width
         self.height = height
@@ -123,7 +124,7 @@ class GlobalSatisfactionBar(SatisfactionBar):
         total = sum(c.satisfaction_level for c in creatures)
         return total / len(creatures)
 
-    def draw(self, screen : pygame.Surface, creatures : list[Creature]):
+    def draw(self, screen : pygame.Surface, creatures : list[Creature]): #type: ignore
         avg = self.compute_average(creatures)
         super().draw(screen, self.x, self.y, avg)
 
@@ -192,22 +193,23 @@ class Food(Consumable): # dev2 : Add Satisfaction
         else:
             creature.satisfaction_level += creature.satisfaction_multiplier * self.satisfaction
 
-class Potion(Consumable): # dev2 : Add Effects
+class Potion(Consumable):
     """Add Effects"""
-    def __init__(self, duration : int, effect : Effect, multiplier : int):
-        super().__init__(name = "Potion")
+
+    def __init__(self, duration: int, effect: Effect, multiplier: int):
+        super().__init__(name="Potion")
         self.duration = duration
         self.effect = effect
         self.multiplier = multiplier
-    
-    def consume(self, name : str, creature: Creature, multiplier : int, duration : int):
-        effect_copy = type(self.effect)(name) # TODO: Fix Potion.consume to handle Effect class subclasses correctly
-        effect_copy.consume(creature, multiplier, duration) 
+
+    def consume(self, creature: "Creature"):
+        """Apply the stored effect instance to the creature"""
+        self.effect.consume(creature, self.multiplier, self.duration)
 
 class Cleanse(Consumable): # dev2: Clear Effects
     """Clear Effects"""
     def __init__(self):
-        super().__init__(name = self.name)
+        super().__init__(name = "Cleanse")
 
     def consume(self, creature : Creature):
         for effect in creature.effects[:]:
