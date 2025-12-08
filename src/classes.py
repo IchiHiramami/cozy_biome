@@ -149,6 +149,20 @@ class Effect():
                 creature.effects.remove(effect)
         self.duration = duration_frames
         creature.effects.append(self)
+
+    def to_dict(self, creature=None):
+        data = {
+            "name": self.name,
+            "duration": self.duration,
+            "type": self.__class__.__name__
+        }
+
+        if creature:
+            if isinstance(self, More_Satisfaction):
+                data["satisfaction_decay"] = creature.satisfaction_decay
+            elif isinstance(self, Less_Decay):
+                data["satisfaction_multiplier"] = creature.satisfaction_multiplier
+        return data
         
 class More_Satisfaction(Effect):
     """Increases Satisfaction sensitivity"""

@@ -1,0 +1,13 @@
+{
+    "world_name": "RON",
+    "world_score": 395.39999999999765,
+    "creatures": [
+        {
+            "name": "creature0",
+            "x": 156,
+            "y": 351,
+            "type": "super",
+            "satisfaction_level": 98.84999999999941,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "satisfaction_bar": 

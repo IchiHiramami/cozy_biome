@@ -61,17 +61,34 @@ class GameScene:
 
         # UI elements
         self.pause_menu_buttons : list[Button] = []
-        self.toolbar = Toolbar(
-        x=0,
-        y=520,
-        width=800,
-        height=80,
-        bg_color=(200, 171, 131),
-        buttons=[
-        Button(20, 540, 100, 40, pygame.font.Font(None, 30), "Toggle", "c8ab83", "eec584", "ffffff", on_click = self.toggle_toolbar),
-        Button(140, 540, 100, 40, pygame.font.Font(None, 30), "Pet", "c8ab83", "eec584", "ffffff", on_click = self.save_game_state),
+
+        # Build a tabbed toolbar with two tabs: Main and Admin
+        toolbar_font = pygame.font.Font(None, 30)
+
+        # Place tab content slightly below the header area so headers don't overlap
+        tab_content_y = 560
+
+        main_tab_buttons = [
+            Button(20, tab_content_y, 100, 40, toolbar_font, "Toggle", "c8ab83", "eec584", "ffffff", on_click = self.toggle_toolbar),
+            Button(140, tab_content_y, 100, 40, toolbar_font, "Pet", "c8ab83", "eec584", "ffffff", on_click = self.save_game_state),
         ]
-)
+
+        admin_tab_buttons = [
+            Button(20, tab_content_y, 120, 40, pygame.font.Font(None, 20), "Master Spawn", "c8ab83", "eec584", "ffffff", on_click=lambda: self.run_admin_command("spawn")),
+            Button(150, tab_content_y, 120, 40, pygame.font.Font(None, 20), "Refill All", "c8ab83", "eec584", "ffffff", on_click=lambda: self.run_admin_command("refill")),
+        ]
+
+        self.toolbar = Toolbar(
+            x=0,
+            y=520,
+            width=800,
+            height=80,
+            bg_color=(200, 171, 131),
+            tabs=[
+                {'name': 'Main', 'buttons': main_tab_buttons, 'elements': []},
+                {'name': 'Admin', 'buttons': admin_tab_buttons, 'elements': []}
+            ]
+        )
 
         pause_font = pygame.font.Font(None, 32)
 

@@ -181,35 +181,92 @@ class Toolbar:
     """
     IFYKYK
     """
-
-    def __init__(self, x: int, y : int , width : int, height : int, bg_color : tuple[int, int,int] | str, buttons : list[Button] | None = None, elements : list[object] | None = None):
+    def __init__(self, x: int, y : int , width : int, height : int, bg_color : tuple[int, int,int] | str, buttons : list[Button] | None = None, elements : list[object] | None = None, tabs: list[dict] | None = None):
         # Position and size of the toolbar
         self.rect = pygame.Rect(x, y, width, height)
 
         # Background color (hex or RGB)
         self.bg_color = bg_color if isinstance(bg_color, tuple) else hex_to_rgb(bg_color)
 
-        # Buttons inside the toolbar
+        # Legacy single-view buttons/elements
         self.buttons = buttons if buttons else []
-
-        # Other UI elements (inventory slots, icons, etc.)
         self.elements = elements if elements else []
+
+        # Tabs support: each tab is a dict with keys: 'name', 'buttons', 'elements'
+        # Accepts a list of such dicts. If provided, toolbar becomes tabbed.
+        self.tabs: list[dict] = tabs if tabs else []
+        self.active_tab = 0
+
+        # Create header buttons for tabs (lazily built)
+        self._tab_header_buttons: list[Button] = []
+
+        # Default font for tab headers
+        self._tab_font = pygame.font.Font(None, 22)
 
         self.visible = True
 
+        # If tabs provided, prepare header buttons
+        if self.tabs:
+            self._build_tab_headers()
+
+    def _build_tab_headers(self):
+        """Create small header Buttons for each tab to switch views."""
+        self._tab_header_buttons.clear()
+        padding = 8
+        btn_w = 110
+        btn_h = 26
+        x = self.rect.x + padding
+        y = self.rect.y + padding
+        for i, tab in enumerate(self.tabs):
+            name = tab.get('name', f'Tab {i}')
+            def make_onclick(idx):
+                return lambda idx=idx: self.switch_tab(idx)
+            btn = Button(x, y, btn_w, btn_h, self._tab_font, name, 'c8ab83', 'eec584', 'ffffff', on_click=make_onclick(i))
+            self._tab_header_buttons.append(btn)
+            x += btn_w + padding
+
+    def add_tab(self, name: str, buttons: list[Button] | None = None, elements: list[object] | None = None):
+        """Add a new tab to the toolbar."""
+        self.tabs.append({'name': name, 'buttons': buttons if buttons else [], 'elements': elements if elements else []})
+        self._build_tab_headers()
+
+    def switch_tab(self, index: int):
+        if 0 <= index < len(self.tabs):
+            self.active_tab = index
+
     def add_button(self, button : Button):
-        """Add a button to the toolbar."""
-        self.buttons.append(button)
+        """Add a button to the legacy single-view toolbar (or current tab if tabbed)."""
+        if self.tabs:
+            self.tabs[self.active_tab]['buttons'].append(button)
+        else:
+            self.buttons.append(button)
 
     def add_element(self, element : object):
         """Add any drawable UI element (inventory slot, icon, etc.)."""
-        self.elements.append(element)
+        if self.tabs:
+            self.tabs[self.active_tab]['elements'].append(element)
+        else:
+            self.elements.append(element)
 
     def handle_event(self, event : pygame.event.Event):
         """Send events to toolbar components only if visible."""
         if not self.visible:
             return
 
+        # If tabbed, send events to header buttons and active tab's components
+        if self.tabs:
+            for btn in self._tab_header_buttons:
+                btn.handle_event(event)
+
+            active = self.tabs[self.active_tab]
+            for button in active.get('buttons', []):
+                button.handle_event(event)
+            for element in active.get('elements', []):
+                if hasattr(element, "handle_event"):
+                    element.handle_event(event)
+            return
+
+        # Legacy behavior
         for button in self.buttons:
             button.handle_event(event)
 
@@ -225,7 +282,26 @@ class Toolbar:
         # Draw background rectangle
         pygame.draw.rect(screen, self.bg_color, self.rect)
 
-        # Draw buttons
+        # If tabbed, draw headers and active tab contents
+        if self.tabs:
+            # Draw header buttons
+            for i, btn in enumerate(self._tab_header_buttons):
+                # highlight active
+                if i == self.active_tab:
+                    # draw a slightly darker background behind the button
+                    pygame.draw.rect(screen, hex_to_rgb('bfa476'), btn.rect, border_radius=5)
+                btn.draw(screen)
+
+            # Draw active tab contents
+            active = self.tabs[self.active_tab]
+            for button in active.get('buttons', []):
+                button.draw(screen)
+            for element in active.get('elements', []):
+                if hasattr(element, "draw"):
+                    element.draw(screen)
+            return
+
+        # Draw buttons for legacy toolbar
         for button in self.buttons:
             button.draw(screen)
 
