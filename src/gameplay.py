@@ -70,7 +70,7 @@ class GameScene:
         # UI elements
         self.pause_menu_buttons : list[Button] = []
 
-        # Build a tabbed toolbar with two tabs: Main and Admin
+        # Build a tabbed toolbar with tabs
         toolbar_font = pygame.font.Font(None, 30)
 
         # Place tab content slightly below the header area so headers don't overlap

@@ -15,7 +15,7 @@ class SatisfactionBar:
                  height : int = 5, 
                  offset_x : int = -20, 
                  offset_y : int = -30):
-        
+            
         self.width = width
         self.height = height
         self.offset_x = offset_x

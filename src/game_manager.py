@@ -182,13 +182,11 @@ class Toolbar:
     IFYKYK
     """
     def __init__(self, x: int, y : int , width : int, height : int, bg_color : tuple[int, int,int] | str, buttons : list[Button] | None = None, elements : list[object] | None = None, tabs: list[dict] | None = None):
-        # Position and size of the toolbar
         self.rect = pygame.Rect(x, y, width, height)
 
         # Background color (hex or RGB)
         self.bg_color = bg_color if isinstance(bg_color, tuple) else hex_to_rgb(bg_color)
 
-        # Legacy single-view buttons/elements
         self.buttons = buttons if buttons else []
         self.elements = elements if elements else []
 
@@ -211,19 +209,18 @@ class Toolbar:
 
     def _build_tab_headers(self):
         """Create small header Buttons for each tab to switch views."""
-        self._tab_header_buttons.clear()
+        self._tab_header_buttons =  []
+
         padding = 8
-        btn_w = 110
-        btn_h = 26
-        x = self.rect.x + padding
-        y = self.rect.y + padding
+        width = 110
+        height = 26
+
+        header_y = self.rect.y - height - padding
+        header_x = self.rect.x + 60
+
         for i, tab in enumerate(self.tabs):
             name = tab.get('name', f'Tab {i}')
-            def make_onclick(idx):
-                return lambda idx=idx: self.switch_tab(idx)
-            btn = Button(x, y, btn_w, btn_h, self._tab_font, name, 'c8ab83', 'eec584', 'ffffff', on_click=make_onclick(i))
-            self._tab_header_buttons.append(btn)
-            x += btn_w + padding
+            
 
     def add_tab(self, name: str, buttons: list[Button] | None = None, elements: list[object] | None = None):
         """Add a new tab to the toolbar."""
