@@ -15,20 +15,15 @@ from datetime import datetime
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ASSETS = os.path.join(BASE_DIR, "assets")
 
-animated_cat = [
-    "assets/Sprites/cat_animation_1.png",
-    "assets/Sprites/cat_animation_2.png",
-    "assets/Sprites/cat_animation_3.png",
-    "assets/Sprites/cat_animation_4.png"
-]
+animated_cat = {
+    "Sprite" : ["assets/Sprites/cat_animation_1.png", "assets/Sprites/cat_animation_2.png", "assets/Sprites/cat_animation_3.png",],
+    }
 
-Nocky_OC = [
-    "assets/Sprites/Nocky_OC_1.png",
-    "assets/Sprites/Nocky_OC_2.png",
-    "assets/Sprites/Nocky_OC_2.png"
-]
+Nocky_OC = {
+        "Sprite" : ["assets/Sprites/Nocky_OC_1.png", "assets/Sprites/Nocky_OC_2.png", "assets/Sprites/Nocky_OC_2.png"]
+    }
 
-spritz = [animated_cat, Nocky_OC]
+spritz = [animated_cat["Sprite"], Nocky_OC["Sprite"]]
 
 class GameScene:
     def __init__(self, world_name: str, creatures : list[Creature] = [], foods : list[Food] = [], potions : list[Potion] = []):
@@ -44,23 +39,22 @@ class GameScene:
         if creatures:
             self.creatures = creatures
         else:
-            self.creatures = [
-                Creature(
-                    f"creature{i}",
-                    "super",
-                    randint(50, 750),
-                    randint(50, 550),
-                    choice(spritz),
-                )
-                for i in range(randint(2, 4))
-    ]
+            self.creatures = []
+            for i in range(randint(2,4)):
+                self_sprite = choice(spritz)
 
-        self.foods = foods
-        self.potions = potions
+                c = Creature(
+                    f"Creature{i}",
+                    "quaker" if self_sprite == spritz[1] else "mimi-carrier",
+                    randint(10, 500), randint(10, 500),
+                    self_sprite
+                    )
+                
+                self.creatures.append(c)
 
         ##################################
-        potion = Potion(10, Less_Decay(), 2)
-        potion.consume(self.creatures[0])
+        self.foods = []
+        self.potions = []
         ##################################
 
         self.selected: Creature | None = None
@@ -74,7 +68,7 @@ class GameScene:
         toolbar_font = pygame.font.Font(None, 30)
 
         # Place tab content slightly below the header area so headers don't overlap
-        tab_content_y = 560
+        tab_content_y = 580
 
         main_tab_buttons = [
             Button(20, tab_content_y, 100, 40, toolbar_font, "Toggle", "c8ab83", "eec584", "ffffff", on_click = self.toggle_toolbar),
@@ -197,14 +191,11 @@ class GameScene:
         self.toolbar.visible = not self.toolbar.visible
 
     def save_game_state(self):
-        Persistence.clear(self.world_name)
         Persistence.save_to_slot(self.world_name,
                                   sum(c.satisfaction_level for c in self.creatures),
                                     self.creatures,
                                     self.foods,
                                     self.potions)
-        for c in self.creatures:
-            print(c.effects)
         print("TODO: Save game here")  #TODO: will wire to Persistence later
 
     def load_game_state(self):

@@ -172,11 +172,11 @@ class More_Satisfaction(Effect):
     
     def consume(self, creature: Creature, multiplier: int, duration_frames: int):
         super().consume(creature, multiplier, duration_frames)
-        creature.satisfaction_decay = multiplier
+        creature.satisfaction_multiplier = multiplier
     
     def remove(self, creature : Creature):
         super().remove(creature)
-        creature.satisfaction_decay = 1
+        creature.satisfaction_multiplier = 1
     
 class Less_Decay(Effect):
     """Reduce Decay Rate of Creature"""
@@ -185,11 +185,12 @@ class Less_Decay(Effect):
     
     def consume(self, creature : Creature, multiplier : int, duration_frames : int):
         super().consume(creature, multiplier, duration_frames)
-        creature.satisfaction_multiplier = multiplier
+        creature.satisfaction_decay /= multiplier
     
     def remove(self, creature : Creature):
         super().remove(creature)
-        creature.satisfaction_multiplier = 1
+        creature.satisfaction_decay = 0.01
+
 
 class Consumable():
     def __init__(self, name : str):
@@ -212,13 +213,11 @@ class Potion(Consumable): # dev2 : Add Effects
     """Add Effects"""
     def __init__(self, duration : int, effect : Effect, multiplier : int):
         super().__init__(name = "Potion")
-        self.duration = duration
+        self.duration = duration * 120
         self.effect = effect
         self.multiplier = multiplier
     
     def consume(self, creature: Creature):
-        if not isinstance(self.effect, Effect):
-            raise TypeError("Potion.effect must be an Effect instance")
         effect_copy = type(self.effect)() # TODO: Fix Potion.consume to handle Effect class subclasses correctly
         effect_copy.consume(creature, self.multiplier, self.duration) 
 

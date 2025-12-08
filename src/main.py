@@ -59,15 +59,20 @@ def start_game():
 
     global current_scene # Transfer over to main gameplay
     log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "New Game Started")
+    go_back() # so that when the player quits the gameplay, it returns to the main menu
+
     current_scene = GameScene(world_name)
 
 def start_loaded_game(slot : str):
     print(f"Game selected from slot {slot}")
     global current_scene, creatureslist
+    creatureslist = []
     log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"Stated Loaded Game: {slot}")
     loaded_data = Persistence.load_slot(slot)
+    go_back() # so that when the player quits the gameplay, it returns to the main menu
     for c in loaded_data["creatures"]:
         creature = Persistence.unpack_creatures(c)
+        print(creature.x)
         creatureslist.append(creature)
     if loaded_data:
         current_scene = GameScene(loaded_data["world_name"], creatureslist)
@@ -76,7 +81,6 @@ def go_back():
     menu_manager.back()
     if menu_manager.current:
         menu_manager.current.activate()
-        # TODO: fix bug on main menu not returning
 
 # Global Variables
 return_to : Menu | None = None
@@ -112,7 +116,7 @@ load_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_ga
         300, 100 + Persistence.taken_name().index(i) * 100, 200, 60, font,
         (Persistence.load_slot(i)["world_name"]),
         "c8ab83", "eec584", "ffffff",
-        on_click=(lambda slot=i: start_loaded_game(slot))
+        on_click = (lambda slot=i: start_loaded_game(slot))
     )
     for i in Persistence.taken_name()
 ],
@@ -135,8 +139,9 @@ while is_running:
             else:
                 menu_manager.handle_event(event)
         
-        for creature in (creatureslist):
-            creature.update_effects()
+
+    for creature in (creatureslist):
+        creature.update_effects()
     
     screen.fill((0,0,0))
 

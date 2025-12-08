@@ -1,11 +1,11 @@
 {
     "world_name": "bababa",
-    "world_score": 979.3199999998872,
+    "world_score": 361.0799999999801,
     "creatures": [
         {
             "name": "creature0",
-            "x": 657,
-            "y": 101,
+            "x": 671,
+            "y": 212,
             "sprite": [
                 "assets/Sprites/cat_animation_1.png",
                 "assets/Sprites/cat_animation_2.png",
@@ -13,15 +13,15 @@
                 "assets/Sprites/cat_animation_4.png"
             ],
             "type": "super",
-            "satisfaction_level": 81.60999999999059,
+            "satisfaction_level": 90.26999999999502,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
         },
         {
             "name": "creature1",
-            "x": 577,
-            "y": 356,
+            "x": 552,
+            "y": 243,
             "sprite": [
                 "assets/Sprites/cat_animation_1.png",
                 "assets/Sprites/cat_animation_2.png",
@@ -29,15 +29,15 @@
                 "assets/Sprites/cat_animation_4.png"
             ],
             "type": "super",
-            "satisfaction_level": 81.60999999999059,
+            "satisfaction_level": 90.26999999999502,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
         },
         {
             "name": "creature2",
-            "x": 320,
-            "y": 455,
+            "x": 444,
+            "y": 257,
             "sprite": [
                 "assets/Sprites/cat_animation_1.png",
                 "assets/Sprites/cat_animation_2.png",
@@ -45,151 +45,22 @@
                 "assets/Sprites/cat_animation_4.png"
             ],
             "type": "super",
-            "satisfaction_level": 81.60999999999059,
+            "satisfaction_level": 90.26999999999502,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
         },
         {
-            "name": "creature0",
-            "x": 657,
-            "y": 101,
+            "name": "creature3",
+            "x": 213,
+            "y": 215,
             "sprite": [
-                "assets/Sprites/cat_animation_1.png",
-                "assets/Sprites/cat_animation_2.png",
-                "assets/Sprites/cat_animation_3.png",
-                "assets/Sprites/cat_animation_4.png"
+                "assets/Sprites/Nocky_OC_1.png",
+                "assets/Sprites/Nocky_OC_2.png",
+                "assets/Sprites/Nocky_OC_2.png"
             ],
             "type": "super",
-            "satisfaction_level": 81.60999999999059,
-            "satisfaction_multiplier": 1,
-            "satisfaction_decay": 0.01,
-            "effects": []
-        },
-        {
-            "name": "creature1",
-            "x": 574,
-            "y": 232,
-            "sprite": [
-                "assets/Sprites/cat_animation_1.png",
-                "assets/Sprites/cat_animation_2.png",
-                "assets/Sprites/cat_animation_3.png",
-                "assets/Sprites/cat_animation_4.png"
-            ],
-            "type": "super",
-            "satisfaction_level": 81.60999999999059,
-            "satisfaction_multiplier": 1,
-            "satisfaction_decay": 0.01,
-            "effects": []
-        },
-        {
-            "name": "creature2",
-            "x": 416,
-            "y": 201,
-            "sprite": [
-                "assets/Sprites/cat_animation_1.png",
-                "assets/Sprites/cat_animation_2.png",
-                "assets/Sprites/cat_animation_3.png",
-                "assets/Sprites/cat_animation_4.png"
-            ],
-            "type": "super",
-            "satisfaction_level": 81.60999999999059,
-            "satisfaction_multiplier": 1,
-            "satisfaction_decay": 0.01,
-            "effects": []
-        },
-        {
-            "name": "creature0",
-            "x": 657,
-            "y": 101,
-            "sprite": [
-                "assets/Sprites/cat_animation_1.png",
-                "assets/Sprites/cat_animation_2.png",
-                "assets/Sprites/cat_animation_3.png",
-                "assets/Sprites/cat_animation_4.png"
-            ],
-            "type": "super",
-            "satisfaction_level": 81.60999999999059,
-            "satisfaction_multiplier": 1,
-            "satisfaction_decay": 0.01,
-            "effects": []
-        },
-        {
-            "name": "creature1",
-            "x": 528,
-            "y": 427,
-            "sprite": [
-                "assets/Sprites/cat_animation_1.png",
-                "assets/Sprites/cat_animation_2.png",
-                "assets/Sprites/cat_animation_3.png",
-                "assets/Sprites/cat_animation_4.png"
-            ],
-            "type": "super",
-            "satisfaction_level": 81.60999999999059,
-            "satisfaction_multiplier": 1,
-            "satisfaction_decay": 0.01,
-            "effects": []
-        },
-        {
-            "name": "creature2",
-            "x": 313,
-            "y": 407,
-            "sprite": [
-                "assets/Sprites/cat_animation_1.png",
-                "assets/Sprites/cat_animation_2.png",
-                "assets/Sprites/cat_animation_3.png",
-                "assets/Sprites/cat_animation_4.png"
-            ],
-            "type": "super",
-            "satisfaction_level": 81.60999999999059,
-            "satisfaction_multiplier": 1,
-            "satisfaction_decay": 0.01,
-            "effects": []
-        },
-        {
-            "name": "creature0",
-            "x": 657,
-            "y": 101,
-            "sprite": [
-                "assets/Sprites/cat_animation_1.png",
-                "assets/Sprites/cat_animation_2.png",
-                "assets/Sprites/cat_animation_3.png",
-                "assets/Sprites/cat_animation_4.png"
-            ],
-            "type": "super",
-            "satisfaction_level": 81.60999999999059,
-            "satisfaction_multiplier": 1,
-            "satisfaction_decay": 0.01,
-            "effects": []
-        },
-        {
-            "name": "creature1",
-            "x": 506,
-            "y": 309,
-            "sprite": [
-                "assets/Sprites/cat_animation_1.png",
-                "assets/Sprites/cat_animation_2.png",
-                "assets/Sprites/cat_animation_3.png",
-                "assets/Sprites/cat_animation_4.png"
-            ],
-            "type": "super",
-            "satisfaction_level": 81.60999999999059,
-            "satisfaction_multiplier": 1,
-            "satisfaction_decay": 0.01,
-            "effects": []
-        },
-        {
-            "name": "creature2",
-            "x": 312,
-            "y": 221,
-            "sprite": [
-                "assets/Sprites/cat_animation_1.png",
-                "assets/Sprites/cat_animation_2.png",
-                "assets/Sprites/cat_animation_3.png",
-                "assets/Sprites/cat_animation_4.png"
-            ],
-            "type": "super",
-            "satisfaction_level": 81.60999999999059,
+            "satisfaction_level": 90.26999999999502,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
@@ -200,5 +71,5 @@
         "foods": [],
         "potions": []
     },
-    "last_saved": "December 08, 2025 09:36:24 PM"
+    "last_saved": "December 08, 2025 11:32:41 PM"
 }

@@ -62,15 +62,14 @@ class Persistence:
 
     @staticmethod
     def unpack_creatures(data):
-        print(data)
         c = Creature(
         name=data["name"],
         type=data["type"],
         x=data["x"],
         y=data["y"],
         sprite=data["sprite"], 
-        satisfaction_multiplier=data.get("satisfaction_multiplier", 1),
-        satisfaction_decay=data.get("satisfaction_decay", 0.01),
+        satisfaction_multiplier = 1,
+        satisfaction_decay = 0.01,
         satisfaction_level=data.get("satisfaction_level", 100)
         )
     
@@ -83,7 +82,7 @@ class Persistence:
             else:
                 continue
             effect.duration = eff_data.get("duration", 0)
-            # apply effect to creature
+
             effect.consume(c, getattr(c, "satisfaction_multiplier", 1), effect.duration)
         
         return c

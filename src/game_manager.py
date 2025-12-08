@@ -132,14 +132,14 @@ class MenuManager:
     def switch(self, menu: Menu):
         """Replace Menu with a new Menu"""
         if self.menus:
-            self.history.append(menu) #store to history
+            self.history.append(self.menus[-1]) #store to history
         self.menus = [menu]
 
     def back(self):
         """Return to previously removed Menu"""
         if self.history:
             restored = self.history.pop()
-            self.menus.append(restored)
+            self.menus = [restored]
 
     @property
     def current(self):
@@ -215,11 +215,29 @@ class Toolbar:
         width = 110
         height = 26
 
-        header_y = self.rect.y - height - padding
-        header_x = self.rect.x + 60
+        header_y = 480
+        header_x = self.rect.x + 10 + 40 + padding
 
         for i, tab in enumerate(self.tabs):
             name = tab.get('name', f'Tab {i}')
+
+            def switch_onclick(idx):
+                return lambda idx = idx: self.switch_tab(idx)
+            
+            btn = Button(
+                header_x, header_y,
+                width, height,
+                self._tab_font,
+                name,
+                'c8ab83', 'eec584', 'ffffff',
+                on_click = switch_onclick(i)
+            )
+
+            btn.active_bg = hex_to_rgb("bfa476")   # darker beige
+            btn.inactive_bg = hex_to_rgb("c8ab83") # normal beige
+
+            self._tab_header_buttons.append(btn)
+            header_x += width + padding
             
 
     def add_tab(self, name: str, buttons: list[Button] | None = None, elements: list[object] | None = None):
@@ -285,8 +303,10 @@ class Toolbar:
             for i, btn in enumerate(self._tab_header_buttons):
                 # highlight active
                 if i == self.active_tab:
-                    # draw a slightly darker background behind the button
-                    pygame.draw.rect(screen, hex_to_rgb('bfa476'), btn.rect, border_radius=5)
+                    pygame.draw.rect(screen, btn.active_bg, btn.rect, border_radius = 5)
+                else:
+                    pygame.draw.rect(screen, btn.inactive_bg, btn.rect, border_radius = 5)
+
                 btn.draw(screen)
 
             # Draw active tab contents
