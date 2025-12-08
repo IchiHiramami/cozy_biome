@@ -6,8 +6,9 @@
 import os
 import pygame
 from random import randint, choice
+from persistence import Persistence # type: ignore
 from classes import Creature, Food, Potion, Cleanse, GlobalSatisfactionBar  # type: ignore
-from game_manager import Button, InputField
+from game_manager import Button, InputField, Toolbar
 from logger import log
 from datetime import datetime
 
@@ -30,30 +31,100 @@ Nocky_OC = [
 spritz = [animated_cat, Nocky_OC]
 
 class GameScene:
-    def __init__(self, world_name: str):
+    def __init__(self, world_name: str, creatures : list[Creature] = [], foods : list[Food] = [], potions : list[Potion] = []):
         self.world_name = world_name
-        self.global_bar = GlobalSatisfactionBar(300, 20)
+        self.global_bar = GlobalSatisfactionBar(800, 20)
+
+        #state
+        self.is_paused = False
 
         self.background = pygame.image.load(os.path.join(ASSETS, "Background/main_world.png"))
         self.background = pygame.transform.scale(self.background, (800, 600))
 
-        self.creatures: list[Creature] = [
+        self.creatures = [
             Creature(
                 f"creature{i}",
+                "super",
                 randint(50, 750),
                 randint(50, 550),
                 choice(spritz),
             )
             for i in range(randint(2, 4))
-        ]
+        ] if not creatures else creatures
+
+        self.foods = foods
+        self.potions = potions
 
         self.selected: Creature | None = None
+        self.inputs: list[InputField] = []
+        
 
+        # UI elements
+        self.pause_menu_buttons : list[Button] = []
+        self.toolbar = Toolbar(
+        x=0,
+        y=520,
+        width=800,
+        height=80,
+        bg_color=(200, 171, 131),
+        buttons=[
+        Button(20, 540, 100, 40, pygame.font.Font(None, 30), "Toggle", "c8ab83", "eec584", "ffffff", on_click = self.toggle_toolbar),
+        Button(140, 540, 100, 40, pygame.font.Font(None, 30), "Pet", "c8ab83", "eec584", "ffffff", on_click = self.save_game_state),
+        ]
+)
+
+        pause_font = pygame.font.Font(None, 32)
+
+        self.hamburger_btn = Button(
+            10, 10, 40, 40,
+            pygame.font.Font(None, 30),
+            "≡",
+            "c8ab83", "eec584", "ffffff",
+            on_click=self.toggle_pause            
+        )
+
+        self.toggle_toolbar_btn = Button(
+            10, 480 if self.toolbar.visible else 600, 40, 40,
+            pygame.font.Font(None, 30),
+            "^",
+            "c8ab83", "eec584", "ffffff",
+            on_click=self.toggle_toolbar
+        )
+
+        resume_btn = Button(
+            300, 200, 200, 50, pause_font,
+            "Resume", "c8ab83", "eec584", "ffffff",
+            on_click=self.toggle_pause
+        )
+
+        save_btn = Button(
+            300, 260, 200, 50, pause_font,
+            "Save Game", "c8ab83", "eec584", "ffffff",
+            on_click=self.save_game_state
+        )
+
+        load_btn = Button(
+            300, 320, 200, 50, pause_font,
+            "Load Game", "c8ab83", "eec584", "ffffff",
+            on_click=self.load_game_state
+        )
+
+        quit_btn = Button(
+            300, 380, 200, 50, pause_font,
+            "Quit to Menu", "c8ab83", "eec584", "ffffff",
+            on_click=self.quit_to_main_menu
+)
+
+        self.pause_menu_buttons.extend([resume_btn, save_btn, load_btn, quit_btn])
+
+
+
+
+
+
+        # Admin input field -> to be shipped in the final game but NOT documented (cheat code kumbaga)
         self.master_buttons: list[Button] = []
         self.master_visible = False      
-
-        self.inputs: list[InputField] = []
-        # Admin input field -> to be shipped in the final game but NOT documented (cheat code kumbaga)
         self.admin_field = InputField(300, 200, 200, 60, pygame.font.Font(None, 20))
         self.inputs.append(self.admin_field)
 
@@ -93,6 +164,29 @@ class GameScene:
 
         self.master_buttons.extend([spawn_btn_m, reset_btn_m, refill_btn_m, hide_btn_m])
 
+    def toggle_pause(self):
+        self.is_paused = not self.is_paused
+        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"Paused set to {self.is_paused}")
+
+    def toggle_toolbar(self):
+        self.toolbar.visible = not self.toolbar.visible
+
+    def save_game_state(self):
+        Persistence.save_to_slot(self.world_name,
+                                  sum(c.satisfaction_level for c in self.creatures),
+                                    self.creatures,
+                                    self.foods,
+                                    self.potions)
+        print("TODO: Save game here")  #TODO: will wire to Persistence later
+
+    def load_game_state(self):
+        print("TODO: Load game here")
+
+    def quit_to_main_menu(self):
+        import main
+        main.current_scene = None
+        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "Returned to main menu from pause")
+
     def toggle_master(self, state: bool):
         """Show/hide master buttons"""
         self.master_visible = state
@@ -101,6 +195,7 @@ class GameScene:
     def debug_spawn(self):
         new = Creature(
             f"creature{len(self.creatures)}",
+            "super",
             randint(50, 750),  
             randint(50, 550),  
             choice(spritz)
@@ -140,6 +235,18 @@ class GameScene:
         log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, f"Unknown command '{cmd}'")
 
     def handle_event(self, event: pygame.event.Event):
+        # Always let hamburger receive events
+        self.hamburger_btn.handle_event(event)
+
+        self.toolbar.handle_event(event)
+        self.toggle_toolbar_btn.handle_event(event)
+
+        # If paused, direct events only to pause buttons and return early
+        if self.is_paused:
+            for b in self.pause_menu_buttons:
+                b.handle_event(event)
+            return
+
         for button in self.master_buttons:
             button.handle_event(event)
 
@@ -148,6 +255,8 @@ class GameScene:
                 fields.handle_event(event)
 
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                self.toggle_pause()
 
             if event.key == pygame.K_SLASH:
                 self.admin_mode = not self.admin_mode 
@@ -179,6 +288,9 @@ class GameScene:
             self.selected.x, self.selected.y = self.selected.rect.center  
 
     def update(self):
+        if self.is_paused:
+            return #temporarily disables updates when game state is paused
+        
         for creature in self.creatures:
             creature.update_effects()
             creature.satisfaction_level = max(
@@ -188,18 +300,21 @@ class GameScene:
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self.background, (0, 0))
-
         self.global_bar.draw(screen, self.creatures)
 
+        # Always draw hamburger
+        self.hamburger_btn.draw(screen)
+
+        self.toolbar.draw(screen)
+        self.toggle_toolbar_btn.draw(screen)
+        
         for creature in self.creatures:
-
             if creature.satisfaction_level > 70:
-                creature.update_sprite(1)  # happy
+                creature.update_sprite(1)
             elif creature.satisfaction_level < 30:
-                creature.update_sprite(2)  # sad
+                creature.update_sprite(2)
             else:
-                creature.update_sprite(0)  # normal
-
+                creature.update_sprite(0)
             creature.draw(screen)
 
         if self.master_visible:
@@ -209,3 +324,11 @@ class GameScene:
         if self.admin_mode:
             for input_field in self.inputs:
                 input_field.draw(screen)
+
+        if self.is_paused:
+            overlay = pygame.Surface((800, 600), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 150))
+            screen.blit(overlay, (0, 0))
+
+            for b in self.pause_menu_buttons:
+                b.draw(screen)

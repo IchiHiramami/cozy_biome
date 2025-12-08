@@ -177,3 +177,59 @@ class GameSetupMenu(Menu):
         """Return dict of all input field values"""
         return {f"field_{i}": field.text for i, field in enumerate(self.input_fields)}
     
+class Toolbar:
+    """
+    IFYKYK
+    """
+
+    def __init__(self, x: int, y : int , width : int, height : int, bg_color : tuple[int, int,int] | str, buttons : list[Button] | None = None, elements : list[object] | None = None):
+        # Position and size of the toolbar
+        self.rect = pygame.Rect(x, y, width, height)
+
+        # Background color (hex or RGB)
+        self.bg_color = bg_color if isinstance(bg_color, tuple) else hex_to_rgb(bg_color)
+
+        # Buttons inside the toolbar
+        self.buttons = buttons if buttons else []
+
+        # Other UI elements (inventory slots, icons, etc.)
+        self.elements = elements if elements else []
+
+        self.visible = True
+
+    def add_button(self, button : Button):
+        """Add a button to the toolbar."""
+        self.buttons.append(button)
+
+    def add_element(self, element : object):
+        """Add any drawable UI element (inventory slot, icon, etc.)."""
+        self.elements.append(element)
+
+    def handle_event(self, event : pygame.event.Event):
+        """Send events to toolbar components only if visible."""
+        if not self.visible:
+            return
+
+        for button in self.buttons:
+            button.handle_event(event)
+
+        for element in self.elements:
+            if hasattr(element, "handle_event"):
+                element.handle_event(event)
+
+    def draw(self, screen : pygame.Surface):
+        """Draw the toolbar and all its components."""
+        if not self.visible:
+            return
+
+        # Draw background rectangle
+        pygame.draw.rect(screen, self.bg_color, self.rect)
+
+        # Draw buttons
+        for button in self.buttons:
+            button.draw(screen)
+
+        # Draw inventory slots or other UI elements
+        for element in self.elements:
+            if hasattr(element, "draw"):
+                element.draw(screen)

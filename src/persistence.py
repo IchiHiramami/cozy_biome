@@ -1,14 +1,15 @@
 import json
+import os
 from datetime import datetime
 from classes import Creature, Food, Potion
 from typing import Any
 
 class Persistence:
     @staticmethod
-    def save_to_slot(file_slot : int, world_name : str, world_score : int, creatures : list[Creature], foods : list[Food], potions : list[Potion]):
-        filename = f"checkpoint_{file_slot}"
+    def save_to_slot(file_slot : str, world_score : int | float, creatures : list[Creature], foods : list[Food], potions : list[Potion]):
+        filename = f"save_files/{file_slot}"
         state : dict[str, Any] = {
-            "world_name" : world_name,
+            "world_name" : file_slot,
             "world_score" : world_score,
             "creatures" : [],
             "inventory" : {
@@ -24,6 +25,7 @@ class Persistence:
                 "name": creature.name,
                 "x": creature.x,
                 "y": creature.y,
+                "type": creature.type,
                 "satisfaction_level": creature.satisfaction_level,
                 "satisfaction_multiplier": creature.satisfaction_multiplier,
                 "satisfaction_decay": creature.satisfaction_decay,
@@ -49,10 +51,16 @@ class Persistence:
             json.dump(state, f, indent = 4)
 
     @staticmethod
-    def load_slot(file_slot : int):
-        filename = f"checkpoint_{file_slot}"
+    def load_slot(file_slot : str):
+        filename = f"save_files/{file_slot}"
 
         with open(filename, "r") as f:
             return json.load(f)
-
-
+        
+    @staticmethod
+    def taken_name():
+        folder = "save_files"
+        filenames : list[str]= []
+        for filename in os.listdir(folder):
+            filenames.append(filename)
+        return filenames

@@ -62,14 +62,15 @@ class SatisfactionBar:
         )
 
 class Creature:
-    def __init__(self, name : str, x : int, y : int, sprite: list[str],
-                satisfaction_multiplier : int = 1, 
+    def __init__(self, name : str, type : str, x : int, y : int, sprite: list[str],
+                satisfaction_multiplier : int = 1,
                 satisfaction_decay : float = 0.01,
                 satisfaction_level : float = 100,
                 dragging : bool = True):
         self.name = name
         self.x = x
         self.y = y
+        self.type = type
         self.satisfaction_multiplier  = satisfaction_multiplier
         self.satisfaction_decay  = satisfaction_decay
         self.satisfaction_level = satisfaction_level
@@ -106,7 +107,6 @@ class Creature:
     def update_effects(self):
         for effects in self.effects[:]:
             effects.update(self)
-
 
 class GlobalSatisfactionBar(SatisfactionBar):
     def __init__(self, screen_width : int=800, y : int=20, height : int=12, margin : int =40):
@@ -213,3 +213,9 @@ class Cleanse(Consumable): # dev2: Clear Effects
     def consume(self, creature : Creature):
         for effect in creature.effects[:]:
             effect.remove(creature)
+
+class Inventory:
+    def __init__(self, foods : list[Food], potions : list[Potion]):
+        self.foods = foods
+        self.potions = potions
+        

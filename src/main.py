@@ -50,22 +50,23 @@ def quit_game():
 
 def start_game():
     world_name = name_Field.return_input()
+    if world_name in Persistence.taken_name():
+        return # TO DO: User picks another world name
     print(f"World Name:{world_name}")
     print(f"Time of Creation: {datetime.now().strftime("%B %d, %Y %I:%M:%S %p")}")
+    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "World Name set to " + world_name)
 
     global current_scene # Transfer over to main gameplay
     log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "New Game Started")
     current_scene = GameScene(world_name)
-        #TODO: log here
-    pass
 
-def start_loaded_game(slot : int):
+def start_loaded_game(slot : str):
     print(f"Game selected from slot {slot}")
     global current_scene
     log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"Stated Loaded Game: {slot}")
-    loaded_data = Persistence.load_slot(slot+1)
+    loaded_data = Persistence.load_slot(slot)
     if loaded_data:
-        current_scene = GameScene(loaded_data["world_name"])
+        current_scene = GameScene(loaded_data["world_name"], loaded_data["creatures"])
 
 def go_back():
     menu_manager.back()
@@ -104,15 +105,15 @@ home_menu = Menu(os.path.join(ASSETS, "Background/main_menu_noncut.png"), [new_g
 new_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"), [start_game_btn, back_btn], [name_Field], bg_manager)
 load_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"), [
     Button(
-        300, 100 + i * 100, 200, 60, font,
-        (Persistence.load_slot(i+1)["world_name"] if Persistence.load_slot(i+1) else f"Empty Slot {i+1}"),
+        300, 100 + Persistence.taken_name().index(i) * 100, 200, 60, font,
+        (Persistence.load_slot(i)["world_name"]),
         "c8ab83", "eec584", "ffffff",
         on_click=(lambda slot=i: start_loaded_game(slot))
     )
-    for i in range(3)
+    for i in Persistence.taken_name()
 ],
 [],
-bg_manager)
+bg_manager) # TO DO: Scrollbar if load slots are more than 3
 
 menu_manager.push(home_menu) # Start app with home menu first
 home_menu.activate()
