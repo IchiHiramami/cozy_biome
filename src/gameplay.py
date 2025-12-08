@@ -64,7 +64,7 @@ class GameScene:
             pygame.font.Font(None, 20),
             "Master Spawn",
             "c8ab83", "eec584", "ffffff",
-            on_click=self.debug_spawn
+            on_click=lambda: self.run_admin_command("spawn")
         )
 
         reset_btn_m = Button(
@@ -98,8 +98,6 @@ class GameScene:
         self.master_visible = state
         log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, f"Admin toggle set to {state}")
 
-
-
     def debug_spawn(self):
         new = Creature(
             f"creature{len(self.creatures)}",
@@ -108,6 +106,7 @@ class GameScene:
             choice(spritz)
         )
         self.creatures.append(new)
+        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, "Spawned creature")
 
     def run_admin_command(self, cmd: str):
         cmd = cmd.strip().lower()

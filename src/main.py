@@ -54,14 +54,18 @@ def start_game():
     print(f"Time of Creation: {datetime.now().strftime("%B %d, %Y %I:%M:%S %p")}")
 
     global current_scene # Transfer over to main gameplay
+    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "New Game Started")
     current_scene = GameScene(world_name)
         #TODO: log here
     pass
 
-def start_loaded_game(slot):
-    print(slot)
+def start_loaded_game(slot : int):
+    print(f"Game selected from slot {slot}")
     global current_scene
-    current_scene = GameScene(Persistence.load_slot(slot+1))
+    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"Stated Loaded Game: {slot}")
+    loaded_data = Persistence.load_slot(slot+1)
+    if loaded_data:
+        current_scene = GameScene(loaded_data["world_name"])
 
 def go_back():
     menu_manager.back()
@@ -98,16 +102,17 @@ home_menu = Menu(os.path.join(ASSETS, "Background/main_menu_noncut.png"), [new_g
 
 # New Game Setup Menu
 new_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"), [start_game_btn, back_btn], [name_Field], bg_manager)
-load_game_menu = GameSetupMenu(
-    os.path.join(ASSETS, "Background/main_menu_new_game.png"),
-    [
-        Button(300, 100 + i * 100, 200, 60, font, Persistence.load_slot(i+1)["world_name"],
-               "c8ab83", "eec584", "ffffff", on_click=(lambda slot=i: start_loaded_game(slot))
-        )
-        for i in range(3)
-    ],
-    None,
-    bg_manager)
+load_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"), [
+    Button(
+        300, 100 + i * 100, 200, 60, font,
+        (Persistence.load_slot(i+1)["world_name"] if Persistence.load_slot(i+1) else f"Empty Slot {i+1}"),
+        "c8ab83", "eec584", "ffffff",
+        on_click=(lambda slot=i: start_loaded_game(slot))
+    )
+    for i in range(3)
+],
+[],
+bg_manager)
 
 menu_manager.push(home_menu) # Start app with home menu first
 home_menu.activate()

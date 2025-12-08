@@ -20,7 +20,7 @@ def hex_to_rgb(hex_color : str) -> tuple[int, int, int]:
 class Button:
     def __init__(self, xpos : int, ypos : int, wid : int | float, hei : int | float, 
                  font : pygame.font.Font, 
-                 text : str,
+                 text : str | None,
                  # dev's note: color args can either be in hex <#str> or RGB <(rr,gg,bb)>
                  base_color : tuple[int, int, int] |str ,
                  on_hover_color : tuple[int, int, int] | str,

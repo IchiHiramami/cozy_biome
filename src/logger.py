@@ -1,5 +1,3 @@
-import logging
-
 def log(timestamp : str, type : int, message: str):
     """
     Interaction Logger
@@ -26,4 +24,5 @@ def log(timestamp : str, type : int, message: str):
 
 def clear():
     with open("cozy_biome.log", "w") as f:
+        f.read
         pass

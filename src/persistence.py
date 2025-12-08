@@ -1,11 +1,13 @@
 import json
 from datetime import datetime
+from classes import Creature, Food, Potion
+from typing import Any
 
 class Persistence:
     @staticmethod
-    def save_to_slot(file_slot : int, world_name : str, world_score : int, creatures : list[object], foods : list[object], potions : list[object]):
+    def save_to_slot(file_slot : int, world_name : str, world_score : int, creatures : list[Creature], foods : list[Food], potions : list[Potion]):
         filename = f"checkpoint_{file_slot}"
-        state = {
+        state : dict[str, Any] = {
             "world_name" : world_name,
             "world_score" : world_score,
             "creatures" : [],
@@ -20,10 +22,9 @@ class Persistence:
         for creature in creatures:
             state["creatures"].append({
                 "name": creature.name,
-                "type": creature.type,
                 "x": creature.x,
                 "y": creature.y,
-                "satisfaction": creature.satisfaction,
+                "satisfaction_level": creature.satisfaction_level,
                 "satisfaction_multiplier": creature.satisfaction_multiplier,
                 "satisfaction_decay": creature.satisfaction_decay,
                 "satisfaction_bar": creature.satisfaction_bar,
@@ -48,18 +49,10 @@ class Persistence:
             json.dump(state, f, indent = 4)
 
     @staticmethod
-    def load_slot(file_slot):
+    def load_slot(file_slot : int):
         filename = f"checkpoint_{file_slot}"
 
-        try:
-            with open(filename, "r") as f:
-                return json.load(f)
-        except FileNotFoundError:
-            return None
-        except json.JSONDecodeError:
-            return None
-        except Exception as e:
-            print("Error loading:", e)
-            return None
+        with open(filename, "r") as f:
+            return json.load(f)
 
 
