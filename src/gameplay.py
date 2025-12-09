@@ -6,7 +6,7 @@
 import os
 import pygame
 from random import randint, choice
-from persistence import Persistence # type: ignore
+from persistence import Persistence
 from classes import PetAction, Creature, Food, Potion, Cleanse, GlobalSatisfactionBar, Less_Decay, More_Satisfaction  # type: ignore
 from game_manager import Button, InputField, InventorySlot, Toolbar
 from logger import log
