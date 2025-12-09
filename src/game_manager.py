@@ -3,20 +3,10 @@
 # --------------------------------------------------------------
 
 import pygame
+from classes import Food, Cleanse, Potion
 from collections.abc import Callable
-
-def hex_to_rgb(hex_color : str) -> tuple[int, int, int]:
-    """
-    Allows for all the functions to be able to take HEX values instead of just RGB
-    """
-    hex_color = hex_color.lstrip('#')
-    if len(hex_color) != 6:
-        raise ValueError("Hex color must be 6 characters long.")
-    r = int(hex_color[0:2], 16)
-    g = int(hex_color[2:4], 16)
-    b = int(hex_color[4:6], 16)
-    return (r, g, b)
-
+from typing import Any
+from non_essential import hex_to_rgb
 class Button:
     def __init__(self, xpos : int, ypos : int, wid : int | float, hei : int | float, 
                  font : pygame.font.Font, 
@@ -77,6 +67,7 @@ class InputField:
     def handle_event(self, event : pygame.event.Event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             self.active = self.rect.collidepoint(event.pos) # true if the field in being interacted
+
 
         if event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_BACKSPACE:
@@ -183,22 +174,40 @@ class GameSetupMenu(Menu):
         return {f"field_{i}": field.text for i, field in enumerate(self.input_fields)}
     
 class InventorySlot:
-    def __init__(self, x: int, y : int, size : int, bg_color : str ="#c8ab83", border_color : str = "#ffffff", item : str = None, quantity : int = 0):
-        self.rect = pygame.Rect(x, y, size, size)
-        self.hovered = False
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        size: int,
+        item_name: str | None = None,
+        icon: pygame.Surface | None = None,
+        bg_color: str = "#c8ab83",
+        border_color: str = "#ffffff",
+        on_click: Callable[[str], None] | None = None
+    ) -> None:
         
-        # Colors
-        self.bg_color = hex_to_rgb(bg_color) if isinstance(bg_color, str) else bg_color
-        self.border_color = hex_to_rgb(border_color) if isinstance(border_color, str) else border_color
+        self.rect: pygame.Rect = pygame.Rect(x, y, size, size)
 
-        # Item data
-        self.item = item          # Should be a sprite or object with .icon
-        self.quantity = quantity
+        # Item identity (string only)
+        self.item_name = item_name
+        self.icon = icon
 
-        # Font for quantity text
-        self.font = pygame.font.Font(None, 20)
+        # Callback when clicked
+        if on_click:
+            self.on_use = on_click
 
-    def set_item(self, item, quantity=1):
+        # UI state
+        self.hovered: bool = False
+        self.bg_color: tuple[int, int, int] = hex_to_rgb(bg_color)
+        self.border_color: tuple[int, int, int] = hex_to_rgb(border_color)
+
+        # Displayed quantity (synced from Inventory)
+        self.quantity: int = 0
+
+        # Font
+        self.font: pygame.font.Font = pygame.font.Font(None, 18)
+
+    def set_item(self, item : Food | Potion | Cleanse , quantity : int =1):
         """Add item to a slot"""
         if self.item:
             if item == self.item:
@@ -211,35 +220,41 @@ class InventorySlot:
         self.item = None
         self.quantity = 0
 
-    def handle_event(self, event):
+    def handle_event(self, event : pygame.event.Event):
         mx, my = pygame.mouse.get_pos()
         hovered = self.rect.collidepoint(mx, my)
         self.hovered = hovered
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
+                if hasattr(self, 'on_use') and self.on_use is not None:
+                    self.on_use(self.item_name)
                 print("Clicked inventory slot")
-                # You can add custom behavior here
                 return True
         return False
 
-    def draw(self, screen):
-        # Draw background
+    def draw(self, screen : pygame.Surface, inventory: Any):
         pygame.draw.rect(screen, self.bg_color, self.rect, border_radius=6)
-
-        # Draw border
         pygame.draw.rect(screen, self.border_color, self.rect, width=2, border_radius=6)
 
-        # Draw item icon
-        if self.item and hasattr(self.item, "icon"):
-            icon = pygame.transform.scale(self.item.icon, (self.rect.width - 8, self.rect.height - 8))
+        # Draw icon
+        if self.icon:
+            icon = pygame.transform.scale(self.icon, (self.rect.width - 8, self.rect.height - 8))
             screen.blit(icon, (self.rect.x + 4, self.rect.y + 4))
 
+        # Get quantity from inventory
+        if self.item_name in inventory.foods:
+            self.quantity = inventory.foods[self.item_name]
+        elif self.item_name in inventory.potions:
+            self.quantity = inventory.potions[self.item_name]
+        elif self.item_name in inventory.cleanse:
+            self.quantity = inventory.cleanse[self.item_name]
+
         # Draw quantity
-        if self.quantity > 1:
+        if self.quantity > 0:
             text = self.font.render(str(self.quantity), True, (255, 255, 255))
             screen.blit(text, (self.rect.right - text.get_width() - 4,
-                               self.rect.bottom - text.get_height() - 2))
+                            self.rect.bottom - text.get_height() - 2))
 
 
 class Toolbar:
@@ -248,6 +263,7 @@ class Toolbar:
     """
     def __init__(self, x: int, y : int , width : int, height : int, bg_color : tuple[int, int,int] | str, buttons : list[Button] | None = None, elements : list[object] | None = None, tabs: list[dict] | None = None):
         self.rect = pygame.Rect(x, y, width, height)
+        self.parent_scene = None
 
         # Background color (hex or RGB)
         self.bg_color = bg_color if isinstance(bg_color, tuple) else hex_to_rgb(bg_color)
@@ -257,7 +273,7 @@ class Toolbar:
 
         # Tabs support: each tab is a dict with keys: 'name', 'buttons', 'elements'
         # Accepts a list of such dicts. If provided, toolbar becomes tabbed.
-        self.tabs: list[dict] = tabs if tabs else []
+        self.tabs: list[dict[str, Any]] = tabs if tabs else []
         self.active_tab = 0
 
         # Create header buttons for tabs (lazily built)
@@ -286,7 +302,7 @@ class Toolbar:
         for i, tab in enumerate(self.tabs):
             name = tab.get('name', f'Tab {i}')
 
-            def switch_onclick(idx):
+            def switch_onclick(idx : int):
                 return lambda idx = idx: self.switch_tab(idx)
             
             btn = Button(
@@ -354,7 +370,7 @@ class Toolbar:
             if hasattr(element, "handle_event"):
                 element.handle_event(event)
 
-    def draw(self, screen : pygame.Surface):
+    def draw(self, screen: pygame.Surface) -> None:
         """Draw the toolbar and all its components."""
         if not self.visible:
             return
@@ -368,26 +384,46 @@ class Toolbar:
             for i, btn in enumerate(self._tab_header_buttons):
                 # highlight active
                 if i == self.active_tab:
-                    pygame.draw.rect(screen, btn.active_bg, btn.rect, border_radius = 5)
+                    pygame.draw.rect(screen, btn.active_bg, btn.rect, border_radius=5)  # type: ignore
                 else:
-                    pygame.draw.rect(screen, btn.inactive_bg, btn.rect, border_radius = 5)
+                    pygame.draw.rect(screen, btn.inactive_bg, btn.rect, border_radius=5)  # type: ignore
 
                 btn.draw(screen)
 
             # Draw active tab contents
             active = self.tabs[self.active_tab]
+
+            # ✅ Buttons (may include InventorySlot)
             for button in active.get('buttons', []):
-                button.draw(screen)
+                if isinstance(button, InventorySlot):
+                    # Pass inventory from parent scene
+                    button.draw(screen, self.parent_scene.inventory)
+                else:
+                    button.draw(screen)
+
+            # ✅ Elements (may include InventorySlot)
             for element in active.get('elements', []):
                 if hasattr(element, "draw"):
-                    element.draw(screen)
+                    if isinstance(element, InventorySlot):
+                        element.draw(screen, self.parent_scene.inventory)
+                    else:
+                        element.draw(screen)
+
             return
 
-        # Draw buttons for legacy toolbar
+        # Legacy toolbar (non-tabbed)
         for button in self.buttons:
-            button.draw(screen)
+            if isinstance(button, InventorySlot):
+                button.draw(screen, self.parent_scene.inventory)
+            else:
+                button.draw(screen)
 
         # Draw inventory slots or other UI elements
         for element in self.elements:
             if hasattr(element, "draw"):
-                element.draw(screen)
+                if isinstance(element, InventorySlot):
+                    element.draw(screen, self.parent_scene.inventory)
+                else:
+                    element.draw(screen)
+            else:
+                print("Element has no draw method:", element)

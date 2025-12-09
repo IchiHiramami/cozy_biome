@@ -1,3 +1,11 @@
-[2025-12-09 11:20:11] -- INFO -- New Game Set
-[2025-12-09 11:20:12] -- INFO -- World Name set to 
-[2025-12-09 11:20:12] -- INFO -- New Game Started
+[2025-12-09 15:24:50] -- INFO -- Stated Loaded Game: Hello
+[2025-12-09 15:24:50] -- INFO -- Acquired an item
+[2025-12-09 15:24:51] -- INFO -- Player selected Creature0
+[2025-12-09 15:24:51] -- INFO -- Started dragging creature 'Creature0' at (407, 148)
+[2025-12-09 15:27:38] -- ADMIN ACCESS -- Admin access set to True
+[2025-12-09 15:27:39] -- INFO -- Player selected Creature0
+[2025-12-09 15:27:39] -- INFO -- Started dragging creature 'Creature0' at (407, 148)
+[2025-12-09 15:27:40] -- ADMIN ACCESS -- Master panel activated
+[2025-12-09 15:27:43] -- ADMIN ACCESS -- Refilled all creatures
+[2025-12-09 15:27:45] -- ADMIN ACCESS -- Admin toggle set to False
+[2025-12-09 15:27:46] -- ADMIN ACCESS -- Admin access set to False

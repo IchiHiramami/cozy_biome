@@ -7,10 +7,9 @@ import os
 import pygame
 from random import randint, choice
 from persistence import Persistence
-from classes import PetAction, Creature, Food, Potion, Cleanse, GlobalSatisfactionBar, Less_Decay, More_Satisfaction  # type: ignore
+from classes import PetAction, Creature, Food, Potion, Cleanse, GlobalSatisfactionBar, Less_Decay, More_Satisfaction, Inventory  # type: ignore
 from game_manager import Button, InputField, InventorySlot, Toolbar
 from logger import log
-from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ASSETS = os.path.join(BASE_DIR, "assets")
@@ -35,7 +34,7 @@ WORLD_BOTTOM = 600 - PADDING
 
 
 class GameScene:
-    def __init__(self, world_name: str, creatures : list[Creature] = [], foods : list[Food] = [], potions : list[Potion] = []):
+    def __init__(self, world_name: str, creatures : list[Creature] = [], foods : dict[Food, int] = None, potions : dict[Potion, int] = None):
         self.world_name = world_name
         self.global_bar = GlobalSatisfactionBar(800, 20)
 
@@ -50,7 +49,7 @@ class GameScene:
         if creatures:
             self.creatures = creatures
         else:
-            self.creatures = []
+            self.creatures : list[Creature] = []
             for i in range(randint(2,4)):
                 self_sprite = choice(spritz)
 
@@ -63,10 +62,11 @@ class GameScene:
                 
                 self.creatures.append(c)
 
-        ##################################
-        self.foods = []
-        self.potions = []
-        ##################################
+        self.inventory = Inventory()
+
+        # test 
+        cg = Food("Grapes", "Quaker", 30)
+        self.inventory.add_inventory(cg)
 
         self.selected: Creature | None = None
         self.inputs: list[InputField] = []
@@ -91,9 +91,9 @@ class GameScene:
             Button(150, tab_content_y, 120, 40, pygame.font.Font(None, 20), "Refill All", "c8ab83", "eec584", "ffffff", on_click=lambda: self.run_admin_command("refill")),
         ]
 
-        slot1 = InventorySlot(300, 560, 50)
-        slot2 = InventorySlot(360, 560, 50)
-        slot3 = InventorySlot(420, 560, 50)
+        slot1 = InventorySlot(300, 540, 50)
+        slot2 = InventorySlot(360, 540, 50)
+        slot3 = InventorySlot(420, 540, 50)
 
         Inventory_buttons = [slot1, slot2, slot3]
 
@@ -104,11 +104,12 @@ class GameScene:
             height=80,
             bg_color=(200, 171, 131),
             tabs=[
-                {'name': 'Main', 'buttons': main_tab_buttons, 'elements': []},
-                {'name': 'Admin', 'buttons': Inventory_buttons, 'elements': []}
+                {'name': 'Actions', 'buttons': main_tab_buttons, 'elements': []},
+                {'name': 'Inventory', 'buttons': Inventory_buttons, 'elements': []}
             ],
 
         )
+        self.toolbar.parent_scene = self #type: ignore
 
         pause_font = pygame.font.Font(None, 32)
 
@@ -202,18 +203,18 @@ class GameScene:
         self.master_buttons.extend([spawn_btn_m, reset_btn_m, refill_btn_m, hide_btn_m])
 
 
-    def get_all_active_buttons(self):
+    def get_all_active_buttons(self) -> list[Button]:
         """
         Put all the buttons into one giant list
         """
-        buttons = []
+        buttons: list[Button] = []
 
         # Toolbar tab buttons
         if self.toolbar.visible:
-            buttons.extend(self.toolbar._tab_header_buttons)
+            buttons.extend(self.toolbar._tab_header_buttons) # type: ignore
 
-            active_tab = self.toolbar.tabs[self.toolbar.active_tab]
-            buttons.extend(active_tab['buttons'])
+            active_tab: dict[str, list[Button]] = self.toolbar.tabs[self.toolbar.active_tab]
+            buttons.extend(active_tab['buttons']) # type: ignore
 
         # Pause menu buttons
         if self.is_paused:
@@ -232,35 +233,40 @@ class GameScene:
     def petting(self):
         self.allow_dragging = not self.allow_dragging
         self.cursor_mode = "Petting" if not self.allow_dragging else "Default"
-        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"World Dragging to {self.allow_dragging}")
+        log(2, f"World Dragging to {self.allow_dragging}")
 
     def toggle_pause(self):
         self.is_paused = not self.is_paused
-        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"Paused set to {self.is_paused}")
+        log(2, f"Paused set to {self.is_paused}")
 
     def toggle_toolbar(self):
         self.toolbar.visible = not self.toolbar.visible
 
     def save_game_state(self):
         Persistence.save_to_slot(self.world_name,
-                                  sum(c.satisfaction_level for c in self.creatures),
+                                sum(c.satisfaction_level for c in self.creatures),
                                     self.creatures,
-                                    self.foods,
-                                    self.potions)
+                                    self.inventory.foods,
+                                    self.inventory.potions,
+                                    self.inventory.cleanse)
         print("TODO: Save game here")  #TODO: will wire to Persistence later
 
     def load_game_state(self):
+        import main
+        main.creatureslist = None
+        main.current_scene = None
+        
         print("TODO: Load game here")
 
     def quit_to_main_menu(self):
         import main
         main.current_scene = None
-        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "Returned to main menu from pause")
+        log(2, "Returned to main menu from pause")
 
     def toggle_master(self, state: bool):
         """Show/hide master buttons"""
         self.master_visible = state
-        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, f"Admin toggle set to {state}")
+        log(3, f"Admin toggle set to {state}")
 
     def debug_spawn(self):
         new = Creature(
@@ -271,7 +277,7 @@ class GameScene:
             choice(spritz)
         )
         self.creatures.append(new)
-        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, "Spawned creature")
+        log(3, "Spawned creature")
 
     def run_admin_command(self, cmd: str):
         cmd = cmd.strip().lower()
@@ -279,30 +285,30 @@ class GameScene:
         # SPAWN — spawn one creature
         if cmd == "spawn":
             self.debug_spawn()
-            log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, "Spawned creature")
+            log(3, "Spawned creature")
             return
 
         # RESET — remove all creatures
         if cmd == "reset":
             self.creatures.clear()
-            log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, "Reset creature list")
+            log(3, "Reset creature list")
             return
 
         # REFILL — refill all satisfaction to 100
         if cmd == "refill":
             for c in self.creatures:
                 c.satisfaction_level = 100
-            log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, "Refilled all creatures")
+            log(3, "Refilled all creatures")
             return
 
         # MASTER — show all debug buttons
         if cmd == "master":
             self.master_visible = True
-            log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, "Master panel activated")
+            log(3, "Master panel activated")
             return
 
         # Unknown command
-        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, f"Unknown command '{cmd}'")
+        log(3, f"Unknown command '{cmd}'")
 
     def handle_event(self, event: pygame.event.Event):
         # Always let hamburger receive events
@@ -332,7 +338,7 @@ class GameScene:
             if event.key == pygame.K_SLASH:
                 self.admin_mode = not self.admin_mode 
 
-                log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 3, f"Admin access set to {self.admin_mode}")
+                log(3, f"Admin access set to {self.admin_mode}")
 
             if self.admin_mode:
                 if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
@@ -346,14 +352,17 @@ class GameScene:
                     creature.update_hover((pygame.mouse.get_pos()))
                     if self.allow_dragging == True:
                         self.selected = creature
+                        log(2, f"Player selected {creature.name}")
                         self.drag_offset = (
                             creature.rect.x - event.pos[0],
                             creature.rect.y - event.pos[1]
                         )
+                        log(2,   f"Started dragging creature '{creature.name}' at {creature.rect.center}")
                         break
 
                     else:
                         creature.pet(PetAction.PET)
+                        log(2, f"Player pet {creature.name}: Creature Satisfation Level: {creature.satisfaction_level}")
 
         elif event.type == pygame.MOUSEBUTTONUP:
             self.selected = None
@@ -363,12 +372,17 @@ class GameScene:
                 
                 self.selected.rect.x = event.pos[0] + self.drag_offset[0]
                 self.selected.rect.y = event.pos[1] + self.drag_offset[1]
-                self.selected.x, self.selected.y = self.selected.rect.center  
+                self.selected.x, self.selected.y = self.selected.rect.center
+  
 
     def update(self):
         mx, my = pygame.mouse.get_pos()
         if self.is_paused:
             return #temporarily disables updates when game state is paused
+
+        for i, creature in enumerate(self.creatures):
+            for j in range(i +1, len(self.creatures)):
+                creature.resolve_soft_collisions(self.creatures[j])
 
         for creature in self.creatures:
             creature.rect.x = max(WORLD_LEFT, min(creature.rect.x, WORLD_RIGHT - creature.rect.width))
@@ -379,6 +393,9 @@ class GameScene:
                 0,
                 creature.satisfaction_level - creature.satisfaction_decay
             )
+            creature.x, creature.y = creature.rect.center
+
+
 
     def draw(self, screen: pygame.Surface):
         screen.blit(self.background, (0, 0))

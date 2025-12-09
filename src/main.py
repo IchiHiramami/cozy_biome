@@ -36,7 +36,7 @@ creatureslist = []
 def new_game():
     menu_manager.switch(new_game_menu)
     new_game_menu.activate()
-    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "New Game Set")
+    log(2, "New Game Set")
 
 def load_game():
     pass #TODO: put the log here (or maybe in the log.py file)
@@ -44,21 +44,23 @@ def load_game():
     load_game_menu.activate()
 
 def quit_game():
-    #TODO: log here quit before quitting
-    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "Game Exited")
+    log(2, "Game Exited")
     pygame.quit()
     exit()
 
 def start_game():
+    worlds = Persistence.taken_name()
     world_name = name_Field.return_input()
-    if world_name in Persistence.taken_name():
+    if len(worlds) >= 3:
+        os.remove(f"save_files/{worlds[0]}")
+    if world_name in worlds:
         return # TO DO: User picks another world name
     print(f"World Name:{world_name}")
     print(f"Time of Creation: {datetime.now().strftime("%B %d, %Y %I:%M:%S %p")}")
-    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "World Name set to " + world_name)
+    log(2, "World Name set to " + world_name)
 
     global current_scene # Transfer over to main gameplay
-    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, "New Game Started")
+    log(2, "New Game Started")
     go_back() # so that when the player quits the gameplay, it returns to the main menu
 
     current_scene = GameScene(world_name)
@@ -67,15 +69,44 @@ def start_loaded_game(slot : str):
     print(f"Game selected from slot {slot}")
     global current_scene, creatureslist
     creatureslist = []
-    log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"Stated Loaded Game: {slot}")
+    log(2, f"Stated Loaded Game: {slot}")
     loaded_data = Persistence.load_slot(slot)
     go_back() # so that when the player quits the gameplay, it returns to the main menu
     for c in loaded_data["creatures"]:
         creature = Persistence.unpack_creatures(c)
-        print(creature.x)
         creatureslist.append(creature)
     if loaded_data:
         current_scene = GameScene(loaded_data["world_name"], creatureslist)
+
+def delete_loaded_game(slot : str):
+    global saved_games_btn
+    os.remove(f"save_files/{slot}")
+    saved_games_btn[:] = []
+
+    for i, slot in enumerate(Persistence.taken_name()):
+        btn = Button(
+            300, 100 + i * 100, 200, 60, font,
+            Persistence.load_slot(slot)["world_name"],
+            "c8ab83", "eec584", "ffffff",
+            on_click=lambda s=slot: select_loaded_game(s)
+        )
+        saved_games_btn.append(btn)
+
+    saved_games_btn.append(back_btn)
+
+    
+def select_loaded_game(slot : str):
+
+    saved_games_btn[:] = [btn for btn in saved_games_btn 
+                          if btn.text not in ("Delete", "Continue")]
+
+    delete_game_btn =  Button(550, 350, 200, 60, font, "Delete", "e8ab83", "eec584", "ffffff", on_click = lambda : delete_loaded_game(slot))
+
+    play_game_btn = Button(550, 250, 200, 60, font, "Continue", "e8ab83", "eec584", "ffffff", on_click = lambda : start_loaded_game(slot))
+
+    saved_games_btn.append(delete_game_btn)
+    saved_games_btn.append(play_game_btn)
+
 
 def go_back():
     menu_manager.back()
@@ -99,6 +130,30 @@ start_game_btn = Button(300, 300, 200, 60, font, "Start", "c8ab83", "eec584", "f
 # All purpose Buttons:
 back_btn = Button(300, 500, 200, 60, font, "Back", "e8ab83", "eec584", "ffffff", on_click = go_back)
 
+# Load Game btns
+saved_files = Persistence.taken_name()
+
+saved_games_btn = [
+    Button(
+        300,
+        100 + idx * 100,
+        200,
+        60,
+        font,
+        Persistence.load_slot(filename).get("world_name", "Unknown World"),
+        "c8ab83",
+        "eec584",
+        "ffffff",
+        on_click=(lambda slot=filename: select_loaded_game(slot))
+    )
+    for idx, filename in enumerate(saved_files)
+]
+
+saved_games_btn.append(back_btn) # note this
+
+
+saved_games_btn.append(back_btn) # note this
+
 # Input Fields
 name_Field = InputField(300, 200, 200, 60, font)
 
@@ -111,15 +166,7 @@ home_menu = Menu(os.path.join(ASSETS, "Background/main_menu_noncut.png"), [new_g
 
 # New Game Setup Menu
 new_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"), [start_game_btn, back_btn], [name_Field], bg_manager)
-load_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"), [
-    Button(
-        300, 100 + Persistence.taken_name().index(i) * 100, 200, 60, font,
-        (Persistence.load_slot(i)["world_name"]),
-        "c8ab83", "eec584", "ffffff",
-        on_click = (lambda slot=i: start_loaded_game(slot))
-    )
-    for i in Persistence.taken_name()
-],
+load_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"),  saved_games_btn,
 [],
 bg_manager) # TO DO: Scrollbar if load slots are more than 3
 
@@ -174,21 +221,17 @@ while is_running:
 
     if current_scene:
 
-        # 1. BUTTON HOVER (highest priority)
         for btn in current_scene.get_all_active_buttons():
             if btn.hovered:
-                cursor_to_draw = cursor_hand
+                cursor_to_draw = cursor_point
                 break
         else:
-            # 2. DRAGGING A CREATURE
             if current_scene.selected:
                 cursor_to_draw = cursor_hand
 
             else:
-                # 3. PETTING MODE
                 if current_scene.cursor_mode == "Petting":
-
-                    # 3a. Hovering a creature
+                    
                     for creature in current_scene.creatures:
                         if creature.hovered:
                             cursor_to_draw = cursor_hover
