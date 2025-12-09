@@ -1,0 +1,48 @@
+{
+    "world_name": "dfg",
+    "world_score": 188.97999999999436,
+    "creatures": [
+        {
+            "name": "Creature0",
+            "x": 43,
+            "y": 326,
+            "sprite": [
+                "assets/Sprites/cat_animation_1.png",
+                "assets/Sprites/cat_animation_2.png",
+                "assets/Sprites/cat_animation_3.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "quaker",
+            "satisfaction_level": 94.48999999999718,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": []
+        },
+        {
+            "name": "Creature1",
+            "x": 72,
+            "y": 112,
+            "sprite": [
+                "assets/Sprites/cat_animation_1.png",
+                "assets/Sprites/cat_animation_2.png",
+                "assets/Sprites/cat_animation_3.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "quaker",
+            "satisfaction_level": 94.48999999999718,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": []
+        }
+    ],
+    "inventory": {
+        "foods": {
+            "Less Decay": 6,
+            "More Satisfaction": 4,
+            "Cleanse": 3
+        },
+        "potions": {},
+        "cleanse": {}
+    },
+    "last_saved": "December 09, 2025 10:25:39 PM"
+}

@@ -1,4 +1,6 @@
-def log(timestamp : str, type : int, message: str):
+from datetime import datetime
+
+def log(type : int, message: str):
     """
     Interaction Logger
 
@@ -18,7 +20,7 @@ def log(timestamp : str, type : int, message: str):
         case _:
             declaration = "OTHERS"
         
-    to_log = f"{timestamp} -- {declaration} -- {message}"
+    to_log = f"{datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")} -- {declaration} -- {message}"
     with open("cozy_biome.log", "a") as f:
         f.write(to_log + "\n")
 
