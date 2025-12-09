@@ -1,7 +1,9 @@
-
 from enum import Enum
-from game_manager import hex_to_rgb
+from non_essential import hex_to_rgb
 import pygame
+from logger import log
+from typing import Any
+from collections import defaultdict
 
 
 class PetAction(Enum):
@@ -45,6 +47,7 @@ class SatisfactionBar:
             return self.color_red
         elif 9 >= value >= 0:
             return self.color_critical
+        return self.color_critical
 
     def draw(self, screen : pygame.Surface, x : int, y : int, value : float):
         """
@@ -77,6 +80,7 @@ class Creature:
         self.satisfaction_bar = SatisfactionBar()
         self.effects : list[Effect] = []
         self.hovered = False
+        self.isalive = True
 
         # Reactive Sprite Image
         self.frames_paths = sprite
@@ -91,13 +95,26 @@ class Creature:
 
     def update_sprite(self, spritestyle : int):
         """
-        spritestyle : 0-> normal, 1-> happy, 2-> sad
+        spritestyle : 0-> normal, 1-> happy, 2-> sad, 3-> dead
         """
-        self.sprite = self.frames[spritestyle]
+        if spritestyle == 3:
+            log(2, f"Creature '{self.name}' has reached 0 satisfaction and is now dead.")
+            self.sprite = pygame.image.load("assets/Sprites/Dead.png").convert_alpha()
+            self.isalive = False
+        else:
+            self.sprite = self.frames[spritestyle]
 
-    def draw(self, screen : pygame.Surface):
+
+
+    def draw(self, screen: pygame.Surface):
         screen.blit(self.sprite, self.rect)
-        self.satisfaction_bar.draw(screen, self.x, self.y, self.satisfaction_level)
+
+        self.satisfaction_bar.draw(
+            screen,
+            self.rect.centerx,
+            self.rect.top,
+            self.satisfaction_level
+        )
 
     def pet(self, action : PetAction):
         if action == PetAction.PET:
@@ -106,14 +123,40 @@ class Creature:
         if action == PetAction.PLAY:
             self.satisfaction_level = min(100, self.satisfaction_level) # to be implemented based on minigames
     
+    def resolve_soft_collisions(self, other : "Creature", push_strength : float = 0.5) -> None:
+        """Soft separation force between creature and other creature"""
+
+        if self is other:
+            return
+        
+        if self.rect.colliderect(other.rect):
+            self.satisfaction_level = max(0, self.satisfaction_level - 0.1)
+            other.satisfaction_level = max(0, other.satisfaction_level - 0.1)
+            delta_x = float(self.rect.centerx - other.rect.centerx)
+            delta_y = float(self.rect.centery - other.rect.centery)
+
+            if delta_x == 0 and delta_y == 0:
+                delta_x = 1.0
+
+            distance : float = max(1.0, (delta_x  * delta_x + delta_y * delta_y) ** 0.5)
+
+            normal_x: float = delta_x / distance
+            normal_y: float = delta_y / distance
+
+            self.rect.x += int(normal_x * push_strength)
+            self.rect.y += int(normal_y * push_strength)
+
+            other.rect.x -= int(normal_x * push_strength)
+            other.rect.y -= int(normal_y * push_strength)
+
+
     def update_effects(self):
         for effects in self.effects[:]:
             effects.update(self)
     
-    def update_hover(self, mouse_pos):
+    def update_hover(self, mouse_pos : tuple[int, int]):
         mx, my = mouse_pos
         self.hovered = self.rect.collidepoint(mx, my)
-
 
 class GlobalSatisfactionBar(SatisfactionBar):
     def __init__(self, screen_width : int=800, y : int=20, height : int=12, margin : int =40):
@@ -131,7 +174,7 @@ class GlobalSatisfactionBar(SatisfactionBar):
         total = sum(c.satisfaction_level for c in creatures)
         return total / len(creatures)
 
-    def draw(self, screen : pygame.Surface, creatures : list[Creature]):
+    def draw(self, screen : pygame.Surface, creatures : list[Creature]): #type: ignore
         avg = self.compute_average(creatures)
         super().draw(screen, self.x, self.y, avg)
 
@@ -157,8 +200,8 @@ class Effect():
         self.duration = duration_frames
         creature.effects.append(self)
 
-    def to_dict(self, creature=None):
-        data = {
+    def to_dict(self, creature : Creature | None = None):
+        data : dict[str, Any] = {
             "name": self.name,
             "duration": self.duration,
             "type": self.__class__.__name__
@@ -197,15 +240,14 @@ class Less_Decay(Effect):
         super().remove(creature)
         creature.satisfaction_decay = 0.01
 
-
 class Consumable():
     def __init__(self, name : str):
         self.name = name
 
 class Food(Consumable): # dev2 : Add Satisfaction
     """Add Satisfaction"""
-    def __init__(self, for_type : str, satisfaction : int):
-        super().__init__(name = "Food")
+    def __init__(self, name : str, for_type : str, satisfaction : int):
+        super().__init__(name)
         self.for_type = for_type
         self.satisfaction = satisfaction
         
@@ -217,27 +259,54 @@ class Food(Consumable): # dev2 : Add Satisfaction
 
 class Potion(Consumable): # dev2 : Add Effects
     """Add Effects"""
-    def __init__(self, duration : int, effect : Effect, multiplier : int):
-        super().__init__(name = "Potion")
+    def __init__(self, name : str, duration : int, effect : Effect, multiplier : int):
+        super().__init__(name)
         self.duration = duration * 120
         self.effect = effect
         self.multiplier = multiplier
     
     def consume(self, creature: Creature):
-        effect_copy = type(self.effect)() # TODO: Fix Potion.consume to handle Effect class subclasses correctly
+        effect_copy = type(self.effect)() # TODO: Fix Potion.consume to handle Effect class subclasses correctly #type: ignore
         effect_copy.consume(creature, self.multiplier, self.duration) 
 
 class Cleanse(Consumable): # dev2: Clear Effects
     """Clear Effects"""
     def __init__(self):
-        super().__init__(name = self.name)
+        super().__init__(name = "Cleanse")
 
     def consume(self, creature : Creature):
         for effect in creature.effects[:]:
             effect.remove(creature)
 
 class Inventory:
-    def __init__(self, foods : list[Food], potions : list[Potion]):
-        self.foods = foods
-        self.potions = potions
-        
+    def __init__(self):
+        self.foods : defaultdict[str, int] = defaultdict(int)
+        self.potions : defaultdict[str, int] = defaultdict(int)
+        self.cleanse : defaultdict[str, int] = defaultdict(int)
+    
+    def add_inventory(self, item : Food | Potion | Cleanse):
+        """
+            Adds an item to inventory.
+        """
+        if isinstance(item, Food):
+            self.foods[item.name] += 1
+        elif isinstance(item, Potion):
+            self.potions[item.name] += 1
+        else:
+            self.cleanse[item.name] += 1
+        log(2, f"Acquired an item: {item.name}")
+
+    def remove_inventory(self, item_name: str):
+        """
+            Decrements inventory by one
+        """
+        if item_name in self.foods and self.foods[item_name] > 0:
+            self.foods[item_name] -= 1
+
+        elif item_name in self.potions and self.potions[item_name] > 0:
+            self.potions[item_name] -= 1
+
+        elif item_name in self.cleanse and self.cleanse[item_name] > 0:
+            self.cleanse[item_name] -= 1
+
+        log(2, f"Consumed an item: {item_name}")
