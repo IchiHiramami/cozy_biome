@@ -36,6 +36,7 @@ class Button:
         self.text = text
         self.font = font
         self.on_click = on_click
+        self.hovered = False
 
     def draw(self, surface : pygame.Surface):
         """
@@ -52,7 +53,11 @@ class Button:
         surface.blit(text_surf, text_rect)
 
     def handle_event(self, event : pygame.event.Event):
-        """Return a bool value if mouse is clicked"""
+        """Button handles"""
+        mx, my = pygame.mouse.get_pos()
+        hovered = self.rect.collidepoint(mx, my)
+        self.hovered = hovered
+
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos):
                 self.on_click()
@@ -180,7 +185,8 @@ class GameSetupMenu(Menu):
 class InventorySlot:
     def __init__(self, x: int, y : int, size : int, bg_color : str ="#c8ab83", border_color : str = "#ffffff", item : str = None, quantity : int = 0):
         self.rect = pygame.Rect(x, y, size, size)
-
+        self.hovered = False
+        
         # Colors
         self.bg_color = hex_to_rgb(bg_color) if isinstance(bg_color, str) else bg_color
         self.border_color = hex_to_rgb(border_color) if isinstance(border_color, str) else border_color
@@ -206,6 +212,10 @@ class InventorySlot:
         self.quantity = 0
 
     def handle_event(self, event):
+        mx, my = pygame.mouse.get_pos()
+        hovered = self.rect.collidepoint(mx, my)
+        self.hovered = hovered
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 print("Clicked inventory slot")

@@ -123,13 +123,25 @@ load_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_ga
 [],
 bg_manager) # TO DO: Scrollbar if load slots are more than 3
 
-menu_manager.push(home_menu) # Start app with home menu first
+menu_manager.push(home_menu)
 home_menu.activate()
 
-is_running = True # for easier identification of app state
+is_running = True
 
-# Main Loop
+cursor_default = pygame.image.load("assets/Cursors/dark/pointer.png").convert_alpha()
+cursor_point = pygame.image.load("assets/Cursors/dark/link.png").convert_alpha()
+cursor_hand = pygame.image.load("assets/Cursors/dark/grab.png").convert_alpha()
+cursor_hover = pygame.image.load("assets/Cursors/dark/grab_hover.png").convert_alpha()
+
+pygame.mouse.set_visible(False)
+
 while is_running:
+
+    mx, my = pygame.mouse.get_pos()
+
+    # -------------------------
+    # EVENT HANDLING
+    # -------------------------
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
@@ -138,19 +150,61 @@ while is_running:
                 current_scene.handle_event(event)
             else:
                 menu_manager.handle_event(event)
-        
 
-    for creature in (creatureslist):
-        creature.update_effects()
-    
-    screen.fill((0,0,0))
-
-    if current_scene:               # while game is still not loaded, refer to menu_manager for the draw function
+    # -------------------------
+    # UPDATE
+    # -------------------------
+    if current_scene:
         current_scene.update()
+
+    # -------------------------
+    # DRAW SCENE OR MENU
+    # -------------------------
+    screen.fill((0, 0, 0))
+
+    if current_scene:
         current_scene.draw(screen)
     else:
         menu_manager.draw(screen)
+
+    # -------------------------
+    # CURSOR LOGIC (PRIORITY STACK)
+    # -------------------------
+    cursor_to_draw = cursor_default
+
+    if current_scene:
+
+        # 1. BUTTON HOVER (highest priority)
+        for btn in current_scene.get_all_active_buttons():
+            if btn.hovered:
+                cursor_to_draw = cursor_hand
+                break
+        else:
+            # 2. DRAGGING A CREATURE
+            if current_scene.selected:
+                cursor_to_draw = cursor_hand
+
+            else:
+                # 3. PETTING MODE
+                if current_scene.cursor_mode == "Petting":
+
+                    # 3a. Hovering a creature
+                    for creature in current_scene.creatures:
+                        if creature.hovered:
+                            cursor_to_draw = cursor_hover
+                            break
+                    else:
+                        # 3b. Petting mode but not hovering a creature
+                        cursor_to_draw = cursor_default
+
+                # 4. NORMAL MODE (no special cursor)
+                else:
+                    cursor_to_draw = cursor_default
+
+    # Draw cursor last so it stays on top
+    screen.blit(cursor_to_draw, (mx, my))
+
     pygame.display.flip()
-    
     clock.tick(60)
+
 pygame.quit()

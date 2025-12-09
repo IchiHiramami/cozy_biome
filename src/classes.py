@@ -5,7 +5,7 @@ import pygame
 
 
 class PetAction(Enum):
-    STROKE = 1
+    PET = 1
     FEED = 2
     PLAY = 3
 
@@ -76,6 +76,7 @@ class Creature:
         self.satisfaction_level = satisfaction_level
         self.satisfaction_bar = SatisfactionBar()
         self.effects : list[Effect] = []
+        self.hovered = False
 
         # Reactive Sprite Image
         self.frames_paths = sprite
@@ -99,8 +100,8 @@ class Creature:
         self.satisfaction_bar.draw(screen, self.x, self.y, self.satisfaction_level)
 
     def pet(self, action : PetAction):
-        if action == PetAction.STROKE:
-            self.satisfaction_decay = 2
+        if action == PetAction.PET:
+            self.satisfaction_level = min(100, (self.satisfaction_level + 0.5 * self.satisfaction_multiplier))
         
         if action == PetAction.PLAY:
             self.satisfaction_level = min(100, self.satisfaction_level) # to be implemented based on minigames
@@ -108,6 +109,11 @@ class Creature:
     def update_effects(self):
         for effects in self.effects[:]:
             effects.update(self)
+    
+    def update_hover(self, mouse_pos):
+        mx, my = mouse_pos
+        self.hovered = self.rect.collidepoint(mx, my)
+
 
 class GlobalSatisfactionBar(SatisfactionBar):
     def __init__(self, screen_width : int=800, y : int=20, height : int=12, margin : int =40):

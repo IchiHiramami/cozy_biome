@@ -7,7 +7,7 @@ import os
 import pygame
 from random import randint, choice
 from persistence import Persistence # type: ignore
-from classes import Creature, Food, Potion, Cleanse, GlobalSatisfactionBar, Less_Decay, More_Satisfaction  # type: ignore
+from classes import PetAction, Creature, Food, Potion, Cleanse, GlobalSatisfactionBar, Less_Decay, More_Satisfaction  # type: ignore
 from game_manager import Button, InputField, InventorySlot, Toolbar
 from logger import log
 from datetime import datetime
@@ -19,13 +19,20 @@ animated_cat = {
     "Sprite" : ["assets/Sprites/cat_animation_1.png", "assets/Sprites/cat_animation_2.png", "assets/Sprites/cat_animation_3.png",],
     }
 
-cat = {"Sprite" : ["assets/Sprites/cat.jpg"]}
+#cat = {"Sprite" : ["assets/Sprites/cat.jpg", "assets/Sprites/cat.jpg", "assets/Sprites/cat.jpg"]} # MINIMUM LAGI 3 sprites
 
 Nocky_OC = {
         "Sprite" : ["assets/Sprites/Nocky_OC_1.png", "assets/Sprites/Nocky_OC_2.png", "assets/Sprites/Nocky_OC_2.png"]
     }
 
-spritz = [animated_cat["Sprite"], Nocky_OC["Sprite"], cat["Sprite"]]
+spritz = [animated_cat["Sprite"], Nocky_OC["Sprite"]]#, cat["Sprite"]]
+
+PADDING = 20
+WORLD_LEFT = 0 + PADDING
+WORLD_TOP = 0 + PADDING
+WORLD_RIGHT = 800 - PADDING
+WORLD_BOTTOM = 600 - PADDING
+
 
 class GameScene:
     def __init__(self, world_name: str, creatures : list[Creature] = [], foods : list[Food] = [], potions : list[Potion] = []):
@@ -35,6 +42,7 @@ class GameScene:
         #state
         self.is_paused = False
         self.allow_dragging = True
+        self.cursor_mode = "Default"
 
         self.background = pygame.image.load(os.path.join(ASSETS, "Background/main_world.png"))
         self.background = pygame.transform.scale(self.background, (800, 600))
@@ -48,7 +56,7 @@ class GameScene:
 
                 c = Creature(
                     f"Creature{i}",
-                    "quaker" if self_sprite == spritz[1] else "mimi-carrier",
+                    "quaker" if self_sprite == spritz[1] or self_sprite[2] else "mimi-carrier",
                     randint(10, 500), randint(10, 500),
                     self_sprite
                     )
@@ -193,13 +201,38 @@ class GameScene:
 
         self.master_buttons.extend([spawn_btn_m, reset_btn_m, refill_btn_m, hide_btn_m])
 
+
+    def get_all_active_buttons(self):
+        """
+        Put all the buttons into one giant list
+        """
+        buttons = []
+
+        # Toolbar tab buttons
+        if self.toolbar.visible:
+            buttons.extend(self.toolbar._tab_header_buttons)
+
+            active_tab = self.toolbar.tabs[self.toolbar.active_tab]
+            buttons.extend(active_tab['buttons'])
+
+        # Pause menu buttons
+        if self.is_paused:
+            buttons.extend(self.pause_menu_buttons)
+
+        # Master admin panel
+        if self.master_visible:
+            buttons.extend(self.master_buttons)
+
+        # Hamburger + toggle toolbar button
+        buttons.append(self.hamburger_btn)
+        buttons.append(self.toggle_toolbar_btn)
+
+        return buttons
+
     def petting(self):
         self.allow_dragging = not self.allow_dragging
-        if not self.allow_dragging:
-            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
-        else:
-            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
-        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"World Dragging to {self.is_paused}")
+        self.cursor_mode = "Petting" if not self.allow_dragging else "Default"
+        log(datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), 2, f"World Dragging to {self.allow_dragging}")
 
     def toggle_pause(self):
         self.is_paused = not self.is_paused
@@ -284,14 +317,13 @@ class GameScene:
                 b.handle_event(event)
             return
 
-        for button in self.master_buttons:
-            button.handle_event(event)
+        if self.master_visible:
+            for button in self.master_buttons:
+                button.handle_event(event)
 
         if self.admin_mode:
             for fields in self.inputs:
                 fields.handle_event(event)
-
-        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -311,6 +343,7 @@ class GameScene:
         if event.type == pygame.MOUSEBUTTONDOWN:
             for creature in self.creatures:
                 if creature.rect.collidepoint(event.pos):
+                    creature.update_hover((pygame.mouse.get_pos()))
                     if self.allow_dragging == True:
                         self.selected = creature
                         self.drag_offset = (
@@ -320,24 +353,28 @@ class GameScene:
                         break
 
                     else:
-                        creature.satisfaction_level += 0.5 * creature.satisfaction_multiplier
+                        creature.pet(PetAction.PET)
 
         elif event.type == pygame.MOUSEBUTTONUP:
             self.selected = None
 
         elif event.type == pygame.MOUSEMOTION and self.selected:
             if self.allow_dragging:
-                pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+                
                 self.selected.rect.x = event.pos[0] + self.drag_offset[0]
                 self.selected.rect.y = event.pos[1] + self.drag_offset[1]
                 self.selected.x, self.selected.y = self.selected.rect.center  
 
     def update(self):
+        mx, my = pygame.mouse.get_pos()
         if self.is_paused:
             return #temporarily disables updates when game state is paused
-        
+
         for creature in self.creatures:
+            creature.rect.x = max(WORLD_LEFT, min(creature.rect.x, WORLD_RIGHT - creature.rect.width))
+            creature.rect.y = max(WORLD_TOP, min(creature.rect.y, WORLD_BOTTOM - creature.rect.height))
             creature.update_effects()
+            creature.update_hover((mx, my))
             creature.satisfaction_level = max(
                 0,
                 creature.satisfaction_level - creature.satisfaction_decay
