@@ -41,8 +41,10 @@ class GameScene:
         pygame.mixer.music.set_volume(0.5)  # 0.0 to 1.0
         pygame.mixer.music.play(-1)  
 
+        # Initial Game Constants
         self.world_name = world_name
         self.global_bar = GlobalSatisfactionBar(800, 20)
+
         self.money = Money(money)
         self.money.add_money(40) 
 
@@ -123,17 +125,17 @@ class GameScene:
         ]
 
         self.market_items : list[dict[str, str | int | pygame.Surface]] = [
-            {"name": "Grapes", "price": 5, "icon": self.icon_grapes, "for-type" : "Quaker", "Satisfaction" : 6},
-            {"name": "Makku", "price": 7, "icon": self.icon_makku, "for-type" : "Quaker", "Satisfaction" : 15},
-            {"name": "Spam", "price": 60, "icon": self.icon_spam, "for-type" : "Quaker", "Satisfaction" : 45},
+            {"name": "Grapes", "price": 5, "icon": self.icon_grapes, "for-type" : "Quaker", "Satisfaction" : 6, "Item Type" : "Food"},
+            {"name": "Makku", "price": 7, "icon": self.icon_makku, "for-type" : "Quaker", "Satisfaction" : 15, "Item Type" : "Food"},
+            {"name": "Spam", "price": 60, "icon": self.icon_spam, "for-type" : "Quaker", "Satisfaction" : 45, "Item Type" : "Food"},
 
-            {"name": "Cassis", "price": 10, "icon": self.icon_cassis, "for-type" : "mimi-carrier", "Satisfaction" : 12},
-            {"name": "Cherry", "price": 3, "icon": self.icon_cherry, "for-type" : "mimi-carrier", "Satisfaction" : 2},
-            {"name": "Aisu", "price": 60, "icon": self.icon_aisu, "for-type" : "mimi-carrier", "Satisfaction" : 50},
+            {"name": "Cassis", "price": 10, "icon": self.icon_cassis, "for-type" : "mimi-carrier", "Satisfaction" : 12, "Item Type" : "Food"},
+            {"name": "Cherry", "price": 3, "icon": self.icon_cherry, "for-type" : "mimi-carrier", "Satisfaction" : 2, "Item Type" : "Food"},
+            {"name": "Aisu", "price": 60, "icon": self.icon_aisu, "for-type" : "mimi-carrier", "Satisfaction" : 50, "Item Type" : "Food"},
 
-            {"name": "Less Decay", "price": 5, "icon": self.icon_less_decay, "for-type" : "Any", "Satisfaction" : 10},
-            {"name": "More Satisfaction", "price": 7, "icon": self.icon_more_satsifaction, "for-type" : "Any", "Satisfaction" : 8},
-            {"name": "Cleanse", "price": 10, "icon": self.icon_cleanse, "for-type" : "Any", "Satisfaction" : 10},
+            {"name": "Less Decay", "price": 5, "icon": self.icon_less_decay, "for-type" : "Any", "Duration" : 10, "Item Type" : "Potion"},
+            {"name": "More Satisfaction", "price": 7, "icon": self.icon_more_satsifaction, "for-type" : "Any", "Duration" : 8, "Item Type" : "Potion"},
+            {"name": "Cleanse", "price": 10, "icon": self.icon_cleanse, "for-type" : "Any", "Duration" : 10, "Item Type" : "Cleanse"},
         ]
         self.market_buttons : list[Button]= []
 
@@ -254,41 +256,37 @@ class GameScene:
 
     def use_item(self, item_name: str):
         target = self.selected
+        if target is None:
+            return
+
+        food_effects : dict[str, tuple[str, float, float]] = {
+            "Grapes":        ("quacker", 6,   -3),
+            "Makku":         ("quacker", 7,   -3.5),
+            "Spam":          ("quacker", 45,  -22.5),
+            "Cassis":        ("mimi-carrier", 12, -6),
+            "Cherry":        ("mimi-carrier", 2,  -1),
+            "Aisu":          ("mimi-carrier", 50, -25),
+        }
 
         def effect_handler(used_item_name: str):
-            # very inefficient but it works
-            if target is None:
+            if used_item_name in food_effects:
+                preferred_type, good, bad = food_effects[used_item_name]
+                delta = good if target.type == preferred_type else bad
+                target.satisfaction_level = min(100, target.satisfaction_level + delta)
                 return
-
-            if used_item_name == "Grapes":
-                target.satisfaction_level = min(100, target.satisfaction_level + 6 if target.type == "quacker" else target.satisfaction_level - 3)
-
-            elif used_item_name == "Makku":
-                target.satisfaction_level = min(100, target.satisfaction_level + 7 if target.type == "quacker" else target.satisfaction_level - 3.5)
-
-            elif used_item_name == "Spam":
-                target.satisfaction_level = min(100, target.satisfaction_level + 45 if target.type == "quacker" else target.satisfaction_level - 22.5)
             
-            elif used_item_name == "Cassis":
-                target.satisfaction_level = min(100, target.satisfaction_level + 12 if target.type == "mimi-carrier" else target.satisfaction_level - 6)
-            
-            elif used_item_name == "Cherry":
-                target.satisfaction_level = min(100, target.satisfaction_level + 2 if target.type == "mimi-carrier" else target.satisfaction_level - 1)
-
-            elif used_item_name == "Aisu":
-                target.satisfaction_level = min(100, target.satisfaction_level + 50 if target.type == "mimi-carrier" else target.satisfaction_level - 25)
-
-
-            elif used_item_name == "Less Decay":
+            if used_item_name == "Less Decay":
                 eff = Less_Decay()
                 eff.consume(target, target.satisfaction_multiplier, eff.duration)
+                return
 
-
-            elif used_item_name == "More Satisfaction":
+            if used_item_name == "More Satisfaction":
                 eff = More_Satisfaction()
                 eff.consume(target, target.satisfaction_multiplier, eff.duration)
+                return
 
-            elif used_item_name == "Cleanse":
+            # Cleanse
+            if used_item_name == "Cleanse":
                 target.effects.clear()
 
         self.inventory.remove_inventory(item_name, on_consumed=effect_handler)
@@ -337,9 +335,14 @@ class GameScene:
         if self.money.money - item["price"] <= 0: #type: ignore
             return
         self.money.remove_money(item) # type: ignore
-        self.inventory.add_inventory(
-            Food(item["name"], item["for-type"], item["Satisfaction"]) #type: ignore
-        )
+        
+        if item["Item Type"] == "Food":
+            to_add = Food(item["name"], item["for-type"], item["Satisfaction"]) #type: ignore
+        elif item["Item Type"] == "Potion":
+            to_add = Potion(item["name"], item["for-type"]) #type: ignore
+        else:
+            to_add = Cleanse()
+        self.inventory.add_inventory(to_add)
         log(2, "Bought item")
 
     def get_all_active_buttons(self) -> list[Button]:

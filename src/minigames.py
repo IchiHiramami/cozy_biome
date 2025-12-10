@@ -90,12 +90,6 @@ def get_random_pipes(xpos):
 # MAIN WRAPPER CLASS FOR GAME LOOP
 
 class FlappyBird:
-    """
-    Wraps the minigame into update()/draw() methods so your main loop can call:
-        flappy.update()
-        flappy.draw(screen)
-    """
-
     def __init__(self, screen, width=800, height=600):
         self.screen = screen
         self.surface = pygame.Surface((800, 600))  # internal game screen
@@ -121,7 +115,7 @@ class FlappyBird:
             self.pipe_group.add(p1, p2)
 
         self.clock = pygame.time.Clock()
-        self.state = "menu"   # menu → running → dead
+        self.state = "menu"   
         self.game_speed = GAME_SPEED   # starting scroll speed
         self.speed_increase = 0.01
         self.score = 0
@@ -130,7 +124,6 @@ class FlappyBird:
     # UPDATE
     def update(self):
         self.game_speed += self.speed_increase
-
 
         if self.state == "menu":
             self.menu_update()
@@ -178,6 +171,8 @@ class FlappyBird:
             if not pipe.scored and pipe.rect.right < self.bird.rect.left:
                 pipe.scored = True
                 self.score += 0.5
+                pygame.mixer.music.load("assets/flappybird/assets/audio/point.wav")
+                pygame.mixer.music.play()
 
         # updates
         self.bird_group.update()

@@ -41,12 +41,14 @@ creatureslist : list[str]= []
 def new_game():
     worlds = Persistence.taken_name()
     if len(worlds) >= 3:
+        log(1, "Maximum World Count has been reached")
         return
     menu_manager.switch(new_game_menu)
     new_game_menu.activate()
-    log(2, "New Game Set")
+    log(2, "Player Opened New Game Menu")
 
 def load_game():
+    
     global saved_games_btn, texts
     log(2, "Load Game Menu Opened")
     saved_games_btn = []
@@ -87,18 +89,21 @@ def start_game():
         pass
     world_name = name_Field.return_input()
     if world_name in worlds or world_name.split == "":
+        print("HEY OVER HERE!")
         return # TO DO: User picks another world name
     print(f"World Name:{world_name}")
     print(f"Time of Creation: {datetime.now().strftime("%B %d, %Y %I:%M:%S %p")}")
     log(2, "World Name set to " + world_name)
 
-    global current_scene # Transfer over to main gameplay
-    log(2, "New Game Started")
+    global current_scene
     go_back() # so that when the player quits the gameplay, it returns to the main menu
+
     pygame.mixer.music.load("assets/Music/GameScene_music.mp3")
     pygame.mixer.music.play(-1)
     print("NEW GAME CREATED")
     current_scene = GameScene(world_name)
+    log(2, f"[Main] Scene switched to: {type(current_scene).__name__}")
+    log(2, "Player Started New Game")
 
 def start_loaded_game(slot: str):
     print(f"Game selected from slot {slot}")
@@ -128,6 +133,8 @@ def start_loaded_game(slot: str):
         potions=potions,
         cleanse=cleanse
     )
+    log(3, f"[Main] Scene switched to: {type(current_scene).__name__}")
+
 
 def delete_loaded_game(slot : str):
     global saved_games_btn
@@ -176,6 +183,8 @@ def start_flappy():
     global current_scene, flappystate
     flappystate = True
     current_scene = FlappyBirdScene(screen)
+    log(3, f"[Main] Scene switched to: {type(current_scene).__name__}")
+
 
 # Global Variables
 return_to : Menu | None = None
@@ -302,7 +311,6 @@ while is_running:
                 else:
                     cursor_to_draw = cursor_default
 
-    # Draw cursor last so it stays on top
     screen.blit(cursor_to_draw, (mx, my))
 
     pygame.display.flip()

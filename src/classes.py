@@ -262,25 +262,26 @@ class Food(Consumable): # dev2 : Add Satisfaction
 
 class Potion(Consumable): # dev2 : Add Effects
     """Add Effects"""
-    def __init__(self, name : str, duration : int, effect : Effect, multiplier : int):
+    def __init__(self, name : str, for_type : str):
         super().__init__(name)
-        self.duration = duration * 120
+        self.for_type = for_type
+"""        self.duration = duration * 120
         self.effect = effect
         self.multiplier = multiplier
     
     def consume(self, creature: Creature):
         effect_copy = type(self.effect)() # TODO: Fix Potion.consume to handle Effect class subclasses correctly #type: ignore
         effect_copy.consume(creature, self.multiplier, self.duration) 
-
+"""
 class Cleanse(Consumable): # dev2: Clear Effects
     """Clear Effects"""
     def __init__(self):
         super().__init__(name = "Cleanse")
-
+"""
     def consume(self, creature : Creature):
         for effect in creature.effects[:]:
             effect.remove(creature)
-
+"""
 class Inventory:
     def __init__(self):
         self.foods : defaultdict[str, int] = defaultdict(int)
