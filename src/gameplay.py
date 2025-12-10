@@ -46,7 +46,7 @@ class GameScene:
         self.global_bar = GlobalSatisfactionBar(800, 20)
 
         self.money = Money(money)
-        self.money.add_money(40) 
+
 
         #state
         self.is_paused = False
@@ -387,7 +387,11 @@ class GameScene:
     def toggle_toolbar(self):
         self.toolbar.visible = not self.toolbar.visible
 
-    def save_game_state(self):
+    def save_game_state(self, world_name = None, money = None):
+        world_name = self.world_name if not world_name else world_name
+        money = self.money.money if not money else money
+        print(self.money.money)
+
         Persistence.save_to_slot(self.world_name,
                                 sum(c.satisfaction_level for c in self.creatures),
                                     self.creatures,
@@ -570,6 +574,11 @@ class GameScene:
     def draw(self, screen: pygame.Surface):
         screen.blit(self.background, (0, 0))
         self.global_bar.draw(screen, self.creatures)
+        # Draw current money amount
+        try:
+            self.money.draw(screen)
+        except Exception:
+            pass
 
         # Always draw hamburger
         self.hamburger_btn.draw(screen)
@@ -586,7 +595,7 @@ class GameScene:
                 creature.update_sprite(2)
             else:
                 creature.update_sprite(3)
-            creature.draw(screen)
+            creature.draw(screen, is_selected = (creature is self.selected))
 
         if self.master_visible:
             for buttons in self.master_buttons:
@@ -657,17 +666,18 @@ class FlappyBirdScene(GameScene):
         self.flappy.update()
 
         if self.flappy.finished:
-            self.money.add_money(self.flappy.score)
-            print(self.money.money)
             import main
+            self.money.add_money(self.flappy.score)
             main.current_scene = None
-            print(self.slot)
+            total_money = Persistence.load_slot(f"{self.slot}.json")["money"] + self.money.money
+            self.save_game_state(self.slot, total_money)
+            print(total_money)
             main.start_loaded_game(f"{self.slot}.json")
             return self.money
 
     def draw(self, screen: pygame.Surface):
         if self.running:
-            # Draw the flappy game first
+
             self.flappy.draw(screen)
 
             font = pygame.font.Font(None, 28)
@@ -677,14 +687,8 @@ class FlappyBirdScene(GameScene):
 
             # Create a Text widget and draw it (x, y, w, h, font, text, bg_color, text_color)
             score_label = None
-            try:
-                # use the project's Text class from game_manager
-                from game_manager import Text
-                score_label = Text(10, 10, 140, 36, font, score_text, "#000000", "#ffffff")
-            except Exception:
-                # Fallback: render directly with pygame if Text import or construction fails
-                txt_surf = font.render(score_text, True, (255, 255, 255))
-                screen.blit(txt_surf, (10, 10))
+            from game_manager import Text
+            score_label = Text(10, 10, 140, 36, font, score_text, "#000000", "#ffffff")
 
             if score_label:
                 score_label.draw(screen)

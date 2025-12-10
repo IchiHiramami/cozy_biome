@@ -82,6 +82,7 @@ class Creature:
         self.effects : list[Effect] = []
         self.hovered = False
         self.isalive = True
+        
 
         # Reactive Sprite Image
         self.frames_paths = sprite
@@ -109,7 +110,9 @@ class Creature:
 
 
 
-    def draw(self, screen: pygame.Surface):
+    def draw(self, screen: pygame.Surface, is_selected : bool = False):
+        if is_selected:
+            pygame.draw.rect(screen, (255,255, 0), self.rect.inflate(10,10), width = 3)
         screen.blit(self.sprite, self.rect)
 
         self.satisfaction_bar.draw(
@@ -265,23 +268,12 @@ class Potion(Consumable): # dev2 : Add Effects
     def __init__(self, name : str, for_type : str):
         super().__init__(name)
         self.for_type = for_type
-"""        self.duration = duration * 120
-        self.effect = effect
-        self.multiplier = multiplier
-    
-    def consume(self, creature: Creature):
-        effect_copy = type(self.effect)() # TODO: Fix Potion.consume to handle Effect class subclasses correctly #type: ignore
-        effect_copy.consume(creature, self.multiplier, self.duration) 
-"""
+
 class Cleanse(Consumable): # dev2: Clear Effects
     """Clear Effects"""
     def __init__(self):
         super().__init__(name = "Cleanse")
-"""
-    def consume(self, creature : Creature):
-        for effect in creature.effects[:]:
-            effect.remove(creature)
-"""
+
 class Inventory:
     def __init__(self):
         self.foods : defaultdict[str, int] = defaultdict(int)
@@ -329,11 +321,15 @@ class Money:
         
     def add_money(self, flappypoints : int | float):
         self.money += int(flappypoints) * random.randint(6, 10)
+        print(self.money)
     
     def remove_money(self, item : dict[str, int]):
         self.money -= item["price"]
     
-    def draw(self):
+    def draw(self, screen: pygame.Surface):
+        """Draw current money amount to the provided surface."""
+
         from game_manager import Text
-        text = Text(20, 20, 100, 50, pygame.font.Font(None, 30), str(self.money), "#e8ab83", "#ffffff")
-        text.draw
+
+        text = Text(630, 470, 140, 36, pygame.font.Font(None, 30), f"${str(self.money)}", "#e8ab83", "#ffffff")
+        text.draw(screen)

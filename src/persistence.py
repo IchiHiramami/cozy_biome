@@ -30,7 +30,8 @@ class Persistence:
                 "potions": potions,    
                 "cleanse": cleanse  
             },
-            "last_saved": datetime.now().strftime("%B %d, %Y %I:%M:%S %p")
+            "last_saved": datetime.now().strftime("%B %d, %Y %I:%M:%S %p",),
+            "money": money
         }
 
         # -------------------------

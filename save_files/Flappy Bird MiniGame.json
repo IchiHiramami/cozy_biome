@@ -1,11 +1,11 @@
 {
-    "world_name": "Real World",
-    "world_score": 157.19999999998606,
+    "world_name": "Flappy Bird MiniGame",
+    "world_score": 300,
     "creatures": [
         {
             "name": "Creature0",
-            "x": 608,
-            "y": 287,
+            "x": 407,
+            "y": 56,
             "sprite": [
                 "assets/Sprites/Nocky_OC_2.png",
                 "assets/Sprites/Nocky_OC_1.png",
@@ -13,15 +13,31 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 78.59999999999303,
+            "satisfaction_level": 100,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
         },
         {
             "name": "Creature1",
-            "x": 224,
-            "y": 339,
+            "x": 369,
+            "y": 335,
+            "sprite": [
+                "assets/Sprites/Nocky_OC_2.png",
+                "assets/Sprites/Nocky_OC_1.png",
+                "assets/Sprites/Nocky_OC_2.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "quacker",
+            "satisfaction_level": 100,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": []
+        },
+        {
+            "name": "Creature2",
+            "x": 258,
+            "y": 116,
             "sprite": [
                 "assets/Sprites/cat_animation_1.png",
                 "assets/Sprites/cat_animation_2.png",
@@ -29,7 +45,7 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 78.59999999999303,
+            "satisfaction_level": 100,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
@@ -40,5 +56,6 @@
         "potions": {},
         "cleanse": {}
     },
-    "last_saved": "December 10, 2025 09:06:09 PM"
+    "last_saved": "December 10, 2025 10:08:50 PM",
+    "money": 18
 }

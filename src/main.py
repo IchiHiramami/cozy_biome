@@ -109,7 +109,6 @@ def start_loaded_game(slot: str):
     log(2, f"Stated Loaded Game: {slot}")
 
     loaded_data = Persistence.load_slot(slot)
-    print(loaded_data)
     go_back()
     for c in loaded_data["creatures"]:
         creature = Persistence.unpack_creatures(c)
@@ -119,6 +118,7 @@ def start_loaded_game(slot: str):
     foods = inv.get("foods", {})
     potions = inv.get("potions", {})
     cleanse = inv.get("cleanse", {})
+    money = loaded_data.get("money", 0)
 
     pygame.mixer.music.load("assets/Music/GameScene_music.mp3")
     pygame.mixer.music.play(-1)
@@ -128,7 +128,8 @@ def start_loaded_game(slot: str):
         creatureslist,
         foods=foods,
         potions=potions,
-        cleanse=cleanse
+        cleanse=cleanse,
+        money=money
     )
     log(3, f"[Main] Scene switched to: {type(current_scene).__name__}")
 
@@ -192,9 +193,9 @@ flappyscore = 0
 # Button Lists
 
 # Home Buttons
-new_game_btn = Button(300, 200, 200, 60, font, "New Game", "#dda658", "eec584", "ffffff", on_click = new_game)
-load_game_btn = Button(300, 300, 200, 60, font, "Load Game", "#dda658", "eec584", "ffffff", on_click = load_game)  
-quit_btn = Button(300, 400, 200, 60, font, "Quit Game", "#dda658", "eec584", "ffffff", on_click = quit_game)
+new_game_btn = Button(300, 260, 200, 60, font, "New Game", "#dda658", "eec584", "ffffff", on_click = new_game)
+load_game_btn = Button(300, 360, 200, 60, font, "Load Game", "#dda658", "eec584", "ffffff", on_click = load_game)  
+quit_btn = Button(300, 460, 200, 60, font, "Quit Game", "#dda658", "eec584", "ffffff", on_click = quit_game)
 
 # New Game Buttons
 start_game_btn = Button(300, 300, 200, 60, font, "Start", "#dda658", "eec584", "ffffff", on_click = start_game)
