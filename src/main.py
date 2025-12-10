@@ -228,7 +228,7 @@ new_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_gam
 where_to_save_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"), saved_games_btn, [], bg_manager)
 load_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"),  saved_games_btn,
 [],
-bg_manager) # TO DO: Scrollbar if load slots are more than 3
+bg_manager)
 
 menu_manager.push(home_menu)
 home_menu.activate()

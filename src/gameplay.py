@@ -115,7 +115,7 @@ class GameScene:
 
         Inv_Action_Buttons = [
             Button(670, tab_content_y, 120, 40, toolbar_font, "Shop", "#dda658", "#eec584", "#ffffff", on_click=self.toggle_marketplace),
-            Button(20, tab_content_y, 120, 40, pygame.font.Font(None, 20), "Refill All", "#dda658", "#eec584", "#ffffff", on_click=lambda: self.run_admin_command("refill")),
+            # Button(20, tab_content_y, 120, 40, pygame.font.Font(None, 20), "Refill All", "#dda658", "#eec584", "#ffffff", on_click=lambda: self.run_admin_command("refill")),
         ]
 
 
@@ -390,7 +390,7 @@ class GameScene:
     def save_game_state(self, world_name = None, money = None):
         world_name = self.world_name if not world_name else world_name
         money = self.money.money if not money else money
-        print(self.money.money)
+        print(money)
 
         Persistence.save_to_slot(self.world_name,
                                 sum(c.satisfaction_level for c in self.creatures),
@@ -398,7 +398,7 @@ class GameScene:
                                     self.inventory.foods,
                                     self.inventory.potions,
                                     self.inventory.cleanse,
-                                    self.money.money)
+                                    money)
 
     def load_game_state(self):
         pygame.mixer.music.load("assets/Music/HomeScene_music.mp3")
@@ -435,23 +435,20 @@ class GameScene:
     def run_admin_command(self, cmd: str):
         cmd = cmd.strip().lower()
 
-        # SPAWN — spawn one creature
         if cmd == "spawn":
             self.debug_spawn()
-            log(3, "Spawned creature")
+            log(3, "Spawned creature via admin")
             return
 
-        # RESET — remove all creatures
         if cmd == "reset":
             self.creatures.clear()
-            log(3, "Reset creature list")
+            log(3, "Despawned all creatures via admin")
             return
 
-        # REFILL — refill all satisfaction to 100
         if cmd == "refill":
             for c in self.creatures:
                 c.satisfaction_level = 100
-            log(3, "Refilled all creatures")
+            log(3, "Refilled all creature satisfaction level via admin")
             return
 
         # MASTER — show all debug buttons
@@ -681,11 +678,8 @@ class FlappyBirdScene(GameScene):
             self.flappy.draw(screen)
 
             font = pygame.font.Font(None, 28)
-
-            # Build the text showing current score; FlappyBird exposes `score`
             score_text = f"Score: {int(getattr(self.flappy, 'score', 0))}"
 
-            # Create a Text widget and draw it (x, y, w, h, font, text, bg_color, text_color)
             score_label = None
             from game_manager import Text
             score_label = Text(10, 10, 140, 36, font, score_text, "#000000", "#ffffff")

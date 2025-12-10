@@ -10,7 +10,7 @@ import random
 class PetAction(Enum):
     PET = 1
     FEED = 2
-    PLAY = 3
+
 
 class SatisfactionBar:
     def __init__(self, 
@@ -123,11 +123,8 @@ class Creature:
         )
 
     def pet(self, action : PetAction):
-        if action == PetAction.PET:
+        if action == PetAction.PET and self.satisfaction_level > 0:
             self.satisfaction_level = min(100, (self.satisfaction_level + 0.5 * self.satisfaction_multiplier))
-        
-        if action == PetAction.PLAY:
-            self.satisfaction_level = min(100, self.satisfaction_level) # to be implemented based on minigames
     
     def resolve_soft_collisions(self, other : "Creature", push_strength : float = 0.5) -> None:
         """Soft separation force between creature and other creature"""
