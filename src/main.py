@@ -105,7 +105,7 @@ def start_game():
 def start_loaded_game(slot: str):
     print(f"Game selected from slot {slot}")
     global current_scene, creatureslist
-    creatureslist : list[str] = []
+    creatureslist = []
     log(2, f"Stated Loaded Game: {slot}")
 
     loaded_data = Persistence.load_slot(slot)

@@ -1,24 +1,6 @@
-[2025-12-10 20:34:39] -- INFO -- Player Opened New Game Menu
-[2025-12-10 20:34:42] -- INFO -- World Name set to Real World
-[2025-12-10 20:34:42] -- INFO -- [Main] Scene switched to: GameScene
-[2025-12-10 20:34:42] -- INFO -- Player Started New Game
-[2025-12-10 20:34:43] -- INFO -- Player selected Creature0
-[2025-12-10 20:34:43] -- INFO -- Started dragging creature 'Creature0' at (106, 130)
-[2025-12-10 20:34:45] -- INFO -- Paused set to True
-[2025-12-10 20:34:47] -- INFO -- Paused set to False
-[2025-12-10 20:34:48] -- INFO -- Paused set to True
-[2025-12-10 20:34:50] -- INFO -- Paused set to False
-[2025-12-10 20:34:52] -- INFO -- Player selected Creature1
-[2025-12-10 20:34:52] -- INFO -- Started dragging creature 'Creature1' at (38, 36)
-[2025-12-10 20:34:53] -- INFO -- Player selected Creature1
-[2025-12-10 20:34:53] -- INFO -- Started dragging creature 'Creature1' at (170, 345)
-[2025-12-10 20:34:54] -- INFO -- Player selected Creature0
-[2025-12-10 20:34:54] -- INFO -- Started dragging creature 'Creature0' at (609, 198)
-[2025-12-10 20:35:06] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
-[2025-12-10 20:35:29] -- INFO -- Stated Loaded Game: Real World.json
-[2025-12-10 20:35:29] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-10 20:37:47] -- WARNING -- All creatures reached 0 satisfaction. Game over.
-[2025-12-10 20:37:47] -- INFO -- Creature 'Creature0' has reached 0 satisfaction and is now dead.
-[2025-12-10 20:37:47] -- INFO -- Creature 'Creature1' has reached 0 satisfaction and is now dead.
-[2025-12-10 20:38:08] -- INFO -- Paused set to True
-[2025-12-10 20:38:10] -- INFO -- Returned to main menu from pause
+[2025-12-10 21:06:06] -- INFO -- Load Game Menu Opened
+[2025-12-10 21:06:07] -- INFO -- Stated Loaded Game: Real World.json
+[2025-12-10 21:06:07] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-10 21:06:09] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
+[2025-12-10 21:06:18] -- INFO -- Stated Loaded Game: Real World.json
+[2025-12-10 21:06:18] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene

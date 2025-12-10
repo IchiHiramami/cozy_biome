@@ -667,5 +667,24 @@ class FlappyBirdScene(GameScene):
 
     def draw(self, screen: pygame.Surface):
         if self.running:
-            tex
+            # Draw the flappy game first
             self.flappy.draw(screen)
+
+            font = pygame.font.Font(None, 28)
+
+            # Build the text showing current score; FlappyBird exposes `score`
+            score_text = f"Score: {int(getattr(self.flappy, 'score', 0))}"
+
+            # Create a Text widget and draw it (x, y, w, h, font, text, bg_color, text_color)
+            score_label = None
+            try:
+                # use the project's Text class from game_manager
+                from game_manager import Text
+                score_label = Text(10, 10, 140, 36, font, score_text, "#000000", "#ffffff")
+            except Exception:
+                # Fallback: render directly with pygame if Text import or construction fails
+                txt_surf = font.render(score_text, True, (255, 255, 255))
+                screen.blit(txt_surf, (10, 10))
+
+            if score_label:
+                score_label.draw(screen)
