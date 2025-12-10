@@ -648,7 +648,7 @@ class GameScene:
 
 class FlappyBirdScene(GameScene):
     def __init__(self, screen : pygame.Surface, slot):
-        super().__init__("Flappy Bird MiniGame")
+        super().__init__("FLAPPYBIRD")
         self.screen = screen
         self.flappy = FlappyBird(screen, width=screen.get_width(), height=screen.get_height())
         self.running = True
