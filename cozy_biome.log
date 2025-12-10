@@ -1,34 +1,24 @@
-[2025-12-10 20:20:24] -- INFO -- Load Game Menu Opened
-[2025-12-10 20:20:25] -- INFO -- Stated Loaded Game: baba.json
-[2025-12-10 20:20:25] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-10 20:20:26] -- INFO -- Paused set to True
-[2025-12-10 20:20:27] -- INFO -- Paused set to False
-[2025-12-10 20:20:28] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
-[2025-12-10 20:20:29] -- INFO -- Stated Loaded Game: baba.json
-[2025-12-10 20:20:29] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-10 20:21:30] -- INFO -- Player selected Creature0
-[2025-12-10 20:21:30] -- INFO -- Started dragging creature 'Creature0' at (275, 199)
-[2025-12-10 20:21:31] -- INFO -- Player selected Creature0
-[2025-12-10 20:21:31] -- INFO -- Started dragging creature 'Creature0' at (273, 199)
-[2025-12-10 20:21:33] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
-[2025-12-10 20:21:34] -- INFO -- Stated Loaded Game: baba.json
-[2025-12-10 20:21:34] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-10 20:21:40] -- INFO -- Paused set to True
-[2025-12-10 20:21:41] -- INFO -- Returned to main menu from pause
-[2025-12-10 20:21:42] -- INFO -- Load Game Menu Opened
-[2025-12-10 20:21:44] -- INFO -- Stated Loaded Game: babafsdfds.json
-[2025-12-10 20:21:44] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-10 20:21:45] -- INFO -- Player selected Creature0
-[2025-12-10 20:21:45] -- INFO -- Started dragging creature 'Creature0' at (187, 336)
-[2025-12-10 20:21:46] -- INFO -- Player selected Creature0
-[2025-12-10 20:21:46] -- INFO -- Started dragging creature 'Creature0' at (421, 306)
-[2025-12-10 20:21:47] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
-[2025-12-10 20:21:48] -- INFO -- Stated Loaded Game: babafsdfds.json
-[2025-12-10 20:21:48] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-10 20:21:49] -- INFO -- Player selected Creature0
-[2025-12-10 20:21:49] -- INFO -- Started dragging creature 'Creature0' at (187, 336)
-[2025-12-10 20:21:51] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
-[2025-12-10 20:21:52] -- INFO -- Stated Loaded Game: babafsdfds.json
-[2025-12-10 20:21:52] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-10 20:21:56] -- INFO -- Player selected Creature0
-[2025-12-10 20:21:56] -- INFO -- Started dragging creature 'Creature0' at (187, 336)
+[2025-12-10 20:34:39] -- INFO -- Player Opened New Game Menu
+[2025-12-10 20:34:42] -- INFO -- World Name set to Real World
+[2025-12-10 20:34:42] -- INFO -- [Main] Scene switched to: GameScene
+[2025-12-10 20:34:42] -- INFO -- Player Started New Game
+[2025-12-10 20:34:43] -- INFO -- Player selected Creature0
+[2025-12-10 20:34:43] -- INFO -- Started dragging creature 'Creature0' at (106, 130)
+[2025-12-10 20:34:45] -- INFO -- Paused set to True
+[2025-12-10 20:34:47] -- INFO -- Paused set to False
+[2025-12-10 20:34:48] -- INFO -- Paused set to True
+[2025-12-10 20:34:50] -- INFO -- Paused set to False
+[2025-12-10 20:34:52] -- INFO -- Player selected Creature1
+[2025-12-10 20:34:52] -- INFO -- Started dragging creature 'Creature1' at (38, 36)
+[2025-12-10 20:34:53] -- INFO -- Player selected Creature1
+[2025-12-10 20:34:53] -- INFO -- Started dragging creature 'Creature1' at (170, 345)
+[2025-12-10 20:34:54] -- INFO -- Player selected Creature0
+[2025-12-10 20:34:54] -- INFO -- Started dragging creature 'Creature0' at (609, 198)
+[2025-12-10 20:35:06] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
+[2025-12-10 20:35:29] -- INFO -- Stated Loaded Game: Real World.json
+[2025-12-10 20:35:29] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-10 20:37:47] -- WARNING -- All creatures reached 0 satisfaction. Game over.
+[2025-12-10 20:37:47] -- INFO -- Creature 'Creature0' has reached 0 satisfaction and is now dead.
+[2025-12-10 20:37:47] -- INFO -- Creature 'Creature1' has reached 0 satisfaction and is now dead.
+[2025-12-10 20:38:08] -- INFO -- Paused set to True
+[2025-12-10 20:38:10] -- INFO -- Returned to main menu from pause

@@ -9,7 +9,6 @@ from gameplay import GameScene, FlappyBirdScene
 from logger import log, clear
 from persistence import Persistence
 from minigames import FlappyBird
-
 # Path and Assets
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ASSETS = os.path.join(BASE_DIR, "assets")
@@ -86,8 +85,8 @@ def quit_game():
 def start_game():
     worlds = Persistence.taken_name()
     world_name = name_Field.return_input()
-    if world_name in worlds or world_name in """<>:'/"\|?* """ or world_name == " ":
-        print("HEY OVER HERE!")
+    if world_name in worlds or world_name in """<>:'/"|?* """ or world_name == " ":
+        log(1, "User attempted to pick an Invalid World Name")
         return # TO DO: User picks another world name
     print(f"World Name:{world_name}")
     print(f"Time of Creation: {datetime.now().strftime("%B %d, %Y %I:%M:%S %p")}")
@@ -106,7 +105,7 @@ def start_game():
 def start_loaded_game(slot: str):
     print(f"Game selected from slot {slot}")
     global current_scene, creatureslist
-    creatureslist = []
+    creatureslist : list[str] = []
     log(2, f"Stated Loaded Game: {slot}")
 
     loaded_data = Persistence.load_slot(slot)
@@ -151,7 +150,7 @@ def delete_loaded_game(slot : str):
     saved_games_btn.append(back_btn)
  
 def select_loaded_game(slot : str):
-    texts = []
+    texts : list[Text] = []
     saved_games_btn[:] = [btn for btn in saved_games_btn 
                         if btn.text not in ("Delete", "Continue")]
 
@@ -177,7 +176,7 @@ def go_back():
     if menu_manager.current:
         menu_manager.current.activate()
 
-def start_flappy(slot):
+def start_flappy(slot : str):
     global current_scene, flappystate
     flappystate = True
     
@@ -202,12 +201,6 @@ start_game_btn = Button(300, 300, 200, 60, font, "Start", "#dda658", "eec584", "
 
 # All purpose Buttons:
 back_btn = Button(300, 500, 200, 60, font, "Back", "#dda658", "eec584", "ffffff", on_click = go_back)
-flappy_btn = Button(
-    300, 500, 200, 60, font, 
-    "Flappy Bird", "c8ab83", "eec584", "ffffff", 
-    on_click=start_flappy
-)
-
 # Load Game Buttons
 saved_files = Persistence.taken_name()
 
@@ -249,7 +242,6 @@ cursor_hover = pygame.image.load("assets/Cursors/dark/grab_hover.png").convert_a
 pygame.mouse.set_visible(False)
 
 flappy = FlappyBird(screen, width=800, height=600)
-home_menu.buttons.append(flappy_btn)
 
 while is_running:
 

@@ -36,7 +36,7 @@ WORLD_BOTTOM = 600 - PADDING
 
 
 class GameScene:
-    def __init__(self, world_name: str, creatures : list[Creature] = [], foods : defaultdict[str, int] | None = None, potions : defaultdict[str, int] | None = None, cleanse : defaultdict[str, int] | None = None, money : int  = 0):
+    def __init__(self, world_name: str, creatures : list[str] = [], foods : defaultdict[str, int] | None = None, potions : defaultdict[str, int] | None = None, cleanse : defaultdict[str, int] | None = None, money : int  = 0):
         pygame.mixer.music.load("assets/Music/Gamescene_music.mp3")
         pygame.mixer.music.set_volume(0.5)  # 0.0 to 1.0
         pygame.mixer.music.play(-1)  
@@ -121,7 +121,7 @@ class GameScene:
 
         import main
         mini_game_Buttons = [
-            Button(20, tab_content_y, 100, 40, pygame.font.Font(None, 25), "Plappy Birb", "#dda658", "#eec584", "##ffffff", on_click = lambda : main.start_flappy(self.world_name)),
+            Button(20, tab_content_y, 100, 40, pygame.font.Font(None, 25), "Plappy Birb", "#dda658", "#eec584", "##ffffff", on_click = lambda : (main.start_flappy(self.world_name), self.save_game_state())),
         ]
 
         self.market_items : list[dict[str, str | int | pygame.Surface]] = [
@@ -667,4 +667,5 @@ class FlappyBirdScene(GameScene):
 
     def draw(self, screen: pygame.Surface):
         if self.running:
+            tex
             self.flappy.draw(screen)
