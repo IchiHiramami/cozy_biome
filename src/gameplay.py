@@ -331,7 +331,6 @@ class GameScene:
         self.market_buttons
 
     def buy_item(self, item: dict[str, str | int | pygame.Surface]):
-        print(self.money.money)
         if self.money.money - item["price"] <= 0: #type: ignore
             return
         self.money.remove_money(item) # type: ignore
@@ -390,7 +389,6 @@ class GameScene:
     def save_game_state(self, world_name = None, money = None):
         world_name = self.world_name if not world_name else world_name
         money = self.money.money if not money else money
-        print(money)
 
         Persistence.save_to_slot(self.world_name,
                                 sum(c.satisfaction_level for c in self.creatures),
@@ -406,8 +404,8 @@ class GameScene:
         import main
         main.creatureslist = None
         main.current_scene = None
+        main.start_loaded_game(f"{self.world_name}.json")
         
-        print("TODO: Load game here")
 
     def quit_to_main_menu(self):
         pygame.mixer.music.load("assets/Music/HomeScene_music.mp3")
@@ -668,7 +666,6 @@ class FlappyBirdScene(GameScene):
             main.current_scene = None
             total_money = Persistence.load_slot(f"{self.slot}.json")["money"] + self.money.money
             self.save_game_state(self.slot, total_money)
-            print(total_money)
             main.start_loaded_game(f"{self.slot}.json")
             return self.money
 

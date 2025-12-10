@@ -1,5 +1,8 @@
-[2025-12-10 22:26:08] -- INFO -- Load Game Menu Opened
-[2025-12-10 22:26:09] -- INFO -- Stated Loaded Game: Flappy Bird MiniGame.json
-[2025-12-10 22:26:09] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-10 22:26:09] -- INFO -- Player selected Creature1
-[2025-12-10 22:26:09] -- INFO -- Started dragging creature 'Creature1' at (496, 192)
+[2025-12-10 22:29:16] -- INFO -- Load Game Menu Opened
+[2025-12-10 22:29:17] -- INFO -- Stated Loaded Game: Flappy Bird MiniGame.json
+[2025-12-10 22:29:17] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-10 22:29:17] -- INFO -- Player selected Creature1
+[2025-12-10 22:29:17] -- INFO -- Started dragging creature 'Creature1' at (537, 321)
+[2025-12-10 22:29:18] -- INFO -- Paused set to True
+[2025-12-10 22:29:19] -- INFO -- Stated Loaded Game: Flappy Bird MiniGame.json
+[2025-12-10 22:29:19] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
