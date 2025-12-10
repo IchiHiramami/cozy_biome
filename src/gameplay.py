@@ -121,7 +121,7 @@ class GameScene:
 
         import main
         mini_game_Buttons = [
-            Button(20, tab_content_y, 100, 40, pygame.font.Font(None, 25), "Plappy Birb", "#dda658", "#eec584", "##ffffff", on_click = main.start_flappy),
+            Button(20, tab_content_y, 100, 40, pygame.font.Font(None, 25), "Plappy Birb", "#dda658", "#eec584", "##ffffff", on_click = lambda : main.start_flappy(self.world_name)),
         ]
 
         self.market_items : list[dict[str, str | int | pygame.Surface]] = [
@@ -641,11 +641,12 @@ class GameScene:
                 b.draw(screen)
 
 class FlappyBirdScene(GameScene):
-    def __init__(self, screen : pygame.Surface):
+    def __init__(self, screen : pygame.Surface, slot):
         super().__init__("Flappy Bird MiniGame")
         self.screen = screen
         self.flappy = FlappyBird(screen, width=screen.get_width(), height=screen.get_height())
         self.running = True
+        self.slot = slot
 
     def handle_event(self, event : pygame.event.Event):
         self.flappy.handle_event(event)
@@ -660,6 +661,8 @@ class FlappyBirdScene(GameScene):
             print(self.money.money)
             import main
             main.current_scene = None
+            print(self.slot)
+            main.start_loaded_game(f"{self.slot}.json")
             return self.money
 
     def draw(self, screen: pygame.Surface):

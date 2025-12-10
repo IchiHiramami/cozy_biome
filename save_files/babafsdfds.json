@@ -1,11 +1,11 @@
 {
-    "world_name": "World 1",
-    "world_score": 148.51999999997366,
+    "world_name": "babafsdfds",
+    "world_score": 187.24000000000007,
     "creatures": [
         {
             "name": "Creature0",
-            "x": 578,
-            "y": 324,
+            "x": 187,
+            "y": 336,
             "sprite": [
                 "assets/Sprites/Nocky_OC_2.png",
                 "assets/Sprites/Nocky_OC_1.png",
@@ -13,15 +13,15 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 74.25999999998683,
+            "satisfaction_level": 93.62000000000003,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
         },
         {
             "name": "Creature1",
-            "x": 193,
-            "y": 319,
+            "x": 143,
+            "y": 353,
             "sprite": [
                 "assets/Sprites/cat_animation_1.png",
                 "assets/Sprites/cat_animation_2.png",
@@ -29,31 +29,16 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 74.25999999998683,
+            "satisfaction_level": 93.62000000000003,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
         }
     ],
     "inventory": {
-        "foods": {
-            "Grapes": 10,
-            "Makku": 0,
-            "Spam": 1,
-            "Aisu": 1,
-            "Cherry": 1,
-            "Cassis": 1,
-            "Less Decay": 0,
-            "More Satisfaction": 0,
-            "Cleanse": 0
-        },
-        "potions": {
-            "More Satisfaction": 1,
-            "Less Decay": 1
-        },
-        "cleanse": {
-            "Cleanse": 1
-        }
+        "foods": {},
+        "potions": {},
+        "cleanse": {}
     },
-    "last_saved": "December 10, 2025 07:51:23 PM"
+    "last_saved": "December 10, 2025 08:06:59 PM"
 }

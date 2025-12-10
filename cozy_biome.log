@@ -1,83 +1,34 @@
-[2025-12-10 19:49:41] -- INFO -- Load Game Menu Opened
-[2025-12-10 19:49:43] -- INFO -- Stated Loaded Game: World 1.json
-[2025-12-10 19:49:43] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-10 19:49:45] -- INFO -- Consumed an item: Cassis
-[2025-12-10 19:49:46] -- INFO -- Consumed an item: Cherry
-[2025-12-10 19:49:46] -- INFO -- Consumed an item: Cherry
-[2025-12-10 19:49:46] -- INFO -- Consumed an item: Cherry
-[2025-12-10 19:49:46] -- INFO -- Consumed an item: Cherry
-[2025-12-10 19:49:46] -- INFO -- Consumed an item: Cherry
-[2025-12-10 19:49:46] -- INFO -- Consumed an item: Cherry
-[2025-12-10 19:49:46] -- INFO -- Consumed an item: Cherry
-[2025-12-10 19:49:47] -- INFO -- Consumed an item: Cherry
-[2025-12-10 19:49:47] -- INFO -- Consumed an item: Aisu
-[2025-12-10 19:49:48] -- INFO -- Consumed an item: More Satisfaction
-[2025-12-10 19:49:48] -- INFO -- Consumed an item: More Satisfaction
-[2025-12-10 19:49:49] -- INFO -- Consumed an item: Cleanse
-[2025-12-10 19:49:51] -- INFO -- Acquired an item: Spam
-[2025-12-10 19:49:51] -- INFO -- Bought item
-[2025-12-10 19:49:52] -- INFO -- Acquired an item: Aisu
-[2025-12-10 19:49:52] -- INFO -- Bought item
-[2025-12-10 19:49:53] -- INFO -- Acquired an item: More Satisfaction
-[2025-12-10 19:49:53] -- INFO -- Bought item
-[2025-12-10 19:49:54] -- INFO -- Acquired an item: Less Decay
-[2025-12-10 19:49:54] -- INFO -- Bought item
-[2025-12-10 19:49:55] -- INFO -- Acquired an item: Cleanse
-[2025-12-10 19:49:55] -- INFO -- Bought item
-[2025-12-10 19:49:55] -- INFO -- Acquired an item: Cherry
-[2025-12-10 19:49:55] -- INFO -- Bought item
-[2025-12-10 19:49:56] -- INFO -- Acquired an item: Cassis
-[2025-12-10 19:49:56] -- INFO -- Bought item
-[2025-12-10 19:49:57] -- INFO -- Acquired an item: Grapes
-[2025-12-10 19:49:57] -- INFO -- Bought item
-[2025-12-10 19:49:59] -- INFO -- Paused set to True
-[2025-12-10 19:50:59] -- INFO -- Paused set to False
-[2025-12-10 19:51:18] -- INFO -- Acquired an item: Grapes
-[2025-12-10 19:51:18] -- INFO -- Bought item
-[2025-12-10 19:51:18] -- INFO -- Acquired an item: Grapes
-[2025-12-10 19:51:18] -- INFO -- Bought item
-[2025-12-10 19:51:19] -- INFO -- Acquired an item: Grapes
-[2025-12-10 19:51:19] -- INFO -- Bought item
-[2025-12-10 19:51:19] -- INFO -- Acquired an item: Grapes
-[2025-12-10 19:51:19] -- INFO -- Bought item
-[2025-12-10 19:51:19] -- INFO -- Acquired an item: Grapes
-[2025-12-10 19:51:19] -- INFO -- Bought item
-[2025-12-10 19:51:19] -- INFO -- Acquired an item: Grapes
-[2025-12-10 19:51:19] -- INFO -- Bought item
-[2025-12-10 19:51:19] -- INFO -- Acquired an item: Grapes
-[2025-12-10 19:51:19] -- INFO -- Bought item
-[2025-12-10 19:51:19] -- INFO -- Acquired an item: Grapes
-[2025-12-10 19:51:19] -- INFO -- Bought item
-[2025-12-10 19:51:19] -- INFO -- Acquired an item: Grapes
-[2025-12-10 19:51:19] -- INFO -- Bought item
-[2025-12-10 19:51:22] -- INFO -- Paused set to True
-[2025-12-10 19:51:24] -- INFO -- Paused set to False
-[2025-12-10 19:51:29] -- ADMIN ACCESS -- Refilled all creatures
-[2025-12-10 19:51:35] -- INFO -- Player selected Creature1
-[2025-12-10 19:51:35] -- INFO -- Started dragging creature 'Creature1' at (193, 319)
-[2025-12-10 19:51:36] -- INFO -- Consumed an item: Grapes
-[2025-12-10 19:51:37] -- INFO -- Consumed an item: Grapes
-[2025-12-10 19:51:37] -- INFO -- Consumed an item: Grapes
-[2025-12-10 19:51:38] -- INFO -- Consumed an item: Grapes
-[2025-12-10 19:51:38] -- INFO -- Consumed an item: Grapes
-[2025-12-10 19:51:39] -- INFO -- Consumed an item: Grapes
-[2025-12-10 19:51:39] -- INFO -- Consumed an item: Grapes
-[2025-12-10 19:51:39] -- INFO -- Consumed an item: Grapes
-[2025-12-10 19:51:39] -- INFO -- Consumed an item: Grapes
-[2025-12-10 19:51:42] -- INFO -- Player selected Creature0
-[2025-12-10 19:51:42] -- INFO -- Started dragging creature 'Creature0' at (578, 324)
-[2025-12-10 19:51:43] -- INFO -- Consumed an item: Grapes
-[2025-12-10 19:51:44] -- INFO -- Player selected Creature0
-[2025-12-10 19:51:44] -- INFO -- Started dragging creature 'Creature0' at (578, 324)
-[2025-12-10 19:51:45] -- INFO -- Player selected Creature0
-[2025-12-10 19:51:45] -- INFO -- Started dragging creature 'Creature0' at (521, 348)
-[2025-12-10 19:51:45] -- INFO -- Player selected Creature0
-[2025-12-10 19:51:45] -- INFO -- Started dragging creature 'Creature0' at (521, 348)
-[2025-12-10 19:51:46] -- INFO -- Consumed an item: Spam
-[2025-12-10 19:51:49] -- INFO -- Consumed an item: Cassis
-[2025-12-10 19:51:50] -- INFO -- Consumed an item: Cherry
-[2025-12-10 19:51:51] -- INFO -- Player selected Creature0
-[2025-12-10 19:51:51] -- INFO -- Started dragging creature 'Creature0' at (521, 348)
-[2025-12-10 19:51:51] -- INFO -- Player selected Creature0
-[2025-12-10 19:51:51] -- INFO -- Started dragging creature 'Creature0' at (521, 348)
-[2025-12-10 19:51:53] -- INFO -- Consumed an item: Aisu
+[2025-12-10 20:20:24] -- INFO -- Load Game Menu Opened
+[2025-12-10 20:20:25] -- INFO -- Stated Loaded Game: baba.json
+[2025-12-10 20:20:25] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-10 20:20:26] -- INFO -- Paused set to True
+[2025-12-10 20:20:27] -- INFO -- Paused set to False
+[2025-12-10 20:20:28] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
+[2025-12-10 20:20:29] -- INFO -- Stated Loaded Game: baba.json
+[2025-12-10 20:20:29] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-10 20:21:30] -- INFO -- Player selected Creature0
+[2025-12-10 20:21:30] -- INFO -- Started dragging creature 'Creature0' at (275, 199)
+[2025-12-10 20:21:31] -- INFO -- Player selected Creature0
+[2025-12-10 20:21:31] -- INFO -- Started dragging creature 'Creature0' at (273, 199)
+[2025-12-10 20:21:33] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
+[2025-12-10 20:21:34] -- INFO -- Stated Loaded Game: baba.json
+[2025-12-10 20:21:34] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-10 20:21:40] -- INFO -- Paused set to True
+[2025-12-10 20:21:41] -- INFO -- Returned to main menu from pause
+[2025-12-10 20:21:42] -- INFO -- Load Game Menu Opened
+[2025-12-10 20:21:44] -- INFO -- Stated Loaded Game: babafsdfds.json
+[2025-12-10 20:21:44] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-10 20:21:45] -- INFO -- Player selected Creature0
+[2025-12-10 20:21:45] -- INFO -- Started dragging creature 'Creature0' at (187, 336)
+[2025-12-10 20:21:46] -- INFO -- Player selected Creature0
+[2025-12-10 20:21:46] -- INFO -- Started dragging creature 'Creature0' at (421, 306)
+[2025-12-10 20:21:47] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
+[2025-12-10 20:21:48] -- INFO -- Stated Loaded Game: babafsdfds.json
+[2025-12-10 20:21:48] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-10 20:21:49] -- INFO -- Player selected Creature0
+[2025-12-10 20:21:49] -- INFO -- Started dragging creature 'Creature0' at (187, 336)
+[2025-12-10 20:21:51] -- ADMIN ACCESS -- [Main] Scene switched to: FlappyBirdScene
+[2025-12-10 20:21:52] -- INFO -- Stated Loaded Game: babafsdfds.json
+[2025-12-10 20:21:52] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-10 20:21:56] -- INFO -- Player selected Creature0
+[2025-12-10 20:21:56] -- INFO -- Started dragging creature 'Creature0' at (187, 336)

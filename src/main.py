@@ -85,10 +85,8 @@ def quit_game():
 
 def start_game():
     worlds = Persistence.taken_name()
-    if len(worlds) >= 3:
-        pass
     world_name = name_Field.return_input()
-    if world_name in worlds or world_name.split == "":
+    if world_name in worlds or world_name in """<>:'/"\|?* """ or world_name == " ":
         print("HEY OVER HERE!")
         return # TO DO: User picks another world name
     print(f"World Name:{world_name}")
@@ -112,7 +110,7 @@ def start_loaded_game(slot: str):
     log(2, f"Stated Loaded Game: {slot}")
 
     loaded_data = Persistence.load_slot(slot)
-
+    print(loaded_data)
     go_back()
     for c in loaded_data["creatures"]:
         creature = Persistence.unpack_creatures(c)
@@ -179,10 +177,11 @@ def go_back():
     if menu_manager.current:
         menu_manager.current.activate()
 
-def start_flappy():
+def start_flappy(slot):
     global current_scene, flappystate
     flappystate = True
-    current_scene = FlappyBirdScene(screen)
+    
+    current_scene = FlappyBirdScene(screen, slot)
     log(3, f"[Main] Scene switched to: {type(current_scene).__name__}")
 
 
