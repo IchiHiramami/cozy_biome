@@ -318,7 +318,6 @@ class Money:
         
     def add_money(self, flappypoints : int | float):
         self.money += int(flappypoints) * random.randint(6, 10)
-        print(self.money)
     
     def remove_money(self, item : dict[str, int]):
         self.money -= item["price"]

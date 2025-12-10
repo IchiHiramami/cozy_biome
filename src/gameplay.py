@@ -13,6 +13,7 @@ from logger import log
 from minigames import FlappyBird
 from collections import defaultdict
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ASSETS = os.path.join(BASE_DIR, "assets")
 
@@ -36,7 +37,9 @@ WORLD_BOTTOM = 600 - PADDING
 
 
 class GameScene:
-    def __init__(self, world_name: str, creatures : list[str] = [], foods : defaultdict[str, int] | None = None, potions : defaultdict[str, int] | None = None, cleanse : defaultdict[str, int] | None = None, money : int  = 0):
+    def __init__(self, world_name: str, creatures : list[str] = [],
+                  foods : defaultdict[str, int] | None = None, potions : defaultdict[str, int] | None = None,
+                  cleanse : defaultdict[str, int] | None = None, money : int  = 0, on_start_flappy=None):
         pygame.mixer.music.load("assets/Music/Gamescene_music.mp3")
         pygame.mixer.music.set_volume(0.5)  # 0.0 to 1.0
         pygame.mixer.music.play(-1)  
@@ -56,6 +59,7 @@ class GameScene:
         self.game_continue = True
         self.is_dragging = False # -> IFKYK
         self.drag_starts_pos = None
+        self.on_start_flappy = on_start_flappy
 
         self.inventory = Inventory()
         if foods: self.inventory.foods = foods
@@ -101,6 +105,7 @@ class GameScene:
 
         # UI elements
         self.pause_menu_buttons : list[Button] = []
+        self.game_over_buttons : list[Button] = []
 
         # Build a tabbed toolbar with tabs
         toolbar_font = pygame.font.Font(None, 30)
@@ -109,7 +114,7 @@ class GameScene:
         tab_content_y = 540
 
         main_tab_buttons = [
-            Button(20, tab_content_y, 100, 40, toolbar_font, "Toggle", "#dda658", "#eec584", "##ffffff", on_click = self.toggle_toolbar),
+            
             Button(680, tab_content_y, 100, 40, toolbar_font, "Pet", "#dda658", "#eec584", "#ffffff", on_click = self.petting),
         ]
 
@@ -119,9 +124,8 @@ class GameScene:
         ]
 
 
-        import main
         mini_game_Buttons = [
-            Button(20, tab_content_y, 100, 40, pygame.font.Font(None, 25), "Plappy Birb", "#dda658", "#eec584", "##ffffff", on_click = lambda : (main.start_flappy(self.world_name), self.save_game_state())),
+            Button(20, tab_content_y, 100, 40, pygame.font.Font(None, 25), "Plappy Birb", "#dda658", "#eec584", "##ffffff", on_click=lambda: (self.on_start_flappy(), self.save_game_state())),
         ]
 
         self.market_items : list[dict[str, str | int | pygame.Surface]] = [
@@ -198,19 +202,14 @@ class GameScene:
             on_click=self.save_game_state
         )
 
-        load_btn = Button(
-            300, 320, 200, 50, pause_font,
-            "Load Game", "#dda658", "#eec584", "#ffffff",
-            on_click=self.load_game_state
-        )
-
         quit_btn = Button(
-            300, 380, 200, 50, pause_font,
+            300, 320, 200, 50, pause_font,
             "Quit to Menu", "#dda658", "#eec584", "#ffffff",
             on_click=self.quit_to_main_menu
 )
 
-        self.pause_menu_buttons.extend([resume_btn, save_btn, load_btn, quit_btn])
+        self.pause_menu_buttons.extend([resume_btn, save_btn, quit_btn])
+        self.game_over_buttons.extend([quit_btn])
 
         # Admin input field -> to be shipped in the final game but NOT documented (cheat code kumbaga)
         self.master_buttons: list[Button] = []
@@ -360,6 +359,9 @@ class GameScene:
         # Pause menu buttons
         if self.is_paused:
             buttons.extend(self.pause_menu_buttons)
+            
+        if not self.game_continue:
+            buttons.extend(self.game_over_buttons)
 
         # Master admin panel
         if self.master_visible:
@@ -389,7 +391,6 @@ class GameScene:
     def save_game_state(self, world_name = None, money = None):
         world_name = self.world_name if not world_name else world_name
         money = self.money.money if not money else money
-
         Persistence.save_to_slot(self.world_name,
                                 sum(c.satisfaction_level for c in self.creatures),
                                     self.creatures,
@@ -404,7 +405,7 @@ class GameScene:
         import main
         main.creatureslist = None
         main.current_scene = None
-        main.start_loaded_game(f"{self.world_name}.json")
+        main.start_loaded_game(f"{self.world_name}")
         
 
     def quit_to_main_menu(self):
@@ -470,6 +471,10 @@ class GameScene:
             for b in self.pause_menu_buttons:
                 b.handle_event(event)
             return
+    
+        if not self.game_continue:
+            for b in self.game_over_buttons:
+                b.handle_event(event)
 
         if self.is_market_open:
             for btn in self.market_buttons:
@@ -643,14 +648,31 @@ class GameScene:
 
             for b in self.pause_menu_buttons:
                 b.draw(screen)
+        
+        if not self.game_continue:
+            overlay = pygame.Surface((800, 600), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 150))
+            screen.blit(overlay, (0, 0))
+
+            for b in self.game_over_buttons:
+                b.draw(screen)
 
 class FlappyBirdScene(GameScene):
-    def __init__(self, screen : pygame.Surface, slot):
-        super().__init__("FLAPPYBIRD")
+    def __init__(self, screen: pygame.Surface, slot, on_finish, world_name = None):
+        super().__init__(
+            world_name=slot,
+            creatures=[],
+            foods=None,
+            potions=None,
+            cleanse=None,
+            money=0,
+            on_start_flappy=None
+        )
         self.screen = screen
         self.flappy = FlappyBird(screen, width=screen.get_width(), height=screen.get_height())
         self.running = True
         self.slot = slot
+        self.on_finish = on_finish
 
     def handle_event(self, event : pygame.event.Event):
         self.flappy.handle_event(event)
@@ -659,19 +681,17 @@ class FlappyBirdScene(GameScene):
 
     def update(self):
         self.flappy.update()
-
         if self.flappy.finished:
-            import main
             self.money.add_money(self.flappy.score)
-            main.current_scene = None
-            total_money = Persistence.load_slot(f"{self.slot}.json")["money"] + self.money.money
+            total_money = Persistence.load_slot(f"{self.slot}")["money"] + self.money.money
+            print(total_money)
             self.save_game_state(self.slot, total_money)
-            main.start_loaded_game(f"{self.slot}.json")
+            print(self.slot)
+            self.on_finish()
             return self.money
 
-    def draw(self, screen: pygame.Surface):
+    def draw(self, screen: pygame.Surface): 
         if self.running:
-
             self.flappy.draw(screen)
 
             font = pygame.font.Font(None, 28)

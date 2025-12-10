@@ -17,7 +17,7 @@ class Persistence:
     ) -> None:
 
         # Clean filename
-        safe_filename = file_slot.replace("\n", "").replace("\r", "")
+        safe_filename = os.path.splitext(file_slot)[0].replace("\n", "").replace("\r", "")
         filename = f"save_files/{safe_filename}.json"
 
         # Base save structure
@@ -68,6 +68,8 @@ class Persistence:
     @staticmethod
     def load_slot(file_slot: str) -> dict[str, Any]:
         filename = f"save_files/{file_slot}"
+        if not filename.endswith(".json"):
+            filename = filename + ".json"
         try:
             with open(filename, "r") as f:
                 return json.load(f)

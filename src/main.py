@@ -76,6 +76,22 @@ def load_game():
     menu_manager.switch(load_game_menu)
     load_game_menu.activate()
 
+def get_active_buttons():
+    """Gets buttons for feedbacking"""
+    active_buttons = []
+
+    if current_scene:
+        if hasattr(current_scene, "get_all_active_buttons"):
+            active_buttons.extend(current_scene.get_all_active_buttons())
+        return active_buttons
+
+    if menu_manager.current:
+        if hasattr(menu_manager.current, "buttons"):
+            active_buttons.extend(menu_manager.current.buttons)
+
+    return active_buttons
+
+
 def quit_game():
     log(2, "Game Exited")
     pygame.quit()
@@ -98,7 +114,7 @@ def start_game():
     pygame.mixer.music.load("assets/Music/GameScene_music.mp3")
     pygame.mixer.music.play(-1)
     print("NEW GAME CREATED")
-    current_scene = GameScene(world_name)
+    current_scene = GameScene(world_name, on_start_flappy=lambda: start_flappy(world_name))
     log(2, f"[Main] Scene switched to: {type(current_scene).__name__}")
     log(2, "Player Started New Game")
 
@@ -113,7 +129,6 @@ def start_loaded_game(slot: str):
     for c in loaded_data["creatures"]:
         creature = Persistence.unpack_creatures(c)
         creatureslist.append(creature)
-
     inv = loaded_data.get("inventory", {})
     foods = inv.get("foods", {})
     potions = inv.get("potions", {})
@@ -122,14 +137,13 @@ def start_loaded_game(slot: str):
 
     pygame.mixer.music.load("assets/Music/GameScene_music.mp3")
     pygame.mixer.music.play(-1)
-
     current_scene = GameScene(
         loaded_data["world_name"],
         creatureslist,
         foods=foods,
         potions=potions,
         cleanse=cleanse,
-        money=money
+        money=money, on_start_flappy=lambda: start_flappy(slot)
     )
     log(3, f"[Main] Scene switched to: {type(current_scene).__name__}")
 
@@ -180,8 +194,12 @@ def go_back():
 def start_flappy(slot : str):
     global current_scene, flappystate
     flappystate = True
-    
-    current_scene = FlappyBirdScene(screen, slot)
+    current_scene = FlappyBirdScene(
+        screen, 
+        slot, 
+        on_finish=lambda: start_loaded_game(slot), 
+        world_name=slot
+    )
     log(3, f"[Main] Scene switched to: {type(current_scene).__name__}")
 
 
@@ -228,7 +246,7 @@ new_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_gam
 where_to_save_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"), saved_games_btn, [], bg_manager)
 load_game_menu = GameSetupMenu(os.path.join(ASSETS, "Background/main_menu_new_game.png"),  saved_games_btn,
 [],
-bg_manager)
+bg_manager) # TO DO: Scrollbar if load slots are more than 3
 
 menu_manager.push(home_menu)
 home_menu.activate()
@@ -280,30 +298,36 @@ while is_running:
     # -------------------------
     cursor_to_draw = cursor_default
 
-    if current_scene:
+    active_buttons = get_active_buttons()
 
-        for btn in current_scene.get_all_active_buttons():
-            if btn.hovered:
-                cursor_to_draw = cursor_point
-                break
-        else:
+    # 1. Button Hover → pointer cursor
+    for btn in active_buttons:
+        if btn.hovered:
+            cursor_to_draw = cursor_point
+            break
+
+    else:
+        # 2. Gameplay-only logic
+        if current_scene:
+
+            # If something is selected → hand cursor
             if current_scene.selected:
                 cursor_to_draw = cursor_hand
 
             else:
+                # Petting mode → creature hover logic
                 if current_scene.cursor_mode == "Petting":
-                    
                     for creature in current_scene.creatures:
                         if creature.hovered:
                             cursor_to_draw = cursor_hover
                             break
                     else:
                         cursor_to_draw = cursor_default
-
                 else:
                     cursor_to_draw = cursor_default
 
-    screen.blit(cursor_to_draw, (mx, my))
+    # Draw cursor
+    screen.blit(cursor_to_draw, (mx, my))   
 
     pygame.display.flip()
     clock.tick(60)
