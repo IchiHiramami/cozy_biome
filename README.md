@@ -5,7 +5,7 @@ A Python/Pygame-based virtual pet simulation featuring creature management, drag
 ---
 
 ## Overview  
-Virtual Creature Care is a desktop game where players manage a small ecosystem of creatures, each with unique behaviors, needs, and satisfaction levels. The player interacts with creatures through feeding, petting, and applying special effects, while navigating a fully custom UI system built on top of Pygame.
+Cozy Cove is a desktop game where players manage a small ecosystem of creatures, each with unique behaviors, needs, and satisfaction levels. The player interacts with creatures through feeding, petting, and applying special effects, while navigating a fully custom UI system built on top of Pygame.
 
 The project emphasizes clean modular design, extensible UI components, and robust event handling across multiple interactive layers.
 
