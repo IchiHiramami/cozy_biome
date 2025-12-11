@@ -170,6 +170,7 @@ class GameScene:
         slot7 = InventorySlot(620, 540, 50, "Cleanse",icon = self.icon_cleanse, on_click = self.use_item)
 
         Inventory_slots = [sloti ,slot0 ,slot1, slot2, slot3, slot4, slot5, slot6, slot7]
+        self.inventory_slots_list = Inventory_slots
         
         self.infobox = InfoBox(670, tab_content_y, 120, 40, pygame.font.Font(None, 20), "", "#dda658", "#ffffff")
 
@@ -510,6 +511,21 @@ class GameScene:
     
         self.hamburger_btn.handle_event(event)
 
+
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            for slot in self.inventory_slots_list:
+                if slot.dragging:
+                    # Check drop target
+                    if self.selected:
+                        if self.selected.rect.collidepoint(event.pos):
+                            print("DROP CHECK — slot.dragging =", slot.dragging)
+                            self.use_item(slot.item_name)
+                            slot.dragging = False
+                            break
+
+                    slot.drag_pos = None
+                    return
+
         self.toolbar.handle_event(event)
         self.toggle_toolbar_btn.handle_event(event)
 
@@ -550,6 +566,7 @@ class GameScene:
                     cmd = self.admin_field.text 
                     self.run_admin_command(cmd) 
                     self.admin_field.text = ""   
+
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             for creature in self.creatures:

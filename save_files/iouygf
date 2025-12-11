@@ -1,0 +1,45 @@
+{
+    "world_name": "iouygf",
+    "world_score": 188.4599999999941,
+    "creatures": [
+        {
+            "name": "Mister",
+            "x": 440,
+            "y": 83,
+            "sprite": [
+                "assets/Sprites/Nocky_OC_1.png",
+                "assets/Sprites/Nocky_OC_2.png",
+                "assets/Sprites/Nocky_OC_3.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "quacker",
+            "satisfaction_level": 94.22999999999705,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": []
+        },
+        {
+            "name": "Abby",
+            "x": 80,
+            "y": 370,
+            "sprite": [
+                "assets/Sprites/Cat_happy.png",
+                "assets/Sprites/Cat.png",
+                "assets/Sprites/Cat_sad.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "mimi-carrier",
+            "satisfaction_level": 94.22999999999705,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": []
+        }
+    ],
+    "inventory": {
+        "foods": {},
+        "potions": {},
+        "cleanse": {}
+    },
+    "last_saved": "December 11, 2025 09:56:21 PM",
+    "money": 30
+}

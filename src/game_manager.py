@@ -275,6 +275,13 @@ class InventorySlot:
         self.font: pygame.font.Font = pygame.font.Font(None, 18)
         self.item: Food | Potion | Cleanse | None = None
 
+        # Dragging Logics
+        self.dragging = False
+        self.drag_icon = None
+        self.drag_pos = None
+        self.drag_offset = (0, 0)
+
+
     def clear(self):
         """Clear item image from slot"""
         self.icon = None
@@ -283,14 +290,41 @@ class InventorySlot:
         mx, my = pygame.mouse.get_pos()
         self.hovered = self.rect.collidepoint(mx, my)
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
+        # Start dragging
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.rect.collidepoint(event.pos) and self.quantity > 0:
+                if pygame.key.get_mods() & pygame.KMOD_SHIFT: #shift key ito
+                    print("SHIFT DETECTED — DRAG START")
+                    self.dragging = True
+                    self.drag_icon = self.icon
+                    self.drag_offset = (self.rect.x - event.pos[0], self.rect.y - event.pos[1])
+                    return True
+
+                # Otherwise → normal click-to-use
                 if self.on_use:
                     self.on_use(self.item_name)
                 return True
+
+        # Drag movement
+        if event.type == pygame.MOUSEMOTION and self.dragging:
+            self.drag_pos = (event.pos[0] + self.drag_offset[0],
+                            event.pos[1] + self.drag_offset[1])
+            return True
+
+        # Drop
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            if self.dragging:
+                self.dragging = False
+                return True
+
         return False
 
     def draw(self, screen : pygame.Surface, inventory: Any):
+        if self.dragging and self.drag_icon and self.drag_pos:
+            icon = pygame.transform.scale(self.drag_icon, (self.rect.width - 8, self.rect.height - 8))
+            screen.blit(icon, (self.drag_pos[0] + 4, self.drag_pos[1] + 4))
+            return
+
         pygame.draw.rect(screen, self.bg_color, self.rect, border_radius=6)
         pygame.draw.rect(screen, self.border_color, self.rect, width=2, border_radius=6)
 
@@ -403,31 +437,38 @@ class Toolbar:
         else:
             self.elements.append(element)
 
-    def handle_event(self, event : pygame.event.Event):
+    def handle_event(self, event: pygame.event.Event):
         """Send events to toolbar components only if visible."""
         if not self.visible:
             return
 
         # If tabbed, send events to header buttons and active tab's components
         if self.tabs:
+            # Tab header buttons (switch tabs)
             for btn in self._tab_header_buttons:
                 btn.handle_event(event)
 
             active = self.tabs[self.active_tab]
-            for button in active.get('buttons', []):
-                button.handle_event(event)
+
+            # ✅ Buttons (may include InventorySlot)
+            for element in active.get('buttons', []):
+                if hasattr(element, "handle_event"):
+                    handled = element.handle_event(event)
+
+                    # ✅ Allow drag-end events to pass through to GameScene
+                    if handled and not getattr(element, "dragging", False):
+                        return
+
+            # ✅ Elements (may include InventorySlot)
             for element in active.get('elements', []):
                 if hasattr(element, "handle_event"):
-                    element.handle_event(event)
+                    handled = element.handle_event(event)
+
+                    # ✅ Same drag-aware rule
+                    if handled and not getattr(element, "dragging", False):
+                        return
+
             return
-
-        # Legacy behavior
-        for button in self.buttons:
-            button.handle_event(event)
-
-        for text in self.t:
-            if hasattr(element, "handle_event"):
-                element.handle_event(event)
 
     def draw(self, screen: pygame.Surface) -> None:
         """Draw the toolbar and all its components."""

@@ -1,0 +1,98 @@
+{
+    "world_name": "dfg",
+    "world_score": 267.4949999999441,
+    "creatures": [
+        {
+            "name": "Panda",
+            "x": 240,
+            "y": 309,
+            "sprite": [
+                "assets/Sprites/Nocky_OC_1.png",
+                "assets/Sprites/Nocky_OC_2.png",
+                "assets/Sprites/Nocky_OC_3.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "quacker",
+            "satisfaction_level": 69.13499999999613,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": [
+                {
+                    "name": "Less Decay",
+                    "duration": 603,
+                    "type": "Less_Decay",
+                    "multiplier": 2
+                },
+                {
+                    "name": "More Satisfaction",
+                    "duration": 779,
+                    "type": "More_Satisfaction",
+                    "multiplier": 2
+                }
+            ]
+        },
+        {
+            "name": "Nikita",
+            "x": 404,
+            "y": 330,
+            "sprite": [
+                "assets/Sprites/Nocky_OC_1.png",
+                "assets/Sprites/Nocky_OC_2.png",
+                "assets/Sprites/Nocky_OC_3.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "quacker",
+            "satisfaction_level": 66.11999999998267,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": []
+        },
+        {
+            "name": "Nikita",
+            "x": 616,
+            "y": 240,
+            "sprite": [
+                "assets/Sprites/Nocky_OC_1.png",
+                "assets/Sprites/Nocky_OC_2.png",
+                "assets/Sprites/Nocky_OC_3.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "quacker",
+            "satisfaction_level": 66.11999999998267,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": []
+        },
+        {
+            "name": "Chessie",
+            "x": 116,
+            "y": 251,
+            "sprite": [
+                "assets/Sprites/Nocky_OC_1.png",
+                "assets/Sprites/Nocky_OC_2.png",
+                "assets/Sprites/Nocky_OC_3.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "quacker",
+            "satisfaction_level": 66.11999999998267,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": []
+        }
+    ],
+    "inventory": {
+        "foods": {
+            "Grapes": 0,
+            "Cassis": 0,
+            "Cherry": 0,
+            "Makku": 0
+        },
+        "potions": {
+            "More Satisfaction": 0,
+            "Less Decay": 0
+        },
+        "cleanse": {}
+    },
+    "last_saved": "December 11, 2025 10:40:36 PM",
+    "money": 259
+}

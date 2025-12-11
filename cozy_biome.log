@@ -1,16 +1,189 @@
-[2025-12-11 20:21:12] -- INFO -- Player Opened New Game Menu
-[2025-12-11 20:21:14] -- INFO -- World Name set to dsaefrgth
-[2025-12-11 20:21:14] -- INFO -- [Main] Scene switched to: GameScene
-[2025-12-11 20:21:14] -- INFO -- Player Started New Game
-[2025-12-11 20:21:15] -- INFO -- Player selected Rosebud
-[2025-12-11 20:21:15] -- INFO -- Started dragging creature 'Rosebud' at (115, 422)
-[2025-12-11 20:21:16] -- INFO -- Player selected Chessie
-[2025-12-11 20:21:16] -- INFO -- Started dragging creature 'Chessie' at (52, 339)
-[2025-12-11 20:21:18] -- INFO -- Player selected Bug
-[2025-12-11 20:21:18] -- INFO -- Started dragging creature 'Bug' at (303, 497)
-[2025-12-11 20:21:20] -- INFO -- Player selected Chessie
-[2025-12-11 20:21:20] -- INFO -- Started dragging creature 'Chessie' at (309, 238)
-[2025-12-11 20:21:31] -- INFO -- Player selected Chessie
-[2025-12-11 20:21:31] -- INFO -- Started dragging creature 'Chessie' at (245, 312)
-[2025-12-11 20:22:08] -- INFO -- Creature 'Chessie' has reached 0 satisfaction and is now dead.
-[2025-12-11 20:22:08] -- INFO -- Creature 'Bug' has reached 0 satisfaction and is now dead.
+[2025-12-11 22:39:55] -- INFO -- Load Game Menu Opened
+[2025-12-11 22:39:56] -- INFO -- Stated Loaded Game: dfg
+[2025-12-11 22:39:56] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-11 22:39:59] -- INFO -- Player selected Panda
+[2025-12-11 22:39:59] -- INFO -- Started dragging creature 'Panda' at (240, 307)
+[2025-12-11 22:39:59] -- INFO -- Consumed an item: Makku
+[2025-12-11 22:40:03] -- INFO -- Player selected Panda
+[2025-12-11 22:40:03] -- INFO -- Started dragging creature 'Panda' at (240, 307)
+[2025-12-11 22:40:03] -- INFO -- Consumed an item: Grapes
+[2025-12-11 22:40:04] -- INFO -- Consumed an item: Grapes
+[2025-12-11 22:40:09] -- INFO -- Consumed an item: Cassis
+[2025-12-11 22:40:16] -- INFO -- Player selected Panda
+[2025-12-11 22:40:16] -- INFO -- Started dragging creature 'Panda' at (240, 308)
+[2025-12-11 22:40:17] -- INFO -- Consumed an item: Cassis
+[2025-12-11 22:40:20] -- INFO -- Consumed an item: Cherry
+[2025-12-11 22:40:22] -- INFO -- Consumed an item: Cherry
+[2025-12-11 22:40:23] -- INFO -- Consumed an item: Cherry
+[2025-12-11 22:40:26] -- INFO -- Consumed an item: Less Decay
+[2025-12-11 22:40:27] -- INFO -- Consumed an item: More Satisfaction
+[2025-12-11 22:40:28] -- INFO -- Consumed an item: More Satisfaction
+[2025-12-11 22:40:36] -- INFO -- [Main] Scene switched to: FlappyBirdScene
+[2025-12-11 22:41:06] -- INFO -- Stated Loaded Game: dfg
+[2025-12-11 22:41:06] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-11 22:41:10] -- INFO -- Acquired an item: Grapes
+[2025-12-11 22:41:10] -- INFO -- Bought item
+[2025-12-11 22:41:10] -- INFO -- Acquired an item: Cassis
+[2025-12-11 22:41:10] -- INFO -- Bought item
+[2025-12-11 22:41:11] -- INFO -- Acquired an item: Grapes
+[2025-12-11 22:41:11] -- INFO -- Bought item
+[2025-12-11 22:41:12] -- INFO -- Acquired an item: Cherry
+[2025-12-11 22:41:12] -- INFO -- Bought item
+[2025-12-11 22:41:12] -- INFO -- Acquired an item: Makku
+[2025-12-11 22:41:12] -- INFO -- Bought item
+[2025-12-11 22:41:12] -- INFO -- Acquired an item: Cherry
+[2025-12-11 22:41:12] -- INFO -- Bought item
+[2025-12-11 22:41:13] -- INFO -- Acquired an item: Cherry
+[2025-12-11 22:41:13] -- INFO -- Bought item
+[2025-12-11 22:41:14] -- INFO -- Acquired an item: Cherry
+[2025-12-11 22:41:14] -- INFO -- Bought item
+[2025-12-11 22:41:14] -- INFO -- Acquired an item: Aisu
+[2025-12-11 22:41:14] -- INFO -- Bought item
+[2025-12-11 22:41:15] -- INFO -- Acquired an item: Aisu
+[2025-12-11 22:41:15] -- INFO -- Bought item
+[2025-12-11 22:41:15] -- INFO -- Acquired an item: Spam
+[2025-12-11 22:41:15] -- INFO -- Bought item
+[2025-12-11 22:41:16] -- INFO -- Acquired an item: Cherry
+[2025-12-11 22:41:16] -- INFO -- Bought item
+[2025-12-11 22:41:17] -- INFO -- Acquired an item: Grapes
+[2025-12-11 22:41:17] -- INFO -- Bought item
+[2025-12-11 22:41:18] -- INFO -- Acquired an item: Cassis
+[2025-12-11 22:41:18] -- INFO -- Bought item
+[2025-12-11 22:41:18] -- INFO -- Acquired an item: Cherry
+[2025-12-11 22:41:18] -- INFO -- Bought item
+[2025-12-11 22:41:19] -- INFO -- Acquired an item: Makku
+[2025-12-11 22:41:19] -- INFO -- Bought item
+[2025-12-11 22:41:19] -- INFO -- Acquired an item: Grapes
+[2025-12-11 22:41:19] -- INFO -- Bought item
+[2025-12-11 22:41:29] -- INFO -- Player has removed creature selection
+[2025-12-11 22:41:30] -- INFO -- Player selected Panda
+[2025-12-11 22:41:30] -- INFO -- Started dragging creature 'Panda' at (240, 309)
+[2025-12-11 22:41:30] -- INFO -- Consumed an item: Makku
+[2025-12-11 22:41:32] -- INFO -- Consumed an item: Spam
+[2025-12-11 22:41:34] -- INFO -- Consumed an item: Makku
+[2025-12-11 22:41:35] -- INFO -- Consumed an item: Grapes
+[2025-12-11 22:41:37] -- INFO -- Consumed an item: Cassis
+[2025-12-11 22:41:40] -- INFO -- Player selected Nikita
+[2025-12-11 22:41:40] -- INFO -- Started dragging creature 'Nikita' at (404, 330)
+[2025-12-11 22:41:40] -- INFO -- Consumed an item: Cherry
+[2025-12-11 22:41:41] -- INFO -- Consumed an item: Cherry
+[2025-12-11 22:41:42] -- INFO -- Consumed an item: Cherry
+[2025-12-11 22:41:45] -- INFO -- Consumed an item: Cherry
+[2025-12-11 22:41:45] -- INFO -- Consumed an item: Cherry
+[2025-12-11 22:41:47] -- INFO -- Consumed an item: Cherry
+[2025-12-11 22:41:50] -- INFO -- Player has removed creature selection
+[2025-12-11 22:41:55] -- INFO -- Player selected Nikita
+[2025-12-11 22:41:55] -- INFO -- Started dragging creature 'Nikita' at (616, 240)
+[2025-12-11 22:41:59] -- INFO -- Player selected Nikita
+[2025-12-11 22:41:59] -- INFO -- Started dragging creature 'Nikita' at (404, 331)
+[2025-12-11 22:41:59] -- INFO -- Consumed an item: Aisu
+[2025-12-11 22:42:01] -- INFO -- Consumed an item: Grapes
+[2025-12-11 22:42:03] -- INFO -- Consumed an item: Grapes
+[2025-12-11 22:42:03] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:03] -- INFO -- Started dragging creature 'Nikita' at (404, 331)
+[2025-12-11 22:42:05] -- INFO -- Consumed an item: Grapes
+[2025-12-11 22:42:07] -- INFO -- Consumed an item: Cassis
+[2025-12-11 22:42:10] -- INFO -- Player toggled creature info showing to True
+[2025-12-11 22:42:15] -- INFO -- World Dragging to False
+[2025-12-11 22:42:16] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:16] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 5.31999999998618
+[2025-12-11 22:42:16] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:16] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 5.669999999986183
+[2025-12-11 22:42:17] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:17] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 6.089999999986185
+[2025-12-11 22:42:17] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:17] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 6.469999999986188
+[2025-12-11 22:42:17] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:17] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 6.87999999998619
+[2025-12-11 22:42:17] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:17] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 7.2899999999861915
+[2025-12-11 22:42:17] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:17] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 7.6999999999861934
+[2025-12-11 22:42:17] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:17] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 8.119999999986195
+[2025-12-11 22:42:17] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:17] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 8.539999999986197
+[2025-12-11 22:42:18] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:18] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 8.969999999986198
+[2025-12-11 22:42:18] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:18] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 9.3899999999862
+[2025-12-11 22:42:18] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:18] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 9.819999999986202
+[2025-12-11 22:42:18] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:18] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 10.239999999986203
+[2025-12-11 22:42:18] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:18] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 10.669999999986205
+[2025-12-11 22:42:18] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:18] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 11.089999999986206
+[2025-12-11 22:42:18] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:18] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 11.519999999986208
+[2025-12-11 22:42:18] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:18] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 11.93999999998621
+[2025-12-11 22:42:19] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:19] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 12.359999999986211
+[2025-12-11 22:42:19] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:19] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 12.789999999986213
+[2025-12-11 22:42:19] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:19] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 13.209999999986215
+[2025-12-11 22:42:19] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:19] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 13.629999999986216
+[2025-12-11 22:42:19] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:19] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 14.049999999986218
+[2025-12-11 22:42:19] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:19] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 14.46999999998622
+[2025-12-11 22:42:19] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:19] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 14.879999999986222
+[2025-12-11 22:42:20] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:20] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 15.299999999986223
+[2025-12-11 22:42:20] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:20] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 15.719999999986225
+[2025-12-11 22:42:20] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:20] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 16.139999999986227
+[2025-12-11 22:42:20] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:20] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 16.569999999986216
+[2025-12-11 22:42:20] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:20] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 16.989999999986203
+[2025-12-11 22:42:20] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:20] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 17.419999999986192
+[2025-12-11 22:42:20] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:20] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 17.83999999998618
+[2025-12-11 22:42:20] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:20] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 18.26999999998617
+[2025-12-11 22:42:21] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:21] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 18.689999999986156
+[2025-12-11 22:42:21] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:21] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 19.119999999986145
+[2025-12-11 22:42:21] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:21] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 19.539999999986133
+[2025-12-11 22:42:21] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:21] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 19.969999999986122
+[2025-12-11 22:42:21] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:21] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 20.38999999998611
+[2025-12-11 22:42:21] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:21] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 20.809999999986097
+[2025-12-11 22:42:21] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:21] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 21.239999999986086
+[2025-12-11 22:42:21] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:21] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 21.659999999986074
+[2025-12-11 22:42:22] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:22] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 22.089999999986063
+[2025-12-11 22:42:22] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:22] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 22.50999999998605
+[2025-12-11 22:42:22] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:22] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 22.93999999998604
+[2025-12-11 22:42:22] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:22] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 23.359999999986027
+[2025-12-11 22:42:22] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:22] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 23.789999999986016
+[2025-12-11 22:42:22] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:22] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 24.209999999986003
+[2025-12-11 22:42:22] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:22] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 24.639999999985992
+[2025-12-11 22:42:22] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:22] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 25.05999999998598
+[2025-12-11 22:42:23] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:23] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 25.479999999985967
+[2025-12-11 22:42:23] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:23] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 25.909999999985956
+[2025-12-11 22:42:23] -- INFO -- Player selected Nikita
+[2025-12-11 22:42:23] -- INFO -- Player pet Nikita: Creature Satisfaction Level: 26.339999999985945
