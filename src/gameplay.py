@@ -24,7 +24,7 @@ animated_cat = {
 #cat = {"Sprite" : ["assets/Sprites/cat.jpg", "assets/Sprites/cat.jpg", "assets/Sprites/cat.jpg"]} # MINIMUM LAGI 3 sprites
 
 Nocky_OC = {
-        "Sprite" : ["assets/Sprites/Nocky_OC_2.png", "assets/Sprites/Nocky_OC_1.png", "assets/Sprites/Nocky_OC_2.png", "assets/Sprites/Dead.png"]
+        "Sprite" : ["assets/Sprites/Nocky_OC_1.png", "assets/Sprites/Nocky_OC_2.png", "assets/Sprites/Nocky_OC_3.png", "assets/Sprites/Dead.png"]
     }
 
 spritz = [animated_cat["Sprite"], Nocky_OC["Sprite"]]#, cat["Sprite"]]
@@ -264,6 +264,7 @@ class GameScene:
         refill_btn_m = Button(
             20, 180, 120, 40,
             pygame.font.Font(None, 20),
+            
             "Refill All",
             "#dda658", "#eec584", "#ffffff",
             on_click=lambda: self.run_admin_command("refill")
