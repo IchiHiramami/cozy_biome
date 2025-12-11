@@ -481,7 +481,11 @@ class GameScene:
         log(3, f"Unknown command '{cmd}'")
 
     def handle_event(self, event: pygame.event.Event):
-        # Always let hamburger receive events
+        if self.showing_info:
+            if self.infobox.handle_event(event) is False:
+                self.showing_info = False
+            return
+    
         self.hamburger_btn.handle_event(event)
 
         self.toolbar.handle_event(event)
@@ -509,10 +513,6 @@ class GameScene:
         if self.admin_mode:
             for fields in self.inputs:
                 fields.handle_event(event)
-
-        if self.showing_info:
-            self.infobox.handle_event(event)
-            pass
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
@@ -546,6 +546,8 @@ class GameScene:
                             f"Decay: {creature.satisfaction_decay:.3f}\n"
                             f"Multiplier: {creature.satisfaction_multiplier}"
                         )
+                    
+                    self.infobox.image = creature.sprite
                     log(2, f"Player selected {creature.name}")
 
                     if self.allow_dragging:
@@ -652,8 +654,8 @@ class GameScene:
             pygame.draw.rect(screen, (200, 171, 131), (50, 50, 700, 400), border_radius=12)
             pygame.draw.rect(screen, (255, 255, 255), (50, 50, 700, 400), width=3, border_radius=12)
 
-            self.infobox.rect.topleft = (100, 100)
-            self.infobox.rect.size = (600, 300)
+            self.infobox.rect.topleft = (80, 80)
+            self.infobox.rect.size = (640, 340)
 
             self.infobox.draw(screen)
 

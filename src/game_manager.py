@@ -21,24 +21,29 @@ class InfoBox:
         self.text_color = text_color if isinstance(text_color, tuple) else hex_to_rgb(text_color)
         self.text = text
         self.font = font
+        self.image : pygame.Surface = None
 
     def draw(self, surface: pygame.Surface):
         pygame.draw.rect(surface, self.color, self.rect, border_radius=5)
+        
+        if self.image:
+            portrait = pygame.transform.scale(self.image, (120, 120))
+            portrait_rect = portrait.get_rect(topleft=(self.rect.x + 20, self.rect.y + 20))
+            surface.blit(portrait, portrait_rect)
+            text_x_offset = 160  # shift text to the right of portrait
+        else:
+            text_x_offset = 20
 
-        if not self.text:
-            return
+        if self.text:
+            lines = self.text.split("\n")
+            line_height = self.font.get_height()
+            start_y = self.rect.y + 20
 
-        lines = self.text.split("\n")
-        line_height = self.font.get_height()
-        total_height = line_height * len(lines)
+            for i, line in enumerate(lines):
+                text_surf = self.font.render(line, True, self.text_color)
+                text_rect = text_surf.get_rect(topleft=(self.rect.x + text_x_offset, start_y + i * line_height))
+                surface.blit(text_surf, text_rect)
 
-        start_y = self.rect.centery - total_height // 2
-
-        for i, line in enumerate(lines):
-            text_surf = self.font.render(line, True, self.text_color)
-            text_rect = text_surf.get_rect(center=(self.rect.centerx, start_y + i * line_height))
-            surface.blit(text_surf, text_rect)
-            
     def handle_event(self, event : pygame.event.Event):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             return False

@@ -1,21 +1,14 @@
-[2025-12-11 19:12:57] -- INFO -- Player Opened New Game Menu
-[2025-12-11 19:12:59] -- WARNING -- User attempted to pick an Invalid World Name
-[2025-12-11 19:13:04] -- INFO -- World Name set to Infobox
-[2025-12-11 19:13:04] -- INFO -- [Main] Scene switched to: GameScene
-[2025-12-11 19:13:04] -- INFO -- Player Started New Game
-[2025-12-11 19:13:05] -- INFO -- Player selected Bacchus
-[2025-12-11 19:13:05] -- INFO -- Started dragging creature 'Bacchus' at (106, 219)
-[2025-12-11 19:13:06] -- INFO -- Player selected Bug
-[2025-12-11 19:13:06] -- INFO -- Started dragging creature 'Bug' at (106, 133)
-[2025-12-11 19:13:13] -- INFO -- Player selected Bug
-[2025-12-11 19:13:13] -- INFO -- Started dragging creature 'Bug' at (106, 155)
-[2025-12-11 19:13:14] -- INFO -- Player selected Rosebud
-[2025-12-11 19:13:14] -- INFO -- Started dragging creature 'Rosebud' at (236, 159)
-[2025-12-11 19:13:17] -- INFO -- Player selected Bug
-[2025-12-11 19:13:17] -- INFO -- Started dragging creature 'Bug' at (106, 379)
-[2025-12-11 19:13:18] -- INFO -- Player selected Maya
-[2025-12-11 19:13:18] -- INFO -- Started dragging creature 'Maya' at (221, 63)
-[2025-12-11 19:13:19] -- INFO -- Player selected Bacchus
-[2025-12-11 19:13:19] -- INFO -- Started dragging creature 'Bacchus' at (657, 449)
-[2025-12-11 19:13:20] -- INFO -- Player selected Bacchus
-[2025-12-11 19:13:20] -- INFO -- Started dragging creature 'Bacchus' at (657, 449)
+[2025-12-11 19:23:33] -- INFO -- Player Opened New Game Menu
+[2025-12-11 19:23:35] -- INFO -- World Name set to dfgh
+[2025-12-11 19:23:35] -- INFO -- [Main] Scene switched to: GameScene
+[2025-12-11 19:23:35] -- INFO -- Player Started New Game
+[2025-12-11 19:23:36] -- INFO -- Player selected Maya
+[2025-12-11 19:23:36] -- INFO -- Started dragging creature 'Maya' at (405, 206)
+[2025-12-11 19:23:37] -- INFO -- Player selected Maya
+[2025-12-11 19:23:37] -- INFO -- Started dragging creature 'Maya' at (495, 263)
+[2025-12-11 19:23:38] -- INFO -- Player selected Maya
+[2025-12-11 19:23:38] -- INFO -- Started dragging creature 'Maya' at (443, 337)
+[2025-12-11 19:23:39] -- INFO -- Player selected Dino
+[2025-12-11 19:23:39] -- INFO -- Started dragging creature 'Dino' at (168, 479)
+[2025-12-11 19:23:41] -- INFO -- Player selected Dino
+[2025-12-11 19:23:41] -- INFO -- Started dragging creature 'Dino' at (239, 276)
