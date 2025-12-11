@@ -1,28 +1,38 @@
-[2025-12-11 15:05:11] -- INFO -- Load Game Menu Opened
-[2025-12-11 15:05:12] -- INFO -- Stated Loaded Game: momomo
-[2025-12-11 15:05:12] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-11 15:05:12] -- INFO -- Creature 'Creature0' has reached 0 satisfaction and is now dead.
-[2025-12-11 15:05:12] -- INFO -- Creature 'Creature1' has reached 0 satisfaction and is now dead.
-[2025-12-11 15:05:14] -- INFO -- Player selected Creature0
-[2025-12-11 15:05:14] -- INFO -- Started dragging creature 'Creature0' at (352, 409)
-[2025-12-11 15:05:15] -- INFO -- Player selected Creature2
-[2025-12-11 15:05:15] -- INFO -- Started dragging creature 'Creature2' at (184, 340)
-[2025-12-11 15:05:16] -- INFO -- Player selected Creature1
-[2025-12-11 15:05:16] -- INFO -- Started dragging creature 'Creature1' at (503, 437)
-[2025-12-11 15:05:24] -- INFO -- Player selected Creature1
-[2025-12-11 15:05:24] -- INFO -- Started dragging creature 'Creature1' at (504, 437)
-[2025-12-11 15:05:25] -- INFO -- Player selected Creature0
-[2025-12-11 15:05:25] -- INFO -- Started dragging creature 'Creature0' at (352, 409)
-[2025-12-11 15:05:26] -- INFO -- Player selected Creature0
-[2025-12-11 15:05:26] -- INFO -- Started dragging creature 'Creature0' at (334, 404)
-[2025-12-11 15:05:28] -- INFO -- Player selected Creature0
-[2025-12-11 15:05:28] -- INFO -- Started dragging creature 'Creature0' at (334, 404)
-[2025-12-11 15:05:29] -- INFO -- Player selected Creature2
-[2025-12-11 15:05:29] -- INFO -- Started dragging creature 'Creature2' at (184, 340)
-[2025-12-11 15:05:29] -- INFO -- Player selected Creature2
-[2025-12-11 15:05:29] -- INFO -- Started dragging creature 'Creature2' at (184, 340)
-[2025-12-11 15:05:30] -- INFO -- Paused set to True
-[2025-12-11 15:05:30] -- INFO -- Paused set to False
-[2025-12-11 15:06:06] -- INFO -- Creature 'Creature3' has reached 0 satisfaction and is now dead.
-[2025-12-11 15:06:17] -- WARNING -- All creatures reached 0 satisfaction. Game over.
-[2025-12-11 15:06:17] -- INFO -- Creature 'Creature2' has reached 0 satisfaction and is now dead.
+[2025-12-11 15:23:46] -- INFO -- Load Game Menu Opened
+[2025-12-11 15:23:48] -- INFO -- Stated Loaded Game: HI!
+[2025-12-11 15:23:48] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
+[2025-12-11 15:23:50] -- INFO -- Player selected Maya
+[2025-12-11 15:23:50] -- INFO -- Started dragging creature 'Maya' at (270, 325)
+[2025-12-11 15:23:50] -- INFO -- Player selected Maya
+[2025-12-11 15:23:50] -- INFO -- Started dragging creature 'Maya' at (266, 325)
+[2025-12-11 15:23:51] -- INFO -- Player selected Maya
+[2025-12-11 15:23:51] -- INFO -- Started dragging creature 'Maya' at (285, 330)
+[2025-12-11 15:23:52] -- INFO -- Player selected Maya
+[2025-12-11 15:23:52] -- INFO -- Started dragging creature 'Maya' at (288, 345)
+[2025-12-11 15:23:52] -- INFO -- Player selected Maya
+[2025-12-11 15:23:52] -- INFO -- Started dragging creature 'Maya' at (294, 355)
+[2025-12-11 15:23:54] -- INFO -- Player selected Pearl
+[2025-12-11 15:23:54] -- INFO -- Started dragging creature 'Pearl' at (529, 327)
+[2025-12-11 15:23:55] -- INFO -- Player selected Pearl
+[2025-12-11 15:23:55] -- INFO -- Started dragging creature 'Pearl' at (527, 362)
+[2025-12-11 15:23:57] -- INFO -- Player selected Pearl
+[2025-12-11 15:23:57] -- INFO -- Started dragging creature 'Pearl' at (514, 308)
+[2025-12-11 15:23:59] -- INFO -- Player selected Pearl
+[2025-12-11 15:23:59] -- INFO -- Started dragging creature 'Pearl' at (311, 333)
+[2025-12-11 15:24:06] -- INFO -- Paused set to True
+[2025-12-11 15:24:07] -- INFO -- Paused set to False
+[2025-12-11 15:24:40] -- INFO -- Player selected Maya
+[2025-12-11 15:24:40] -- INFO -- Started dragging creature 'Maya' at (301, 305)
+[2025-12-11 15:24:41] -- INFO -- Player selected Pearl
+[2025-12-11 15:24:41] -- INFO -- Started dragging creature 'Pearl' at (462, 324)
+[2025-12-11 15:24:42] -- INFO -- Player selected Maya
+[2025-12-11 15:24:42] -- INFO -- Started dragging creature 'Maya' at (301, 305)
+[2025-12-11 15:24:43] -- INFO -- Paused set to True
+[2025-12-11 15:24:46] -- INFO -- Paused set to False
+[2025-12-11 15:24:46] -- INFO -- Player selected Pearl
+[2025-12-11 15:24:46] -- INFO -- Started dragging creature 'Pearl' at (462, 324)
+[2025-12-11 15:24:47] -- INFO -- Player selected Maya
+[2025-12-11 15:24:47] -- INFO -- Started dragging creature 'Maya' at (301, 305)
+[2025-12-11 15:25:47] -- WARNING -- All creatures reached 0 satisfaction. Game over.
+[2025-12-11 15:25:47] -- INFO -- Creature 'Maya' has reached 0 satisfaction and is now dead.
+[2025-12-11 15:25:47] -- INFO -- Creature 'Pearl' has reached 0 satisfaction and is now dead.

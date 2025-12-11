@@ -194,7 +194,6 @@ def go_back():
 def start_flappy(slot : str):
     global current_scene, flappystate
     flappystate = True
-    print(f"{Persistence.load_slot(f"{slot}")["world_score"]} POPOPOP")
     current_scene = FlappyBirdScene(
         screen, 
         slot, 

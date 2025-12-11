@@ -8,7 +8,7 @@ import pygame
 from random import randint, choice
 from persistence import Persistence
 from classes import PetAction, Creature, Food, Potion, Cleanse, GlobalSatisfactionBar, Less_Decay, More_Satisfaction, Inventory, Money  # type: ignore
-from game_manager import InfoBox, Button, InputField, InventorySlot, Toolbar, Text
+from game_manager import  Button, InputField, InventorySlot, Toolbar, Text
 from logger import log
 from minigames import FlappyBird
 from collections import defaultdict
@@ -84,11 +84,18 @@ class GameScene:
             self.creatures = creatures
         else:
             self.creatures : list[Creature] = []
+            names = []
             for i in range(randint(2,4)):
                 self_sprite = choice(spritz)
-
+                name = choice(("Patch", "Nikita", "Butter", "Dino", "Bug", "Mister",
+                                "Frankie", "Beans", "Chessie", "Pearl", "Panda",
+                                "Maya", "Abby", "Bacchus", "Rosebud", "Maximus"))
+                while name in names:
+                    name = choice(("Patch", "Nikita", "Butter", "Dino", "Bug", "Mister",
+                                "Frankie", "Beans", "Chessie", "Pearl", "Panda",
+                                "Maya", "Abby", "Bacchus", "Rosebud", "Maximus"))
                 c = Creature(
-                    f"Creature{i}",
+                    name,
                     "quacker" if self_sprite == spritz[1] else "mimi-carrier",
                     randint(10, 500), randint(10, 500),
                     self_sprite
@@ -522,8 +529,7 @@ class GameScene:
                     self.selected = creature
                     self.about_selected_creature = self.selected.type
                     if hasattr(self, "selected_info_btn") and self.selected_info_btn:
-                        self.selected_info_btn.text = f"{creature.name} ({creature.type})"
-                    print(f"about selected creature : {self.about_selected_creature}")
+                        self.selected_info_btn.text = f"{creature.name} ({(str(creature.satisfaction_level)[:5])})"
                     log(2, f"Player selected {creature.name}")
 
                     if self.allow_dragging:

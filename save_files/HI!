@@ -1,0 +1,45 @@
+{
+    "world_name": "HI!",
+    "world_score": 117.27999999999099,
+    "creatures": [
+        {
+            "name": "Maya",
+            "x": 301,
+            "y": 305,
+            "sprite": [
+                "assets/Sprites/Cat_happy.png",
+                "assets/Sprites/Cat.png",
+                "assets/Sprites/Cat_sad.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "mimi-carrier",
+            "satisfaction_level": 58.639999999995496,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": []
+        },
+        {
+            "name": "Pearl",
+            "x": 462,
+            "y": 324,
+            "sprite": [
+                "assets/Sprites/Cat_happy.png",
+                "assets/Sprites/Cat.png",
+                "assets/Sprites/Cat_sad.png",
+                "assets/Sprites/Dead.png"
+            ],
+            "type": "mimi-carrier",
+            "satisfaction_level": 58.639999999995496,
+            "satisfaction_multiplier": 1,
+            "satisfaction_decay": 0.01,
+            "effects": []
+        }
+    ],
+    "inventory": {
+        "foods": {},
+        "potions": {},
+        "cleanse": {}
+    },
+    "last_saved": "December 11, 2025 03:24:06 PM",
+    "money": 248
+}
