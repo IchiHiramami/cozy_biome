@@ -1,11 +1,11 @@
 {
-    "world_name": "hui",
-    "world_score": 42.79999999994217,
+    "world_name": "momomo",
+    "world_score": 70.62999999998124,
     "creatures": [
         {
             "name": "Creature0",
-            "x": 381,
-            "y": 483,
+            "x": 352,
+            "y": 409,
             "sprite": [
                 "assets/Sprites/Cat_happy.png",
                 "assets/Sprites/Cat.png",
@@ -13,15 +13,15 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "mimi-carrier",
-            "satisfaction_level": 11.999999999985539,
+            "satisfaction_level": 0,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
         },
         {
             "name": "Creature1",
-            "x": 554,
-            "y": 228,
+            "x": 503,
+            "y": 437,
             "sprite": [
                 "assets/Sprites/Cat_happy.png",
                 "assets/Sprites/Cat.png",
@@ -29,15 +29,15 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "mimi-carrier",
-            "satisfaction_level": 9.399999999985548,
+            "satisfaction_level": 0,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
         },
         {
             "name": "Creature2",
-            "x": 437,
-            "y": 224,
+            "x": 184,
+            "y": 340,
             "sprite": [
                 "assets/Sprites/Cat_happy.png",
                 "assets/Sprites/Cat.png",
@@ -45,15 +45,22 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "mimi-carrier",
-            "satisfaction_level": 9.399999999985548,
+            "satisfaction_level": 38.63999999998977,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
-            "effects": []
+            "effects": [
+                {
+                    "name": "More Satisfaction",
+                    "duration": 1135,
+                    "type": "More_Satisfaction",
+                    "multiplier": 2
+                }
+            ]
         },
         {
             "name": "Creature3",
-            "x": 106,
-            "y": 155,
+            "x": 631,
+            "y": 177,
             "sprite": [
                 "assets/Sprites/Nocky_OC_2.png",
                 "assets/Sprites/Nocky_OC_1.png",
@@ -61,7 +68,7 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 11.999999999985539,
+            "satisfaction_level": 31.989999999991475,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
@@ -69,9 +76,12 @@
     ],
     "inventory": {
         "foods": {},
-        "potions": {},
+        "potions": {
+            "Less Decay": 0,
+            "More Satisfaction": 0
+        },
         "cleanse": {}
     },
-    "last_saved": "December 11, 2025 01:53:21 PM",
-    "money": 28
+    "last_saved": "December 11, 2025 02:47:09 PM",
+    "money": 80
 }

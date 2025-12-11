@@ -11,9 +11,9 @@ class Persistence:
         world_score: int | float,
         creatures: list[Creature],
         foods: dict[str, int],
-        potions: dict[str, int],
-        cleanse: dict[str, int],
-        money: int
+        potions: dict[str, int] = {"More_satisfaction": 0, "Less decay" : 0},
+        cleanse: dict[str, int] = {},
+        money: int = 0
     ) -> None:
 
         # Clean filename
@@ -45,8 +45,8 @@ class Persistence:
                 "sprite": creature.frames_paths,
                 "type": creature.type,
                 "satisfaction_level": creature.satisfaction_level,
-                "satisfaction_multiplier": creature.satisfaction_multiplier,
-                "satisfaction_decay": creature.satisfaction_decay,
+                "satisfaction_multiplier": 1,
+                "satisfaction_decay": 0.01,
                 "effects": [effect.to_dict(creature) for effect in creature.effects]
             })
 
@@ -96,15 +96,20 @@ class Persistence:
 
             if eff_type == "More_Satisfaction":
                 effect = More_Satisfaction()
+                mult = eff_data.get("satisfaction_multiplier", getattr(c, "satisfaction_multiplier", 1))
             elif eff_type == "Less_Decay":
-                effect = Less_Decay()
+                mult = eff_data.get("multiplier", 1)
+                dur = eff_data.get("duration", 0)
+                effect = Less_Decay(multiplier=mult, duration=dur)
             else:
                 continue
 
-            effect.duration = eff_data.get("duration", 0)
+            if "duration" in eff_data:
+                effect.duration = eff_data.get("duration", effect.duration)
+
             effect.consume(
                 c,
-                getattr(c, "satisfaction_multiplier", 1),
+                mult,
                 effect.duration
             )
 

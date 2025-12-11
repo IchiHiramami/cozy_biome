@@ -111,11 +111,15 @@ class GameScene:
         # Place tab content slightly below the header area so headers don't overlap
         tab_content_y = 540
 
-        main_tab_buttons = [
-            
-            Button(680, tab_content_y, 100, 40, toolbar_font, "Pet", "#dda658", "#eec584", "#ffffff", on_click = self.petting),
-            Button(20, tab_content_y, 300, 50, toolbar_font, "Kupal si ron cruz", "#dda658", "#dda658", "#ffffff", on_click = self.passed)
+        self.selected_info_btn = Button(
+            20, tab_content_y, 300, 50, toolbar_font,
+            "No Selection", "#dda658", "#dda658", "#ffffff",
+            on_click = self.passed
+        )
 
+        main_tab_buttons = [
+            Button(680, tab_content_y, 100, 40, toolbar_font, "Pet", "#dda658", "#eec584", "#ffffff", on_click = self.petting),
+            self.selected_info_btn
         ]
 
         Inv_Action_Buttons = [
@@ -280,12 +284,12 @@ class GameScene:
                 return
             
             if used_item_name == "Less Decay":
-                eff = Less_Decay()
+                eff = Less_Decay(multiplier = 2, duration = 20)
                 eff.consume(target, target.satisfaction_multiplier, eff.duration)
                 return
 
             if used_item_name == "More Satisfaction":
-                eff = More_Satisfaction()
+                eff = More_Satisfaction(multiplier = 2, duration = 20)
                 eff.consume(target, target.satisfaction_multiplier, eff.duration)
                 return
 
@@ -396,7 +400,6 @@ class GameScene:
     def save_game_state(self, world_name = None, money = None):
         world_name = self.world_name if not world_name else world_name
         money = self.money.money if not money else money
-        print(self.creatures[0].x)
         Persistence.save_to_slot(self.world_name,
                                 sum(c.satisfaction_level for c in self.creatures),
                                     self.creatures,
@@ -518,6 +521,8 @@ class GameScene:
                     # Always select the creature on click
                     self.selected = creature
                     self.about_selected_creature = self.selected.type
+                    if hasattr(self, "selected_info_btn") and self.selected_info_btn:
+                        self.selected_info_btn.text = f"{creature.name} ({creature.type})"
                     print(f"about selected creature : {self.about_selected_creature}")
                     log(2, f"Player selected {creature.name}")
 
@@ -539,6 +544,8 @@ class GameScene:
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             self.selected = None
+            if hasattr(self, "selected_info_btn"):
+                self.selected_info_btn.text = "No Selection"
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             # stop dragging but keep the creature selected until another is clicked
@@ -678,7 +685,6 @@ class FlappyBirdScene(GameScene):
         self.running = True
         self.slot = slot
         self.on_finish = on_finish
-        print(self.creatures[0].x)
 
     def handle_event(self, event : pygame.event.Event):
         self.flappy.handle_event(event)

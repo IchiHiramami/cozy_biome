@@ -204,27 +204,35 @@ class Effect():
         creature.effects.append(self)
 
     def to_dict(self, creature : Creature | None = None):
-        data : dict[str, Any] = {
-            "name": self.name,
-            "duration": self.duration,
-            "type": self.__class__.__name__
-        }
+            data : dict[str, Any] = {
+                "name": self.name,
+                "duration": self.duration,
+                "type": self.__class__.__name__
+            }
 
-        if creature:
-            if isinstance(self, More_Satisfaction):
-                data["satisfaction_decay"] = creature.satisfaction_decay
-            elif isinstance(self, Less_Decay):
-                data["satisfaction_multiplier"] = creature.satisfaction_multiplier
-        return data
+            if creature:
+                if isinstance(self, More_Satisfaction):
+                    data["multiplier"] = getattr(self, "multiplier", 1)
+                elif isinstance(self, Less_Decay):
+                    data["multiplier"] = getattr(self, "multiplier", 1)
+            return data
         
 class More_Satisfaction(Effect):
     """Increases Satisfaction sensitivity"""
-    def __init__(self):
+    def __init__(self, multiplier: float = 1.0, duration: int = 0):
         super().__init__(name="More Satisfaction")
+        self.multiplier = multiplier
+        if duration and duration < 1000:
+            self.duration = duration * 60
+        else:
+            self.duration = duration
     
-    def consume(self, creature: Creature, multiplier: int, duration_frames: int):
+    def consume(self, creature : Creature, multiplier : int = 1, duration_frames : int = 0):
         super().consume(creature, multiplier, duration_frames)
-        creature.satisfaction_multiplier = multiplier
+        use_mult = getattr(self, "multiplier", None)
+        if use_mult is None:
+            use_mult = multiplier or 1
+        creature.satisfaction_multiplier *= use_mult
     
     def remove(self, creature : Creature):
         super().remove(creature)
@@ -232,13 +240,21 @@ class More_Satisfaction(Effect):
     
 class Less_Decay(Effect):
     """Reduce Decay Rate of Creature"""
-    def __init__(self):
+    def __init__(self, multiplier: float = 1.0, duration: int = 0):
         super().__init__(name="Less Decay")
-    
-    def consume(self, creature : Creature, multiplier : int, duration_frames : int):
+        self.multiplier = multiplier
+        if duration and duration < 1000:
+            self.duration = duration * 60
+        else:
+            self.duration = duration
+
+    def consume(self, creature : Creature, multiplier : int = 1, duration_frames : int = 0):
         super().consume(creature, multiplier, duration_frames)
-        creature.satisfaction_decay /= multiplier
-    
+        use_mult = getattr(self, "multiplier", None)
+        if use_mult is None:
+            use_mult = multiplier or 1
+        creature.satisfaction_decay /= use_mult
+
     def remove(self, creature : Creature):
         super().remove(creature)
         creature.satisfaction_decay = 0.01
@@ -282,9 +298,15 @@ class Inventory:
             Adds an item to inventory.
         """
         if isinstance(item, Food):
-            self.foods[item.name] += 1
+            if item.name not in self.foods:
+                self.foods[item.name] = 1
+            else:
+                self.foods[item.name] += 1
         elif isinstance(item, Potion):
-            self.potions[item.name] += 1
+            if item.name not in self.potions:
+                self.potions[item.name] = 1
+            else:
+                self.potions[item.name] += 1
         else:
             self.cleanse[item.name] += 1
         log(2, f"Acquired an item: {item.name}")
