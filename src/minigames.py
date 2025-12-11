@@ -96,7 +96,7 @@ class FlappyBird:
 
 
         # background
-        self.background = pygame.image.load('assets/flappybird/assets/sprites/background-day.png')
+        self.background = pygame.image.load('assets/Background/main_menu_noncut.png')
         self.background = pygame.transform.scale(self.background, (800, 600))
 
 
@@ -123,11 +123,11 @@ class FlappyBird:
 
     # UPDATE
     def update(self):
-        self.game_speed += self.speed_increase
 
         if self.state == "menu":
             self.menu_update()
         elif self.state == "running":
+            self.game_speed += self.speed_increase
             self.game_update()
         elif self.state == "dead":
             self.finished = True

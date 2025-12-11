@@ -8,6 +8,34 @@ from collections.abc import Callable
 from typing import Any
 from non_essential import hex_to_rgb
 
+class InfoBox:
+    def __init__(self, xpos : int, ypos : int, wid : int | float, hei : int | float, 
+                 font : pygame.font.Font, 
+                 text : str | None,
+                 # dev's note: color args can either be in hex <#str> or RGB <(rr,gg,bb)>
+                 base_color : tuple[int, int, int] |str ,
+                 text_color : tuple[int, int, int] | str,
+                 ):
+        """
+        for text -> extract it from <class>.type
+        """
+        
+        self.rect = pygame.Rect(xpos, ypos, wid, hei)
+        self.color = base_color if isinstance(base_color, tuple) else hex_to_rgb(base_color)
+        self.text_color = text_color if isinstance(text_color, tuple) else hex_to_rgb(text_color)
+        self.text = text
+        self.font = font
+        
+    def draw(self, surface : pygame.Surface):
+        """
+        Show text
+        """
+        button_color = self.hover_color if is_hovered else self.color
+        pygame.draw.rect(surface, button_color, self.rect, border_radius = 5)
+        text_surf = self.font.render(self.text, True, self.text_color)
+        text_rect = text_surf.get_rect(center = self.rect.center)
+        surface.blit(text_surf, text_rect)
+
 
 class Button:
     def __init__(self, xpos : int, ypos : int, wid : int | float, hei : int | float, 
@@ -84,19 +112,22 @@ class Text:
     def __init__(self, xpos: int, ypos: int, wid: int | float, hei: int | float, font: pygame.font.Font,
                  text: str,
                  bg_color: tuple[int, int, int] | str,
-                 text_color: tuple[int, int, int] | str):
+                 text_color: tuple[int, int, int] | str,
+                 should_draw: bool = True):
         self.rect = pygame.Rect(xpos, ypos, wid, hei)
         self.text = text
         self.font = font
         self.bg_color = bg_color if isinstance(bg_color, tuple) else hex_to_rgb(bg_color)
         self.text_color = text_color if isinstance(text_color, tuple) else hex_to_rgb(text_color)
+        self.should_draw = should_draw
 
     def draw(self, screen : pygame.Surface):
-        pygame.draw.rect(screen, self.bg_color, self.rect)
-
-        text_surf = self.font.render(self.text, True, self.text_color)
-        text_rect = text_surf.get_rect(center=self.rect.center)  # center in the rectangle
-        screen.blit(text_surf, text_rect)
+        if self.should_draw:
+            pygame.draw.rect(screen, self.bg_color, self.rect)
+            text_surf = self.font.render(self.text, True, self.text_color)
+            text_rect = text_surf.get_rect(center=self.rect.center)  # center in the rectangle
+            screen.blit(text_surf, text_rect)
+        else: return
 
 class BackgroundManager:
     def __init__(self, wid : int = 800, hei : int = 600):
@@ -278,7 +309,7 @@ class Toolbar:
     """
     IFYKYK
     """
-    def __init__(self, x: int, y : int , width : int, height : int, bg_color : tuple[int, int,int] | str, buttons : list[Button] | None = None, elements : list[object] | None = None, tabs: list[dict] | None = None):
+    def __init__(self, x: int, y : int , width : int, height : int, bg_color : tuple[int, int,int] | str, buttons : list[Button] | None = None, Text : list[Text] | None = None, tabs: list[dict] | None = None):
         self.rect = pygame.Rect(x, y, width, height)
         self.parent_scene = None
 
@@ -286,7 +317,7 @@ class Toolbar:
         self.bg_color = bg_color if isinstance(bg_color, tuple) else hex_to_rgb(bg_color)
 
         self.buttons = buttons if buttons else []
-        self.elements = elements if elements else []
+        self.text = Text if Text else []
 
         # Tabs support: each tab is a dict with keys: 'name', 'buttons', 'elements'
         # Accepts a list of such dicts. If provided, toolbar becomes tabbed.
@@ -383,7 +414,7 @@ class Toolbar:
         for button in self.buttons:
             button.handle_event(event)
 
-        for element in self.elements:
+        for text in self.t:
             if hasattr(element, "handle_event"):
                 element.handle_event(event)
 
@@ -428,15 +459,8 @@ class Toolbar:
 
             return
 
-        # Legacy toolbar (non-tabbed)
-        for button in self.buttons:
-            if isinstance(button, InventorySlot):
-                button.draw(screen, self.parent_scene.inventory)
-            else:
-                button.draw(screen)
-
         # Draw inventory slots or other UI elements
-        for element in self.elements:
+        for element in self.Text:
             if hasattr(element, "draw"):
                 if isinstance(element, InventorySlot):
                     element.draw(screen, self.parent_scene.inventory)

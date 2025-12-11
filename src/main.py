@@ -194,13 +194,13 @@ def go_back():
 def start_flappy(slot : str):
     global current_scene, flappystate
     flappystate = True
+    print(f"{Persistence.load_slot(f"{slot}")["world_score"]} POPOPOP")
     current_scene = FlappyBirdScene(
         screen, 
         slot, 
         on_finish=lambda: start_loaded_game(slot), 
-        world_name=slot
     )
-    log(3, f"[Main] Scene switched to: {type(current_scene).__name__}")
+    log(2, f"[Main] Scene switched to: {type(current_scene).__name__}")
 
 
 # Global Variables

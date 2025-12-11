@@ -8,7 +8,7 @@ import pygame
 from random import randint, choice
 from persistence import Persistence
 from classes import PetAction, Creature, Food, Potion, Cleanse, GlobalSatisfactionBar, Less_Decay, More_Satisfaction, Inventory, Money  # type: ignore
-from game_manager import Button, InputField, InventorySlot, Toolbar
+from game_manager import InfoBox, Button, InputField, InventorySlot, Toolbar, Text
 from logger import log
 from minigames import FlappyBird
 from collections import defaultdict
@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 ASSETS = os.path.join(BASE_DIR, "assets")
 
 animated_cat = {
-    "Sprite" : ["assets/Sprites/cat_animation_1.png", "assets/Sprites/cat_animation_2.png", "assets/Sprites/cat_animation_3.png", "assets/Sprites/Dead.png"],
+    "Sprite" : ["assets/Sprites/Cat_happy.png", "assets/Sprites/Cat.png", "assets/Sprites/Cat_sad.png", "assets/Sprites/Dead.png"],
     }
 
 #cat = {"Sprite" : ["assets/Sprites/cat.jpg", "assets/Sprites/cat.jpg", "assets/Sprites/cat.jpg"]} # MINIMUM LAGI 3 sprites
@@ -70,13 +70,11 @@ class GameScene:
         self.background = pygame.transform.scale(self.background, (800, 600))
 
         self.icon_grapes = pygame.image.load("assets/Items/grapes.png").convert_alpha()
-        self.icon_cola = pygame.image.load("assets/Items/cola.png").convert_alpha()
         self.icon_cassis = pygame.image.load("assets/Items/cassis.png").convert_alpha()
         self.icon_cherry = pygame.image.load("assets/Items/cherry.png").convert_alpha()
         self.icon_aisu = pygame.image.load("assets/Items/aisu.png").convert_alpha()
         self.icon_makku = pygame.image.load("assets/Items/makku.png").convert_alpha()
         self.icon_spam = pygame.image.load("assets/Items/spamcan.png").convert_alpha()
-        self.icon_diamond = pygame.image.load("assets/Collectibles/Diamond-green.png").convert_alpha()
         self.icon_cleanse = pygame.image.load("assets/Items/Cleanse.png").convert_alpha()
         self.icon_less_decay = pygame.image.load("assets/Items/Lessdecay.png").convert_alpha()
         self.icon_more_satsifaction = pygame.image.load("assets/Items/MoreSatisfaction.png").convert_alpha()
@@ -91,7 +89,7 @@ class GameScene:
 
                 c = Creature(
                     f"Creature{i}",
-                    "quacker" if self_sprite == spritz[1] or self_sprite[2] else "mimi-carrier",
+                    "quacker" if self_sprite == spritz[1] else "mimi-carrier",
                     randint(10, 500), randint(10, 500),
                     self_sprite
                     )
@@ -99,7 +97,7 @@ class GameScene:
                 self.creatures.append(c)
 
         self.selected: Creature | None = None
-        
+        self.about_selected_creature : str | None = None
         self.inputs: list[InputField] = []
         
 
@@ -116,6 +114,8 @@ class GameScene:
         main_tab_buttons = [
             
             Button(680, tab_content_y, 100, 40, toolbar_font, "Pet", "#dda658", "#eec584", "#ffffff", on_click = self.petting),
+            Button(20, tab_content_y, 300, 50, toolbar_font, "Kupal si ron cruz", "#dda658", "#dda658", "#ffffff", on_click = self.passed)
+
         ]
 
         Inv_Action_Buttons = [
@@ -125,7 +125,8 @@ class GameScene:
 
 
         mini_game_Buttons = [
-            Button(20, tab_content_y, 100, 40, pygame.font.Font(None, 25), "Plappy Birb", "#dda658", "#eec584", "##ffffff", on_click=lambda: (self.on_start_flappy(), self.save_game_state())),
+            Button(20, tab_content_y, 100, 40, pygame.font.Font(None, 25), "Plappy Birb", "#dda658", "#eec584", "##ffffff",
+                    on_click=lambda: (self.save_game_state(),self.on_start_flappy())),
         ]
 
         self.market_items : list[dict[str, str | int | pygame.Surface]] = [
@@ -156,6 +157,8 @@ class GameScene:
         slot7 = InventorySlot(620, 540, 50, "Cleanse",icon = self.icon_cleanse, on_click = self.use_item)
 
         Inventory_slots = [sloti ,slot0 ,slot1, slot2, slot3, slot4, slot5, slot6, slot7]
+        
+       
 
         self.toolbar = Toolbar(
             x=0,
@@ -253,6 +256,8 @@ class GameScene:
 
         self.master_buttons.extend([spawn_btn_m, reset_btn_m, refill_btn_m, hide_btn_m])
 
+    def passed(self):
+        pass
     def use_item(self, item_name: str):
         target = self.selected
         if target is None:
@@ -391,6 +396,7 @@ class GameScene:
     def save_game_state(self, world_name = None, money = None):
         world_name = self.world_name if not world_name else world_name
         money = self.money.money if not money else money
+        print(self.creatures[0].x)
         Persistence.save_to_slot(self.world_name,
                                 sum(c.satisfaction_level for c in self.creatures),
                                     self.creatures,
@@ -423,7 +429,7 @@ class GameScene:
     def debug_spawn(self):
         new = Creature(
             f"creature{len(self.creatures)}",
-            "super",
+            "admin_spawned_creature",
             randint(50, 750),  
             randint(50, 550),  
             choice(spritz)
@@ -511,6 +517,8 @@ class GameScene:
 
                     # Always select the creature on click
                     self.selected = creature
+                    self.about_selected_creature = self.selected.type
+                    print(f"about selected creature : {self.about_selected_creature}")
                     log(2, f"Player selected {creature.name}")
 
                     if self.allow_dragging:
@@ -528,6 +536,9 @@ class GameScene:
                         log(2, f"Player pet {creature.name}: Creature Satisfaction Level: {creature.satisfaction_level}")
 
                     break  # stop checking other creatures
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+            self.selected = None
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             # stop dragging but keep the creature selected until another is clicked
@@ -574,7 +585,6 @@ class GameScene:
     def draw(self, screen: pygame.Surface):
         screen.blit(self.background, (0, 0))
         self.global_bar.draw(screen, self.creatures)
-        # Draw current money amount
         try:
             self.money.draw(screen)
         except Exception:
@@ -651,21 +661,16 @@ class GameScene:
         
         if not self.game_continue:
             overlay = pygame.Surface((800, 600), pygame.SRCALPHA)
-            overlay.fill((0, 0, 0, 150))
+            overlay.fill((13, 0, 0, 150))
             screen.blit(overlay, (0, 0))
 
             for b in self.game_over_buttons:
                 b.draw(screen)
 
 class FlappyBirdScene(GameScene):
-    def __init__(self, screen: pygame.Surface, slot, on_finish, world_name = None):
+    def __init__(self, screen: pygame.Surface, slot, on_finish):
         super().__init__(
             world_name=slot,
-            creatures=[],
-            foods=None,
-            potions=None,
-            cleanse=None,
-            money=0,
             on_start_flappy=None
         )
         self.screen = screen
@@ -673,20 +678,19 @@ class FlappyBirdScene(GameScene):
         self.running = True
         self.slot = slot
         self.on_finish = on_finish
+        print(self.creatures[0].x)
 
     def handle_event(self, event : pygame.event.Event):
         self.flappy.handle_event(event)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            self.running = False
+            self.flappy.finished = True
 
     def update(self):
         self.flappy.update()
         if self.flappy.finished:
             self.money.add_money(self.flappy.score)
             total_money = Persistence.load_slot(f"{self.slot}")["money"] + self.money.money
-            print(total_money)
-            self.save_game_state(self.slot, total_money)
-            print(self.slot)
+            Persistence.update_file(self.slot, {"money" : total_money})
             self.on_finish()
             return self.money
 

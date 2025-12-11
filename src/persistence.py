@@ -18,7 +18,7 @@ class Persistence:
 
         # Clean filename
         safe_filename = os.path.splitext(file_slot)[0].replace("\n", "").replace("\r", "")
-        filename = f"save_files/{safe_filename}.json"
+        filename = f"save_files/{safe_filename}"
 
         # Base save structure
         state: dict[str, Any] = {
@@ -68,8 +68,6 @@ class Persistence:
     @staticmethod
     def load_slot(file_slot: str) -> dict[str, Any]:
         filename = f"save_files/{file_slot}"
-        if not filename.endswith(".json"):
-            filename = filename + ".json"
         try:
             with open(filename, "r") as f:
                 return json.load(f)
@@ -121,3 +119,16 @@ class Persistence:
         for filename in os.listdir(folder):
             filenames.append(filename)
         return filenames
+
+    def update_file(file_slot, data):
+        safe_filename = os.path.splitext(file_slot)[0].replace("\n", "").replace("\r", "")
+        filename = f"save_files/{safe_filename}"
+
+        with open(filename, "r") as f:
+            state = json.load(f)
+    
+        state.update(data)
+        
+        # Write back to file
+        with open(filename, "w") as f:
+            json.dump(state, f, indent=4)
