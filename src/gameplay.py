@@ -127,11 +127,12 @@ class GameScene:
 
         main_tab_buttons = [
             Button(680, tab_content_y, 100, 40, toolbar_font, "Pet", "#dda658", "#eec584", "#ffffff", on_click = self.petting),
+            Button(540, tab_content_y, 120, 40, toolbar_font, "Shop", "#dda658", "#eec584", "#ffffff", on_click=self.toggle_marketplace),
+
             self.selected_info_btn
         ]
 
         Inv_Action_Buttons = [
-            Button(670, tab_content_y, 120, 40, toolbar_font, "Shop", "#dda658", "#eec584", "#ffffff", on_click=self.toggle_marketplace),
             # Button(20, tab_content_y, 120, 40, pygame.font.Font(None, 20), "Refill All", "#dda658", "#eec584", "#ffffff", on_click=lambda: self.run_admin_command("refill")),
         ]
 
@@ -170,7 +171,7 @@ class GameScene:
 
         Inventory_slots = [sloti ,slot0 ,slot1, slot2, slot3, slot4, slot5, slot6, slot7]
         
-        self.infobox = InfoBox(670, tab_content_y, 120, 40, toolbar_font, "", "#dda658", "#ffffff")
+        self.infobox = InfoBox(670, tab_content_y, 120, 40, pygame.font.Font(None, 20), "", "#dda658", "#ffffff")
 
         self.toolbar = Toolbar(
             x=0,
@@ -189,6 +190,14 @@ class GameScene:
         
 
         pause_font = pygame.font.Font(None, 32)
+
+        self.info_back_btn = Button(
+            600, 380, 120, 40,
+            pygame.font.Font(None, 28),
+            "Back",
+            "#dda658", "#eec584", "#ffffff",
+            on_click=lambda: self.close_info()
+        )
 
         self.hamburger_btn = Button(
             10, 10, 40, 40,
@@ -235,6 +244,7 @@ class GameScene:
 
         self.admin_mode = False
 
+
         spawn_btn_m = Button(
             20, 80, 120, 40,
             pygame.font.Font(None, 20),
@@ -271,6 +281,7 @@ class GameScene:
 
     def passed(self):
         self.showing_info = not self.showing_info
+        log(2, f"Player toggled creature info showing to {self.showing_info}")
         pass
     
 
@@ -364,6 +375,10 @@ class GameScene:
         self.inventory.add_inventory(to_add)
         log(2, "Bought item")
 
+    def close_info(self):
+        self.showing_info = False
+
+
     def get_all_active_buttons(self) -> list[Button]:
         """
         Put all the buttons into one giant list
@@ -376,6 +391,9 @@ class GameScene:
 
             active_tab: dict[str, list[Button]] = self.toolbar.tabs[self.toolbar.active_tab]
             buttons.extend(active_tab['buttons']) # type: ignore
+
+        if self.showing_info:
+            buttons.append(self.info_back_btn)
 
         # Pause menu buttons
         if self.is_paused:
@@ -396,6 +414,7 @@ class GameScene:
             buttons.extend(self.market_buttons)
 
         return buttons
+
 
     def petting(self):
         self.allow_dragging = not self.allow_dragging
@@ -484,6 +503,8 @@ class GameScene:
         if self.showing_info:
             if self.infobox.handle_event(event) is False:
                 self.showing_info = False
+            
+            self.info_back_btn.handle_event(event) 
             return
     
         self.hamburger_btn.handle_event(event)
@@ -544,8 +565,38 @@ class GameScene:
                             f"Type: {creature.type}\n"
                             f"Satisfaction: {creature.satisfaction_level:.1f}\n"
                             f"Decay: {creature.satisfaction_decay:.3f}\n"
-                            f"Multiplier: {creature.satisfaction_multiplier}"
-                        )
+                            f"Multiplier: {creature.satisfaction_multiplier}\n"
+
+                            f"""
+                            A lively, duck like creature bursting with playful energy 
+                            and noisy charm. Quackers thrive on attention, love 
+                            splashing around, and respond strongly to foods that 
+                            match their energetic nature. 
+
+                            They bond quickly with caretakers and are known for 
+                            their expressive reactions — both joyful and dramatic.
+
+                            Preferred Foods: Grapes, Makku, Spam  
+                            Disliked Foods: Cassis, Cherry, Aisu     """ if creature.type == "quacker" else 
+                            
+                            f"Name: {creature.name}\n"
+                            f"Type: {creature.type}\n"
+                            f"Satisfaction: {creature.satisfaction_level:.1f}\n"
+                            f"Decay: {creature.satisfaction_decay:.3f}\n"
+                            f"Multiplier: {creature.satisfaction_multiplier}\n"
+                            f"""
+                            A gentle, softspoken creature known for its calm 
+                            temperament and nurturing instincts. Mimi carriers 
+                            prefer quiet environments and bond deeply with 
+                            caretakers who show patience and consistency. 
+                            
+                            They are sensitive to harsh stimuli but thrive 
+                            when treated with steady affection and comfort.
+
+                            Preferred Foods: Cassis, Cherry, Aisu  
+                            Disliked Foods: Grapes, Makku, Spam
+
+                            """)
                     
                     self.infobox.image = creature.sprite
                     log(2, f"Player selected {creature.name}")
@@ -568,11 +619,11 @@ class GameScene:
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             self.selected = None
+            log(2, f"Player has removed creature selection")
             if hasattr(self, "selected_info_btn"):
                 self.selected_info_btn.text = "No Selection"
 
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            # stop dragging but keep the creature selected until another is clicked
             self.is_dragging = False
             self.drag_start_pos = None
 
@@ -656,8 +707,9 @@ class GameScene:
 
             self.infobox.rect.topleft = (80, 80)
             self.infobox.rect.size = (640, 340)
-
+            
             self.infobox.draw(screen)
+            self.info_back_btn.draw(screen)
 
         if self.is_market_open:
             overlay = pygame.Surface((800, 600), pygame.SRCALPHA)
@@ -705,7 +757,7 @@ class GameScene:
         
         if not self.game_continue:
             overlay = pygame.Surface((800, 600), pygame.SRCALPHA)
-            overlay.fill((13, 0, 0, 150))
+            overlay.fill((30, 0, 0, 150))
             screen.blit(overlay, (0, 0))
 
             for b in self.game_over_buttons:
