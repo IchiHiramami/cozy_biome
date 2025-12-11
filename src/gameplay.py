@@ -511,21 +511,19 @@ class GameScene:
     
         self.hamburger_btn.handle_event(event)
 
-
+        # ✅ FIRST: let GameScene check for drop
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             for slot in self.inventory_slots_list:
                 if slot.dragging:
                     # Check drop target
-                    if self.selected:
-                        if self.selected.rect.collidepoint(event.pos):
-                            print("DROP CHECK — slot.dragging =", slot.dragging)
-                            self.use_item(slot.item_name)
-                            slot.dragging = False
-                            break
+                    if self.selected and self.selected.rect.collidepoint(event.pos):
+                        self.use_item(slot.item_name)
 
+                    slot.dragging = False
                     slot.drag_pos = None
-                    return
+                    return  # ✅ STOP HERE so toolbar never sees this event
 
+        # ✅ THEN: let toolbar handle the event
         self.toolbar.handle_event(event)
         self.toggle_toolbar_btn.handle_event(event)
 
@@ -700,9 +698,11 @@ class GameScene:
             if 100 >= creature.satisfaction_level > 70:
                 creature.update_sprite(0)
             elif 70 >= creature.satisfaction_level > 30:
+                log(2, f"{creature.name}'s satisfaction level is below 70")
                 creature.update_sprite(1)
             elif 30 >= creature.satisfaction_level > 0:
                 creature.update_sprite(2)
+                log(2, f"{creature.name}'s satisfaction level is below 30")
             else:
                 creature.update_sprite(3)
             creature.draw(screen, is_selected = (creature is self.selected))

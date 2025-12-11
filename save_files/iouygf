@@ -1,6 +1,6 @@
 {
     "world_name": "iouygf",
-    "world_score": 188.4599999999941,
+    "world_score": 177.21999999998835,
     "creatures": [
         {
             "name": "Mister",
@@ -13,7 +13,7 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 94.22999999999705,
+            "satisfaction_level": 88.60999999999417,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
@@ -29,17 +29,22 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "mimi-carrier",
-            "satisfaction_level": 94.22999999999705,
+            "satisfaction_level": 88.60999999999417,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
         }
     ],
     "inventory": {
-        "foods": {},
+        "foods": {
+            "Grapes": 1,
+            "Makku": 1,
+            "Cassis": 1,
+            "Cherry": 1
+        },
         "potions": {},
         "cleanse": {}
     },
-    "last_saved": "December 11, 2025 09:56:21 PM",
-    "money": 30
+    "last_saved": "December 11, 2025 10:49:04 PM",
+    "money": 5
 }

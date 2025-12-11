@@ -294,7 +294,6 @@ class InventorySlot:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.rect.collidepoint(event.pos) and self.quantity > 0:
                 if pygame.key.get_mods() & pygame.KMOD_SHIFT: #shift key ito
-                    print("SHIFT DETECTED — DRAG START")
                     self.dragging = True
                     self.drag_icon = self.icon
                     self.drag_offset = (self.rect.x - event.pos[0], self.rect.y - event.pos[1])
@@ -519,4 +518,3 @@ class Toolbar:
                 else:
                     element.draw(screen)
             else:
-                print("Element has no draw method:", element)

@@ -104,8 +104,6 @@ def start_game():
     if world_name in worlds or world_name in """<>:'/"|?* """ or world_name == " ":
         log(1, "User attempted to pick an Invalid World Name")
         return # TO DO: User picks another world name
-    print(f"World Name:{world_name}")
-    print(f"Time of Creation: {datetime.now().strftime("%B %d, %Y %I:%M:%S %p")}")
     log(2, "World Name set to " + world_name)
 
     global current_scene
@@ -113,13 +111,11 @@ def start_game():
 
     pygame.mixer.music.load("assets/Music/GameScene_music.mp3")
     pygame.mixer.music.play(-1)
-    print("NEW GAME CREATED")
     current_scene = GameScene(world_name, on_start_flappy=lambda: start_flappy(world_name))
     log(2, f"[Main] Scene switched to: {type(current_scene).__name__}")
     log(2, "Player Started New Game")
 
 def start_loaded_game(slot: str):
-    print(f"Game selected from slot {slot}")
     global current_scene, creatureslist
     creatureslist = []
     log(2, f"Stated Loaded Game: {slot}")

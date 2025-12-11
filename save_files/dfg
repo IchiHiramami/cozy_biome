@@ -1,6 +1,6 @@
 {
     "world_name": "dfg",
-    "world_score": 267.4949999999441,
+    "world_score": 261.5099999999423,
     "creatures": [
         {
             "name": "Panda",
@@ -13,21 +13,21 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 69.13499999999613,
+            "satisfaction_level": 68.2799999999969,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": [
                 {
                     "name": "Less Decay",
-                    "duration": 603,
+                    "duration": 432,
                     "type": "Less_Decay",
                     "multiplier": 2
                 },
                 {
                     "name": "More Satisfaction",
-                    "duration": 779,
+                    "duration": 608,
                     "type": "More_Satisfaction",
-                    "multiplier": 2
+                    "multiplier": 1.0
                 }
             ]
         },
@@ -42,7 +42,7 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 66.11999999998267,
+            "satisfaction_level": 64.40999999998179,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
@@ -58,7 +58,7 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 66.11999999998267,
+            "satisfaction_level": 64.40999999998179,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
@@ -74,7 +74,7 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 66.11999999998267,
+            "satisfaction_level": 64.40999999998179,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
@@ -93,6 +93,6 @@
         },
         "cleanse": {}
     },
-    "last_saved": "December 11, 2025 10:40:36 PM",
-    "money": 259
+    "last_saved": "December 11, 2025 10:54:00 PM",
+    "money": 448
 }
