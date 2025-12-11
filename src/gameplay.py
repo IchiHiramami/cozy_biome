@@ -539,6 +539,13 @@ class GameScene:
                     self.about_selected_creature = self.selected.type
                     if hasattr(self, "selected_info_btn") and self.selected_info_btn:
                         self.selected_info_btn.text = f"{creature.name} ({(str(creature.satisfaction_level)[:5])})"
+                    self.infobox.text = (
+                            f"Name: {creature.name}\n"
+                            f"Type: {creature.type}\n"
+                            f"Satisfaction: {creature.satisfaction_level:.1f}\n"
+                            f"Decay: {creature.satisfaction_decay:.3f}\n"
+                            f"Multiplier: {creature.satisfaction_multiplier}"
+                        )
                     log(2, f"Player selected {creature.name}")
 
                     if self.allow_dragging:
@@ -645,6 +652,10 @@ class GameScene:
             pygame.draw.rect(screen, (200, 171, 131), (50, 50, 700, 400), border_radius=12)
             pygame.draw.rect(screen, (255, 255, 255), (50, 50, 700, 400), width=3, border_radius=12)
 
+            self.infobox.rect.topleft = (100, 100)
+            self.infobox.rect.size = (600, 300)
+
+            self.infobox.draw(screen)
 
         if self.is_market_open:
             overlay = pygame.Surface((800, 600), pygame.SRCALPHA)

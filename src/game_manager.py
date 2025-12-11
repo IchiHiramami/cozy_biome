@@ -22,13 +22,23 @@ class InfoBox:
         self.text = text
         self.font = font
 
-    def draw(self, surface : pygame.Surface):
-        pygame.draw.rect(surface, self.color, self.rect, border_radius = 5)
+    def draw(self, surface: pygame.Surface):
+        pygame.draw.rect(surface, self.color, self.rect, border_radius=5)
 
-        text_surf = self.font.render(self.text, True, self.text_color)
-        text_rect = text_surf.get_rect(center = self.rect.center)
-        surface.blit(text_surf, text_rect)
+        if not self.text:
+            return
 
+        lines = self.text.split("\n")
+        line_height = self.font.get_height()
+        total_height = line_height * len(lines)
+
+        start_y = self.rect.centery - total_height // 2
+
+        for i, line in enumerate(lines):
+            text_surf = self.font.render(line, True, self.text_color)
+            text_rect = text_surf.get_rect(center=(self.rect.centerx, start_y + i * line_height))
+            surface.blit(text_surf, text_rect)
+            
     def handle_event(self, event : pygame.event.Event):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             return False

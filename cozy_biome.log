@@ -1,11 +1,21 @@
-[2025-12-11 18:37:24] -- INFO -- Load Game Menu Opened
-[2025-12-11 18:37:25] -- INFO -- Stated Loaded Game: momomo
-[2025-12-11 18:37:25] -- ADMIN ACCESS -- [Main] Scene switched to: GameScene
-[2025-12-11 18:37:25] -- INFO -- Creature 'Creature0' has reached 0 satisfaction and is now dead.
-[2025-12-11 18:37:25] -- INFO -- Creature 'Creature1' has reached 0 satisfaction and is now dead.
-[2025-12-11 18:37:26] -- INFO -- Player selected Creature0
-[2025-12-11 18:37:26] -- INFO -- Started dragging creature 'Creature0' at (352, 409)
-[2025-12-11 18:37:43] -- INFO -- Paused set to True
-[2025-12-11 18:37:44] -- INFO -- Paused set to False
-[2025-12-11 18:37:45] -- INFO -- Player selected Creature3
-[2025-12-11 18:37:45] -- INFO -- Started dragging creature 'Creature3' at (631, 177)
+[2025-12-11 19:12:57] -- INFO -- Player Opened New Game Menu
+[2025-12-11 19:12:59] -- WARNING -- User attempted to pick an Invalid World Name
+[2025-12-11 19:13:04] -- INFO -- World Name set to Infobox
+[2025-12-11 19:13:04] -- INFO -- [Main] Scene switched to: GameScene
+[2025-12-11 19:13:04] -- INFO -- Player Started New Game
+[2025-12-11 19:13:05] -- INFO -- Player selected Bacchus
+[2025-12-11 19:13:05] -- INFO -- Started dragging creature 'Bacchus' at (106, 219)
+[2025-12-11 19:13:06] -- INFO -- Player selected Bug
+[2025-12-11 19:13:06] -- INFO -- Started dragging creature 'Bug' at (106, 133)
+[2025-12-11 19:13:13] -- INFO -- Player selected Bug
+[2025-12-11 19:13:13] -- INFO -- Started dragging creature 'Bug' at (106, 155)
+[2025-12-11 19:13:14] -- INFO -- Player selected Rosebud
+[2025-12-11 19:13:14] -- INFO -- Started dragging creature 'Rosebud' at (236, 159)
+[2025-12-11 19:13:17] -- INFO -- Player selected Bug
+[2025-12-11 19:13:17] -- INFO -- Started dragging creature 'Bug' at (106, 379)
+[2025-12-11 19:13:18] -- INFO -- Player selected Maya
+[2025-12-11 19:13:18] -- INFO -- Started dragging creature 'Maya' at (221, 63)
+[2025-12-11 19:13:19] -- INFO -- Player selected Bacchus
+[2025-12-11 19:13:19] -- INFO -- Started dragging creature 'Bacchus' at (657, 449)
+[2025-12-11 19:13:20] -- INFO -- Player selected Bacchus
+[2025-12-11 19:13:20] -- INFO -- Started dragging creature 'Bacchus' at (657, 449)
