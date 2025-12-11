@@ -8,6 +8,30 @@ from collections.abc import Callable
 from typing import Any
 from non_essential import hex_to_rgb
 
+class InfoBox:
+    def __init__(self, xpos : int, ypos : int, wid : int | float, hei : int | float, 
+                 font : pygame.font.Font, 
+                 text : str | None,
+                 base_color : tuple[int, int, int] |str ,
+                 text_color : tuple[int, int, int] | str,
+                 ):
+        
+        self.rect = pygame.Rect(xpos, ypos, wid, hei)
+        self.color = base_color if isinstance(base_color, tuple) else hex_to_rgb(base_color)
+        self.text_color = text_color if isinstance(text_color, tuple) else hex_to_rgb(text_color)
+        self.text = text
+        self.font = font
+
+    def draw(self, surface : pygame.Surface):
+        pygame.draw.rect(surface, self.color, self.rect, border_radius = 5)
+
+        text_surf = self.font.render(self.text, True, self.text_color)
+        text_rect = text_surf.get_rect(center = self.rect.center)
+        surface.blit(text_surf, text_rect)
+
+    def handle_event(self, event : pygame.event.Event):
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            return False
 
 class Button:
     def __init__(self, xpos : int, ypos : int, wid : int | float, hei : int | float, 

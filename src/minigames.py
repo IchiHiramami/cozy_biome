@@ -17,7 +17,7 @@ class Bird(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        self.image = pygame.image.load('assets/flappybird/assets/sprites/bluebird-midflap.png').convert_alpha()
+        self.image = pygame.image.load('assets/flappybird/assets/sprites/redbird-midflap.png').convert_alpha()
 
         self.speed = SPEED
         self.mask = pygame.mask.from_surface(self.image)
@@ -37,7 +37,7 @@ class Pipe(pygame.sprite.Sprite):
     def __init__(self, inverted, xpos, ysize):
         super().__init__()
 
-        img = pygame.image.load('assets/flappybird/assets/sprites/pipe-green.png').convert_alpha()
+        img = pygame.image.load('assets/flappybird/assets/sprites/pipe-red.png').convert_alpha()
         img = pygame.transform.scale(img, (PIPE_WIDHT, PIPE_HEIGHT))
 
         if inverted:
@@ -96,7 +96,7 @@ class FlappyBird:
 
 
         # background
-        self.background = pygame.image.load('assets/Background/main_menu_noncut.png')
+        self.background = pygame.image.load('assets/flappybird/assets/sprites/flappybg2.png')
         self.background = pygame.transform.scale(self.background, (800, 600))
 
 

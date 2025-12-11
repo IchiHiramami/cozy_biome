@@ -8,7 +8,7 @@ import pygame
 from random import randint, choice
 from persistence import Persistence
 from classes import PetAction, Creature, Food, Potion, Cleanse, GlobalSatisfactionBar, Less_Decay, More_Satisfaction, Inventory, Money  # type: ignore
-from game_manager import  Button, InputField, InventorySlot, Toolbar, Text
+from game_manager import  Button, InputField, InventorySlot, Toolbar, Text, InfoBox
 from logger import log
 from minigames import FlappyBird
 from collections import defaultdict
@@ -58,6 +58,7 @@ class GameScene:
         self.cursor_mode = "Default"
         self.game_continue = True
         self.is_dragging = False # -> IFKYK
+        self.showing_info = False
         self.drag_starts_pos = None
         self.on_start_flappy = on_start_flappy
 
@@ -169,7 +170,7 @@ class GameScene:
 
         Inventory_slots = [sloti ,slot0 ,slot1, slot2, slot3, slot4, slot5, slot6, slot7]
         
-       
+        self.infobox = InfoBox(670, tab_content_y, 120, 40, toolbar_font, "", "#dda658", "#ffffff")
 
         self.toolbar = Toolbar(
             x=0,
@@ -185,6 +186,7 @@ class GameScene:
 
         )
         self.toolbar.parent_scene = self #type: ignore
+        
 
         pause_font = pygame.font.Font(None, 32)
 
@@ -268,7 +270,10 @@ class GameScene:
         self.master_buttons.extend([spawn_btn_m, reset_btn_m, refill_btn_m, hide_btn_m])
 
     def passed(self):
+        self.showing_info = not self.showing_info
         pass
+    
+
     def use_item(self, item_name: str):
         target = self.selected
         if target is None:
@@ -505,6 +510,10 @@ class GameScene:
             for fields in self.inputs:
                 fields.handle_event(event)
 
+        if self.showing_info:
+            self.infobox.handle_event(event)
+            pass
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 self.toggle_pause()
@@ -627,6 +636,15 @@ class GameScene:
         if self.admin_mode:
             for input_field in self.inputs:
                 input_field.draw(screen)
+
+        if self.showing_info:
+            overlay = pygame.Surface((800, 600), pygame.SRCALPHA)
+            overlay.fill((0, 0, 0, 150))
+            screen.blit(overlay, (0, 0))
+                        
+            pygame.draw.rect(screen, (200, 171, 131), (50, 50, 700, 400), border_radius=12)
+            pygame.draw.rect(screen, (255, 255, 255), (50, 50, 700, 400), width=3, border_radius=12)
+
 
         if self.is_market_open:
             overlay = pygame.Surface((800, 600), pygame.SRCALPHA)

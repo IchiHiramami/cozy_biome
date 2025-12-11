@@ -1,6 +1,6 @@
 {
     "world_name": "momomo",
-    "world_score": 70.62999999998124,
+    "world_score": 42.469999999979194,
     "creatures": [
         {
             "name": "Creature0",
@@ -45,17 +45,10 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "mimi-carrier",
-            "satisfaction_level": 38.63999999998977,
+            "satisfaction_level": 24.559999999989923,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
-            "effects": [
-                {
-                    "name": "More Satisfaction",
-                    "duration": 1135,
-                    "type": "More_Satisfaction",
-                    "multiplier": 2
-                }
-            ]
+            "effects": []
         },
         {
             "name": "Creature3",
@@ -68,7 +61,7 @@
                 "assets/Sprites/Dead.png"
             ],
             "type": "quacker",
-            "satisfaction_level": 31.989999999991475,
+            "satisfaction_level": 17.909999999989274,
             "satisfaction_multiplier": 1,
             "satisfaction_decay": 0.01,
             "effects": []
@@ -82,6 +75,6 @@
         },
         "cleanse": {}
     },
-    "last_saved": "December 11, 2025 02:47:09 PM",
-    "money": 80
+    "last_saved": "December 11, 2025 06:24:14 PM",
+    "money": 432
 }

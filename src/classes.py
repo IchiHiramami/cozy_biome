@@ -285,7 +285,7 @@ class Potion(Consumable): # dev2 : Add Effects
 class Cleanse(Consumable): # dev2: Clear Effects
     """Clear Effects"""
     def __init__(self):
-        super().__init__(name = "Cleanse")
+        super().__init__(name = "Cleanse")  
 
 class Inventory:
     def __init__(self):
